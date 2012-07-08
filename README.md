@@ -2,7 +2,7 @@
 
 Helps keep usages of [ObsoleteAttribute](http://msdn.microsoft.com/en-us/library/fwz0y5c2) consistent.
 
-[Introduction to Fody](https://github.com/SimonCropp/Fody/blob/master/SampleUsage.md)
+[Introduction to Fody](http://github.com/SimonCropp/Fody/wiki/SampleUsage)
 
 ## Nuget package http://nuget.org/packages/Obsolete.Fody 
 
