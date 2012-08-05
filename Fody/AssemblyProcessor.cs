@@ -1,17 +1,19 @@
+using Mono.Cecil;
+
 public class AssemblyProcessor
 {
-    AllTypesFinder typesFinder;
+    ModuleDefinition moduleDefinition;
     AttributeFixer attributeFixer;
 
-    public AssemblyProcessor(AllTypesFinder typesFinder, AttributeFixer attributeFixer)
+    public AssemblyProcessor(ModuleDefinition moduleDefinition, AttributeFixer attributeFixer)
     {
-        this.typesFinder = typesFinder;
+        this.moduleDefinition = moduleDefinition;
         this.attributeFixer = attributeFixer;
     }
 
     public void Execute()
     {
-        foreach (var typeDefinition in typesFinder.AllTypes)
+        foreach (var typeDefinition in moduleDefinition.GetTypes())
         {
             attributeFixer.ProcessAttributes(typeDefinition);
             foreach (var property in typeDefinition.Properties)
