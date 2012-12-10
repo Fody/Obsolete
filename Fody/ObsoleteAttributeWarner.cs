@@ -1,17 +1,11 @@
-using System;
 using System.Linq;
 using Mono.Cecil;
 
-public class ObsoleteAttributeWarner
+public partial class ModuleWeaver
 {
-    Action<string> logWarning;
+    
 
-    public ObsoleteAttributeWarner(Action<string> logWarning)
-    {
-        this.logWarning = logWarning;
-    }
-
-    public void ProcessAttributes(IMemberDefinition memberDefinition)
+    public void CheckForNormalAttribute(IMemberDefinition memberDefinition)
     {
         var obsoleteExAttribute = memberDefinition
             .CustomAttributes
@@ -21,7 +15,7 @@ public class ObsoleteAttributeWarner
             return;
         }
         var warning = string.Format("The member '{0}' has an ObsoleteAttribute. You should consider replacing it with an ObsoleteExAttribute.", memberDefinition.FullName);
-        logWarning(warning);
+        LogWarning(warning);
 
     }
 }

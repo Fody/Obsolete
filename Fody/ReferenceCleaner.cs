@@ -1,28 +1,18 @@
-using System;
 using System.Linq;
-using Mono.Cecil;
 
-public class ReferenceCleaner
+public partial class ModuleWeaver
 {
-    ModuleDefinition moduleDefinition;
-    Action<string> logInfo;
 
-    public ReferenceCleaner(ModuleDefinition moduleDefinition, Action<string> logInfo )
+    public void CleanReferences()
     {
-        this.moduleDefinition = moduleDefinition;
-        this.logInfo = logInfo;
-    }
-
-    public void Execute()
-    {
-        var referenceToRemove = moduleDefinition.AssemblyReferences.FirstOrDefault(x => x.Name == "Obsolete");
+        var referenceToRemove = ModuleDefinition.AssemblyReferences.FirstOrDefault(x => x.Name == "Obsolete");
         if (referenceToRemove == null)
         {
-            logInfo("\tNo reference to 'Obsolete.dll' found. References not modified.");
+            LogInfo("\tNo reference to 'Obsolete.dll' found. References not modified.");
             return;
         }
 
-        moduleDefinition.AssemblyReferences.Remove(referenceToRemove);
-        logInfo("\tRemoving reference to 'Obsolete.dll'.");
+        ModuleDefinition.AssemblyReferences.Remove(referenceToRemove);
+        LogInfo("\tRemoving reference to 'Obsolete.dll'.");
     }
 }

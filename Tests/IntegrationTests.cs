@@ -12,6 +12,7 @@ public class IntegrationTests
 {
     Assembly assembly;
     List<string> warnings = new List<string>();
+    List<string> errors = new List<string>();
     public IntegrationTests()
     {
         var assemblyPath = Path.GetFullPath(@"..\..\..\AssemblyToProcess\bin\Debug\AssemblyToProcess.dll");
@@ -28,7 +29,8 @@ public class IntegrationTests
                               {
                                   ModuleDefinition = moduleDefinition,
                                   AssemblyResolver = new MockAssemblyResolver(),
-                                  LogWarning =s => warnings.Add(s)
+                                  LogWarning =s => warnings.Add(s),
+                                  LogError =s => errors.Add(s)
                               };
 
         weavingTask.Execute();
@@ -48,6 +50,12 @@ public class IntegrationTests
     public void Warnings()
     {
         Assert.Contains("The member 'ClassWithObsoleteAttribute' has an ObsoleteAttribute. You should consider replacing it with an ObsoleteExAttribute.", warnings);
+    }
+    [Test]
+    public void Errors()
+    {
+        Assert.Contains("ObsoleteExAttribute is not valid on property gets or sets. Member: 'System.Void ClassWithObsoleteOnGetSet::set_PropertyToMark(System.String)'.", errors);
+        Assert.Contains("ObsoleteExAttribute is not valid on property gets or sets. Member: 'System.String ClassWithObsoleteOnGetSet::get_PropertyToMark()'.", errors);
     }
     [Test]
     public void Interface()

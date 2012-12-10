@@ -1,17 +1,7 @@
-using System;
 using System.Text;
 
-public class DataFormatter
+public partial class ModuleWeaver
 {
-
-    Version assemblyVersion;
-    FormatterConfigReader formatterConfigReader;
-
-    public DataFormatter(Version assemblyVersion, FormatterConfigReader formatterConfigReader)
-    {
-        this.assemblyVersion = assemblyVersion;
-        this.formatterConfigReader = formatterConfigReader;
-    }
 
     public string ConvertToMessage(AttributeData attributeData)
     {
@@ -22,18 +12,18 @@ public class DataFormatter
         }
         if (attributeData.Replacement != null)
         {
-            stringBuilder.AppendFormat(formatterConfigReader.ReplacementFormat, attributeData.Replacement);
+            stringBuilder.AppendFormat(ReplacementFormat, attributeData.Replacement);
         }
         if (attributeData.TreatAsErrorFromVersion != null)
         {
             if (assemblyVersion < attributeData.TreatAsErrorFromVersion)
             {
-                stringBuilder.AppendFormat(formatterConfigReader.TreatAsErrorFormat, attributeData.TreatAsErrorFromVersion);
+                stringBuilder.AppendFormat(TreatAsErrorFormat, attributeData.TreatAsErrorFromVersion);
             }
         }
         if (attributeData.RemoveInVersion != null)
         {
-            stringBuilder.AppendFormat(formatterConfigReader.RemoveInVersionFormat, attributeData.RemoveInVersion);
+            stringBuilder.AppendFormat(RemoveInVersionFormat, attributeData.RemoveInVersion);
         }
 
         return stringBuilder.ToString().Trim();
