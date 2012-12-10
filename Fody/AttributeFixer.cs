@@ -3,28 +3,14 @@ using System.Linq;
 using Mono.Cecil;
 
 
-public class AttributeFixer
+public partial class ModuleWeaver
 {
-    ObsoleteTypeFinder obsoleteTypeFinder;
-    TypeSystem typeSystem;
-    DataFormatter dataFormatter;
-    ObsoleteAttributeWarner obsoleteAttributeWarner;
-    Version assemblyVersion;
-
-    public AttributeFixer(ObsoleteTypeFinder obsoleteTypeFinder, ModuleDefinition moduleDefinition, DataFormatter dataFormatter,ObsoleteAttributeWarner obsoleteAttributeWarner)
-    {
-        this.obsoleteTypeFinder = obsoleteTypeFinder;
-        typeSystem = moduleDefinition.TypeSystem;
-        this.dataFormatter = dataFormatter;
-        this.obsoleteAttributeWarner = obsoleteAttributeWarner;
-        assemblyVersion = moduleDefinition.Assembly.Name.Version;
-    }
-
+    
     public void ProcessAttributes(IMemberDefinition memberDefinition)
     {
         try
         {
-            obsoleteAttributeWarner.ProcessAttributes(memberDefinition);
+            CheckForNormalAttribute(memberDefinition);
             InnerProcess(memberDefinition);
         }
         catch (Exception exception)
@@ -41,22 +27,32 @@ public class AttributeFixer
         {
             return;
         }
+        var methodDefinition = memberDefinition as MethodDefinition;
+        if (methodDefinition != null)
+        {
+            if (methodDefinition.IsGetter || methodDefinition.IsSetter)
+            {
+                var error = string.Format("ObsoleteExAttribute is not valid on property gets or sets. Member: '{0}'.", memberDefinition.FullName);
 
-        customAttributes.Remove(obsoleteExAttribute);
+                LogError(error);
+            }
+        }
+
+        customAttributes.Remove(obsoleteExAttribute);   
 
 
         var attributeData = DataReader.ReadAttributeData(obsoleteExAttribute);
 
         ValidateVersion(attributeData);
 
-        var customAttribute = new CustomAttribute(obsoleteTypeFinder.ConstructorReference);
+        var customAttribute = new CustomAttribute(ConstructorReference);
 
-        var message = dataFormatter.ConvertToMessage(attributeData);
-        var messageArg = new CustomAttributeArgument(typeSystem.String, message);
+        var message = ConvertToMessage(attributeData);
+        var messageArg = new CustomAttributeArgument(ModuleDefinition.TypeSystem.String, message);
         customAttribute.ConstructorArguments.Add(messageArg);
 
         var isError = GetIsError(attributeData);
-        var isErrorArg = new CustomAttributeArgument(typeSystem.Boolean, isError);
+        var isErrorArg = new CustomAttributeArgument(ModuleDefinition.TypeSystem.Boolean, isError);
         customAttribute.ConstructorArguments.Add(isErrorArg);
 
         customAttributes.Add(customAttribute);

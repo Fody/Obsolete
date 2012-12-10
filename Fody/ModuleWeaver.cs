@@ -2,10 +2,12 @@
 using System.Xml.Linq;
 using Mono.Cecil;
 
-public class ModuleWeaver
+public partial class ModuleWeaver
 {
+    public Version assemblyVersion;
     public Action<string> LogInfo { get; set; }
     public Action<string> LogWarning { get; set; }
+    public Action<string> LogError { get; set; }
     public ModuleDefinition ModuleDefinition { get; set; }
     public IAssemblyResolver AssemblyResolver { get; set; }
     public XElement Config { get; set; }
@@ -14,22 +16,19 @@ public class ModuleWeaver
     {
         LogInfo = s => { };
         LogWarning = s => { };
+        LogError = s => { };
     }
 
     public void Execute()
     {
-        var obsoleteTypeFinder = new ObsoleteTypeFinder(ModuleDefinition, AssemblyResolver);
-        obsoleteTypeFinder.Execute();
 
-        var obsoleteAttributeWarner = new ObsoleteAttributeWarner(LogWarning);
-        var formatterConfigReader = new FormatterConfigReader(Config);
-        formatterConfigReader.Execute();
-        var attributeDataFormatter = new DataFormatter(ModuleDefinition.Assembly.Name.Version, formatterConfigReader);
+        assemblyVersion = ModuleDefinition.Assembly.Name.Version;
+        FindObsoleteType();
 
-        var attributeFixer = new AttributeFixer(obsoleteTypeFinder, ModuleDefinition, attributeDataFormatter, obsoleteAttributeWarner);
-        var assemblyProcessor = new AssemblyProcessor(ModuleDefinition, attributeFixer);
-        assemblyProcessor.Execute();
+        ReadConfig();
 
-        new ReferenceCleaner(ModuleDefinition, LogInfo).Execute();
+        ProcessAssembly();
+
+        CleanReferences();
     }
 }

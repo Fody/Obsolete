@@ -1,36 +1,26 @@
-using Mono.Cecil;
-
-public class AssemblyProcessor
+public partial class ModuleWeaver
 {
-    ModuleDefinition moduleDefinition;
-    AttributeFixer attributeFixer;
 
-    public AssemblyProcessor(ModuleDefinition moduleDefinition, AttributeFixer attributeFixer)
+    public void ProcessAssembly()
     {
-        this.moduleDefinition = moduleDefinition;
-        this.attributeFixer = attributeFixer;
-    }
-
-    public void Execute()
-    {
-        foreach (var typeDefinition in moduleDefinition.GetTypes())
+        foreach (var typeDefinition in ModuleDefinition.GetTypes())
         {
-            attributeFixer.ProcessAttributes(typeDefinition);
+            ProcessAttributes(typeDefinition);
             foreach (var property in typeDefinition.Properties)
             {
-                attributeFixer.ProcessAttributes(property);
+                ProcessAttributes(property);
             }
             foreach (var method in typeDefinition.Methods)
             {
-                attributeFixer.ProcessAttributes(method);
+                ProcessAttributes(method);
             }
             foreach (var field in typeDefinition.Fields)
             {
-                attributeFixer.ProcessAttributes(field);
+                ProcessAttributes(field);
             }
             foreach (var @event in typeDefinition.Events)
             {
-                attributeFixer.ProcessAttributes(@event);
+                ProcessAttributes(@event);
             }
         }
     }
