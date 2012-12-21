@@ -40,8 +40,8 @@
     <Copy SourceFiles="$(SolutionDir)AttributeAssembly\bin\$(ConfigurationName)_PCL\Obsolete.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\SL40-WP" />
     <Copy SourceFiles="$(SolutionDir)AttributeAssembly\bin\$(ConfigurationName)_PCL\Obsolete.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\SL40-WP71" />
     <Copy SourceFiles="$(SolutionDir)AttributeAssembly\bin\$(ConfigurationName)_PCL\Obsolete.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\SL40-WP71" />
-    <Copy SourceFiles="$(SolutionDir)AttributeAssembly\bin\$(ConfigurationName)_PCL\Obsolete.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\portable-net4%2Bsl4%2Bwp7%2Bwin8" />	
-    <Copy SourceFiles="$(SolutionDir)AttributeAssembly\bin\$(ConfigurationName)_PCL\Obsolete.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\portable-net4%2Bsl4%2Bwp7%2Bwin8" />	
+    <Copy SourceFiles="$(SolutionDir)AttributeAssembly\bin\$(ConfigurationName)_PCL\Obsolete.dll" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\portable-net4+sl4+wp7+win8" />	
+    <Copy SourceFiles="$(SolutionDir)AttributeAssembly\bin\$(ConfigurationName)_PCL\Obsolete.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\portable-net4+sl4+wp7+win8" />	
     <Copy SourceFiles="$(SolutionDir)NuGet\Obsolete.nuspec" DestinationFolder="$(SolutionDir)NuGetBuild" />
     <Copy SourceFiles="$(SolutionDir)Fody\bin\$(ConfigurationName)\Obsolete.Fody.dll" DestinationFolder="$(SolutionDir)NuGetBuild" />
     <PepitaPackage.WeavingTask NuGetBuildDirectory="$(SolutionDir)NuGetBuild" MetadataAssembly="$(SolutionDir)Fody\bin\$(ConfigurationName)\Obsolete.Fody.dll" />
