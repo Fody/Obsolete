@@ -1,8 +1,8 @@
-## This is an add-in for [Fody](https://github.com/SimonCropp/Fody/) 
+## This is an add-in for [Fody](https://github.com/Fody/Fody/) 
 
 Helps keep usages of [ObsoleteAttribute](http://msdn.microsoft.com/en-us/library/fwz0y5c2) consistent.
 
-[Introduction to Fody](http://github.com/SimonCropp/Fody/wiki/SampleUsage)
+[Introduction to Fody](http://github.com/Fody/Fody/wiki/SampleUsage)
 
 ## Nuget package http://nuget.org/packages/Obsolete.Fody 
 
