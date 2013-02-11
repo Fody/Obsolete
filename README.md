@@ -62,7 +62,7 @@ The string used when informing the user what version the member will be treated 
 
 *Defaults to  `Will be treated as an error from version '{0}'. `
 
-    <Obsolete TreatAsErrorFormat='Will be treated as an error from version '{0}'. '/>
+    <Obsolete TreatAsErrorFormat="Will be treated as an error from version '{0}'. "/>
 
 ## RemoveInVersionFormat
 
@@ -70,7 +70,7 @@ The string used when informing the user what version the member will be removed 
 
 *Defaults to  `Will be removed in version '{0}'. `
 
-    <Obsolete RemoveInVersionFormat='Will be removed in version '{0}'. '/>
+    <Obsolete RemoveInVersionFormat="Will be removed in version '{0}'. "/>
 
 ## ReplacementFormat
 
@@ -78,7 +78,7 @@ The string used when informing the user of an alternative member to use instead 
 
 *Defaults to `Please use '{0}' instead. `
 
-    <Obsolete ReplacementFormat='Please use '{0}' instead. '/>
+    <Obsolete ReplacementFormat="Please use '{0}' instead. "/>
 
     
 
