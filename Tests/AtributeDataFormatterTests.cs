@@ -5,6 +5,7 @@ using NUnit.Framework;
 [TestFixture]
 public class AtributeDataFormatterTests
 {
+
     [Test]
     public void Empty()
     {
@@ -12,6 +13,7 @@ public class AtributeDataFormatterTests
         var message = new ModuleWeaver {assemblyVersion = assemblyVersion}.ConvertToMessage(new AttributeData());
         Assert.AreEqual("", message);
     }
+
     [Test]
     public void CustomMessage()
     {
@@ -20,6 +22,7 @@ public class AtributeDataFormatterTests
         var message = new ModuleWeaver {assemblyVersion = assemblyVersion}.ConvertToMessage(attributeData);
         Assert.AreEqual("Custom Message.", message);
     }
+
     [Test]
     public void All()
     {

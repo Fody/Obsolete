@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -33,7 +34,8 @@ public class IntegrationTests
                                   ModuleDefinition = moduleDefinition,
                                   AssemblyResolver = new MockAssemblyResolver(),
                                   LogWarning =s => warnings.Add(s),
-                                  LogError =s => errors.Add(s)
+                                  LogError =s => errors.Add(s),
+                                  HideObsoleteMembers = true
                               };
 
         weavingTask.Execute();
@@ -49,22 +51,26 @@ public class IntegrationTests
         ValidateMessage(type);
         ValidateIsNotError(type);
     }
+
     [Test]
     public void Warnings()
     {
         Assert.Contains("The member 'ClassWithObsoleteAttribute' has an ObsoleteAttribute. You should consider replacing it with an ObsoleteExAttribute.", warnings);
     }
+
     [Test]
     public void Errors()
     {
         Assert.Contains("ObsoleteExAttribute is not valid on property gets or sets. Member: 'System.Void ClassWithObsoleteOnGetSet::set_PropertyToMark(System.String)'.", errors);
         Assert.Contains("ObsoleteExAttribute is not valid on property gets or sets. Member: 'System.String ClassWithObsoleteOnGetSet::get_PropertyToMark()'.", errors);
     }
+
     [Test]
     public void Interface()
     {
         var type = assembly.GetType("InterfaceToMark");
         ValidateMessage(type);
+        ValidateHidden(type);
         ValidateIsNotError(type);
     }
 
@@ -81,6 +87,7 @@ public class IntegrationTests
         var type = assembly.GetType("EnumToMark");
         ValidateIsNotError(type);
     }
+
     [Test]
     public void Struct()
     {
@@ -94,6 +101,7 @@ public class IntegrationTests
         var type = assembly.GetType("EnumToMark");
         var info = type.GetField("Foo");
         ValidateMessage(info);
+        ValidateHidden(info);
         ValidateIsNotError(info);
     }
 
@@ -103,22 +111,27 @@ public class IntegrationTests
         var type = assembly.GetType("ClassToMark");
         var info = type.GetMethod("MethodToMark");
         ValidateMessage(info);
+        ValidateHidden(info);
         ValidateIsNotError(info);
     }
+
     [Test]
     public void InterfaceMethod()
     {
         var type = assembly.GetType("InterfaceToMark");
         var info = type.GetMethod("MethodToMark");
         ValidateMessage(info);
+        ValidateHidden(info);
         ValidateIsNotError(info);
     }
+
     [Test]
     public void StructMethod()
     {
         var type = assembly.GetType("StructToMark");
         var info = type.GetMethod("MethodToMark");
         ValidateMessage(info);
+        ValidateHidden(info);
         ValidateIsNotError(info);
     }
     
@@ -128,62 +141,77 @@ public class IntegrationTests
         var type = assembly.GetType("ClassToMark");
         var info = type.GetProperty("PropertyToMark");
         ValidateMessage(info);
+        ValidateHidden(info);
         ValidateIsNotError(info);
     }
+
     [Test]
     public void ClassField()
     {
         var type = assembly.GetType("ClassToMark");
         var info = type.GetField("FieldToMark");
         ValidateMessage(info);
+        ValidateHidden(info);
         ValidateIsNotError(info);
     }
+
     [Test]
     public void InterfaceEvent()
     {
         var type = assembly.GetType("InterfaceToMark");
         var info = type.GetMember("EventToMark").First();
         ValidateMessage(info);
+        ValidateHidden(info);
         ValidateIsNotError(info);
     }
+
     [Test]
     public void ClassEvent()
     {
         var type = assembly.GetType("ClassToMark");
         var info = type.GetEvent("EventToMark");
         ValidateMessage(info);
+        ValidateHidden(info);
         ValidateIsNotError(info);
     }
+
     [Test]
     public void StructEvent()
     {
         var type = assembly.GetType("StructToMark");
         var info = type.GetMember("EventToMark").First();
         ValidateMessage(info);
+        ValidateHidden(info);
         ValidateIsNotError(info);
     }
+
     [Test]
     public void InterfaceProperty()
     {
         var type = assembly.GetType("InterfaceToMark");
         var info = type.GetProperty("PropertyToMark");
         ValidateMessage(info);
+        ValidateHidden(info);
         ValidateIsNotError(info);
     }
+
     [Test]
     public void StructProperty()
     {
         var type = assembly.GetType("StructToMark");
         var info = type.GetProperty("PropertyToMark");
         ValidateMessage(info);
+        ValidateHidden(info);
         ValidateIsNotError(info);
     }
+
     [Test]
     public void StructField()
     {
         var type = assembly.GetType("StructToMark");
         var info = type.GetField("FieldToMark");
         ValidateMessage(info);
+        ValidateHidden(info);
         ValidateIsNotError(info);
     }
 
@@ -192,6 +220,13 @@ public class IntegrationTests
         var customAttributes = attributeProvider.GetCustomAttributes(typeof (ObsoleteAttribute), false);
         var obsoleteAttribute = (ObsoleteAttribute) customAttributes.First();
         Assert.AreEqual("Custom message. Please use 'NewThing' instead. Will be treated as an error from version '2.0'. Will be removed in version '3.0'.", obsoleteAttribute.Message);
+    }
+
+    static void ValidateHidden(System.Reflection.ICustomAttributeProvider attributeProvider)
+    {
+        var customAttributes = attributeProvider.GetCustomAttributes(typeof (EditorBrowsableAttribute), false);
+        var attribute = (EditorBrowsableAttribute)customAttributes.First();
+        Assert.AreEqual(EditorBrowsableState.Advanced, attribute.State);
     }
     
     static void ValidateIsError(System.Reflection.ICustomAttributeProvider attributeProvider)

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Mono.Cecil;
+using Mono.Collections.Generic;
 
 
 public partial class ModuleWeaver
@@ -45,7 +46,16 @@ public partial class ModuleWeaver
 
         ValidateVersion(attributeData);
 
-        var customAttribute = new CustomAttribute(ConstructorReference);
+        AddObsoleteAttribute(attributeData, customAttributes);
+        if (HideObsoleteMembers)
+        {
+            AddEditorBrowsableAttribute(customAttributes);
+        }
+    }
+
+    void AddObsoleteAttribute(AttributeData attributeData, Collection<CustomAttribute> customAttributes)
+    {
+        var customAttribute = new CustomAttribute(ObsoleteConstructorReference);
 
         var message = ConvertToMessage(attributeData);
         var messageArg = new CustomAttributeArgument(ModuleDefinition.TypeSystem.String, message);

@@ -21,7 +21,7 @@ public partial class ModuleWeaver
 
     public void Execute()
     {
-
+        FindSystemTypes();
         assemblyVersion = ModuleDefinition.Assembly.Name.Version;
         FindObsoleteType();
 

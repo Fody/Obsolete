@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AtributeDataFormatterTests.cs" />
+    <Compile Include="ConfigReaderTests.cs" />
     <Compile Include="MockAssemblyResolver.cs" />
     <Compile Include="Sample.cs" />
     <Compile Include="Verifier.cs" />

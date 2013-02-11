@@ -3,7 +3,7 @@ using Mono.Cecil;
 
 public partial class ModuleWeaver
 {
-    public MethodReference ConstructorReference;
+    public MethodReference ObsoleteConstructorReference;
 
 
     public void FindObsoleteType()
@@ -13,7 +13,7 @@ public partial class ModuleWeaver
             x.Parameters.Count == 2
             && x.Parameters[0].ParameterType.Name == "String"
             && x.Parameters[1].ParameterType.Name == "Boolean");
-        ConstructorReference = ModuleDefinition.Import(constructor);
+        ObsoleteConstructorReference = ModuleDefinition.Import(constructor);
 
     }
 

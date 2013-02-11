@@ -64,13 +64,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyProcessor.cs" />
+    <Compile Include="BrowsableAttributeAdder.cs" />
+    <Compile Include="MsCoreReferenceFinder.cs" />
     <Compile Include="ObsoleteAttributeWarner.cs" />
     <Compile Include="DataFormatter.cs" />
     <Compile Include="AttributeData.cs" />
     <Compile Include="DataReader.cs" />
     <Compile Include="AttributeFixer.cs" />
     <Compile Include="AttributeExtensions.cs" />
-    <Compile Include="FormatterConfigReader.cs" />
+    <Compile Include="ConfigReader.cs" />
     <Compile Include="ModuleWeaver.cs" />
     <Compile Include="..\CommonAssemblyInfo.cs" />
     <Compile Include="ReferenceCleaner.cs" />
