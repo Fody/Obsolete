@@ -60,7 +60,7 @@ When this is `true` obsolete members will also have `[EditorBrowsable(EditorBrow
 
 The string used when informing the user what version the member will be treated as an error.
 
-*Defaults to  `Will be treated as an error from version '{0}'. `
+*Defaults to  `Will be treated as an error from version '{0}'. `*
 
     <Obsolete TreatAsErrorFormat="Will be treated as an error from version '{0}'. "/>
 
@@ -68,7 +68,7 @@ The string used when informing the user what version the member will be treated 
 
 The string used when informing the user what version the member will be removed it.
 
-*Defaults to  `Will be removed in version '{0}'. `
+*Defaults to  `Will be removed in version '{0}'. `*
 
     <Obsolete RemoveInVersionFormat="Will be removed in version '{0}'. "/>
 
@@ -76,7 +76,7 @@ The string used when informing the user what version the member will be removed 
 
 The string used when informing the user of an alternative member to use instead of the obsolete member.
 
-*Defaults to `Please use '{0}' instead. `
+*Defaults to `Please use '{0}' instead. `*
 
     <Obsolete ReplacementFormat="Please use '{0}' instead. "/>
 
