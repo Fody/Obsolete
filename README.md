@@ -43,3 +43,15 @@ The message property should only be used for useful information. The fact that i
  * "Do not call this method"
  * "This method will be removed"
  * "This method is obsolete"
+
+# Configuration Options
+
+All config options are access by modifying the `Obsolete` node in FodyWeavers.xml
+
+## HideObsoleteMembers
+
+When this is `true` obsolete members will also have `[EditorBrowsable(EditorBrowsableState.Advanced)]` added to them.
+
+*Defaults to `false`*
+
+    <Obsolete HideObsoleteMembers='true'/>
