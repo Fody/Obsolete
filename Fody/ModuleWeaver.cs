@@ -21,11 +21,11 @@ public partial class ModuleWeaver
 
     public void Execute()
     {
+        ReadConfig();
         FindSystemTypes();
         assemblyVersion = ModuleDefinition.Assembly.Name.Version;
         FindObsoleteType();
 
-        ReadConfig();
 
         ProcessAssembly();
 

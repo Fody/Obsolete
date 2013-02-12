@@ -65,7 +65,7 @@
   <ItemGroup>
     <Compile Include="AssemblyProcessor.cs" />
     <Compile Include="BrowsableAttributeAdder.cs" />
-    <Compile Include="MsCoreReferenceFinder.cs" />
+    <Compile Include="EditorBrowsableAttributeFinder.cs" />
     <Compile Include="ObsoleteAttributeWarner.cs" />
     <Compile Include="DataFormatter.cs" />
     <Compile Include="AttributeData.cs" />
