@@ -44,6 +44,7 @@
     <Copy SourceFiles="$(SolutionDir)AttributeAssembly\bin\$(ConfigurationName)_PCL\Obsolete.xml" DestinationFolder="$(SolutionDir)NuGetBuild\Lib\portable-net4+sl4+wp7+win8" />	
     <Copy SourceFiles="$(SolutionDir)NuGet\Obsolete.nuspec" DestinationFolder="$(SolutionDir)NuGetBuild" />
     <Copy SourceFiles="$(SolutionDir)Fody\bin\$(ConfigurationName)\Obsolete.Fody.dll" DestinationFolder="$(SolutionDir)NuGetBuild" />
+    <Copy SourceFiles="$(SolutionDir)Fody\bin\$(ConfigurationName)\Obsolete.Fody.pdb" DestinationFolder="$(SolutionDir)NuGetBuild" />
     <PepitaPackage.WeavingTask NuGetBuildDirectory="$(SolutionDir)NuGetBuild" MetadataAssembly="$(SolutionDir)Fody\bin\$(ConfigurationName)\Obsolete.Fody.dll" />
   </Target>
   <ItemGroup>
