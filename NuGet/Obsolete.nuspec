@@ -13,5 +13,8 @@
     <summary />
     <language>en-AU</language>
     <tags>Obsolete, ObsoleteAttribute, ILWeaving, Fody, Cecil</tags>
+    <dependencies>
+      <dependency id="Fody"/>
+    </dependencies>
   </metadata>
 </package>
