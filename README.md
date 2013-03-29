@@ -4,7 +4,13 @@ Helps keep usages of [ObsoleteAttribute](http://msdn.microsoft.com/en-us/library
 
 [Introduction to Fody](http://github.com/Fody/Fody/wiki/SampleUsage)
 
-## Nuget package http://nuget.org/packages/Obsolete.Fody 
+## Nuget
+
+Nuget package http://nuget.org/packages/Obsolete.Fody 
+
+To Install from the Nuget Package Manager Console 
+    
+    PM> Install-Package Obsolete.Fody
 
 ### Your Code
 
