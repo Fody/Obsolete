@@ -86,5 +86,8 @@ The string used when informing the user of an alternative member to use instead 
 
     <Obsolete ReplacementFormat="Please use '{0}' instead. "/>
 
-    
+## Icon
+
+Icon courtesy of [The Noun Project](http://thenounproject.com)
+
 
