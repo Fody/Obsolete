@@ -1,5 +1,7 @@
 ## This is an add-in for [Fody](https://github.com/Fody/Fody/) 
 
+![Icon](https://raw.github.com/Fody/Obsolete/master/Icons/package_icon.png)
+
 Helps keep usages of [ObsoleteAttribute](http://msdn.microsoft.com/en-us/library/fwz0y5c2) consistent.
 
 [Introduction to Fody](http://github.com/Fody/Fody/wiki/SampleUsage)
