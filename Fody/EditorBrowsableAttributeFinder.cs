@@ -37,8 +37,8 @@ public partial class ModuleWeaver
 
     void FindFromTypes(Collection<TypeDefinition> typeDefinitions)
     {
-        var attribyteType = typeDefinitions.First(x => x.Name == "EditorBrowsableAttribute");
-        EditorBrowsableConstructor = ModuleDefinition.Import(attribyteType.Methods.First(IsDesiredConstructor));
+        var attributeType = typeDefinitions.First(x => x.Name == "EditorBrowsableAttribute");
+        EditorBrowsableConstructor = ModuleDefinition.Import(attributeType.Methods.First(IsDesiredConstructor));
         EditorBrowsableStateType = typeDefinitions.First(x => x.Name == "EditorBrowsableState");
         var fieldDefinition = EditorBrowsableStateType.Fields.First(x => x.Name == "Advanced");
         AdvancedStateConstant = (int) fieldDefinition.Constant;

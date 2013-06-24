@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using Mono.Cecil;
 using Mono.Collections.Generic;
@@ -9,15 +8,9 @@ public partial class ModuleWeaver
     
     public void ProcessAttributes(IMemberDefinition memberDefinition)
     {
-        try
-        {
             CheckForNormalAttribute(memberDefinition);
             InnerProcess(memberDefinition);
-        }
-        catch (Exception exception)
-        {
-            throw new WeavingException(string.Format("An error occurred processing '{0}'. Error: {1}", memberDefinition.FullName, exception.Message));
-        }
+     
     }
 
     void InnerProcess(IMemberDefinition memberDefinition)
@@ -44,7 +37,7 @@ public partial class ModuleWeaver
 
         var attributeData = DataReader.ReadAttributeData(obsoleteExAttribute);
 
-        ValidateVersion(attributeData);
+        ValidateVersion(memberDefinition, attributeData);
 
         AddObsoleteAttribute(attributeData, customAttributes);
         if (HideObsoleteMembers)
@@ -58,17 +51,17 @@ public partial class ModuleWeaver
         var customAttribute = new CustomAttribute(ObsoleteConstructorReference);
 
         var message = ConvertToMessage(attributeData);
-        var messageArg = new CustomAttributeArgument(ModuleDefinition.TypeSystem.String, message);
-        customAttribute.ConstructorArguments.Add(messageArg);
+        var messageArgument = new CustomAttributeArgument(ModuleDefinition.TypeSystem.String, message);
+        customAttribute.ConstructorArguments.Add(messageArgument);
 
         var isError = GetIsError(attributeData);
-        var isErrorArg = new CustomAttributeArgument(ModuleDefinition.TypeSystem.Boolean, isError);
-        customAttribute.ConstructorArguments.Add(isErrorArg);
+        var isErrorArgument = new CustomAttributeArgument(ModuleDefinition.TypeSystem.Boolean, isError);
+        customAttribute.ConstructorArguments.Add(isErrorArgument);
 
         customAttributes.Add(customAttribute);
     }
 
-    void ValidateVersion(AttributeData attributeData)
+    void ValidateVersion(IMemberDefinition memberDefinition, AttributeData attributeData)
     {
         if (attributeData.RemoveInVersion == null)
         {
@@ -76,7 +69,8 @@ public partial class ModuleWeaver
         }
         if (assemblyVersion >= attributeData.RemoveInVersion)
         {
-            throw new WeavingException("Version of assembly is higher than version specified in 'RemoveInVersion'. Member should be removed");
+            var message = string.Format("Cannot process '{0}'. The assembly version {1} is higher than version specified in 'RemoveInVersion' {2}. The member should be removed or 'RemoveInVersion' increased.", memberDefinition.FullName, assemblyVersion, attributeData.RemoveInVersion);
+            throw new WeavingException(message);
         }
     }
 

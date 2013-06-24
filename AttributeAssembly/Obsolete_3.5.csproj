@@ -14,6 +14,8 @@
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FodyPath>..\packages\Fody.1.13.8.0</FodyPath>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,19 +37,21 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release_3.5\Obsolete.xml</DocumentationFile>
   </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\key.snk</AssemblyOriginatorKeyFile>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Deployable|AnyCPU'">
+    <OutputPath>bin\Deployable_3.5\</OutputPath>
+    <DefineConstants>TRACE;Linq</DefineConstants>
+    <DocumentationFile>bin\Deployable_3.5\Obsolete.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <None Include="Fody.targets" />
     <None Include="packages.config" />
     <Reference Include="System" />
     <None Include="FodyWeavers.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="ObsoleteExAttribute.cs" />
     <Compile Include="..\CommonAssemblyInfo.cs" />
   </ItemGroup>

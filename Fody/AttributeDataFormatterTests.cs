@@ -3,7 +3,7 @@ using System.Diagnostics;
 using NUnit.Framework;
 
 [TestFixture]
-public class AtributeDataFormatterTests
+public class AttributeDataFormatterTests
 {
 
     [Test]
