@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using Mono.Cecil;
 using NUnit.Framework;
+using ICustomAttributeProvider = System.Reflection.ICustomAttributeProvider;
 
 
 [TestFixture]
@@ -49,6 +50,15 @@ public class IntegrationTests
     {
         var type = assembly.GetType("ClassToMark");
         ValidateMessage(type);
+        ValidateIsNotError(type);
+    }
+    [Test]
+    public void ClassWithAssumedVersion()
+    {
+        var type = assembly.GetType("ClassToMarkWithAssumedVersion");
+        var customAttributes = ((ICustomAttributeProvider) type).GetCustomAttributes(typeof (ObsoleteAttribute), false);
+        var obsoleteAttribute = (ObsoleteAttribute) customAttributes.First();
+        Assert.AreEqual("Custom message. Please use 'NewThing' instead. Will be treated as an error from version '2.0.0'. Will be removed in version '3.0.0'.", obsoleteAttribute.Message);
         ValidateIsNotError(type);
     }
 
@@ -215,28 +225,28 @@ public class IntegrationTests
         ValidateIsNotError(info);
     }
 
-    static void ValidateMessage(System.Reflection.ICustomAttributeProvider attributeProvider)
+    static void ValidateMessage(ICustomAttributeProvider attributeProvider)
     {
         var customAttributes = attributeProvider.GetCustomAttributes(typeof (ObsoleteAttribute), false);
         var obsoleteAttribute = (ObsoleteAttribute) customAttributes.First();
-        Assert.AreEqual("Custom message. Please use 'NewThing' instead. Will be treated as an error from version '2.0'. Will be removed in version '3.0'.", obsoleteAttribute.Message);
+        Assert.AreEqual("Custom message. Please use 'NewThing' instead. Will be treated as an error from version '2.0.0'. Will be removed in version '4.0.0'.", obsoleteAttribute.Message);
     }
 
-    static void ValidateHidden(System.Reflection.ICustomAttributeProvider attributeProvider)
+    static void ValidateHidden(ICustomAttributeProvider attributeProvider)
     {
         var customAttributes = attributeProvider.GetCustomAttributes(typeof (EditorBrowsableAttribute), false);
         var attribute = (EditorBrowsableAttribute)customAttributes.First();
         Assert.AreEqual(EditorBrowsableState.Advanced, attribute.State);
     }
     
-    static void ValidateIsError(System.Reflection.ICustomAttributeProvider attributeProvider)
+    static void ValidateIsError(ICustomAttributeProvider attributeProvider)
     {
         var customAttributes = attributeProvider.GetCustomAttributes(typeof (ObsoleteAttribute), false);
         var obsoleteAttribute = (ObsoleteAttribute) customAttributes.First();
         Assert.IsTrue(obsoleteAttribute.IsError);
     }
 
-    static void ValidateIsNotError(System.Reflection.ICustomAttributeProvider attributeProvider)
+    static void ValidateIsNotError(ICustomAttributeProvider attributeProvider)
     {
         var customAttributes = attributeProvider.GetCustomAttributes(typeof (ObsoleteAttribute), false);
         var obsoleteAttribute = (ObsoleteAttribute) customAttributes.First();

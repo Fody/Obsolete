@@ -10,7 +10,11 @@ public class AttributeDataFormatterTests
     public void Empty()
     {
         var assemblyVersion = new Version(1, 0, 0, 0);
-        var message = new ModuleWeaver {assemblyVersion = assemblyVersion}.ConvertToMessage(new AttributeData());
+        var moduleWeaver = new ModuleWeaver
+                           {
+                               assemblyVersion = assemblyVersion
+                           };
+        var message = moduleWeaver.ConvertToMessage(new AttributeData());
         Assert.AreEqual("", message);
     }
 
@@ -19,7 +23,11 @@ public class AttributeDataFormatterTests
     {
         var attributeData = new AttributeData {Message = "Custom Message."};
         var assemblyVersion = new Version(1, 0, 0, 0);
-        var message = new ModuleWeaver {assemblyVersion = assemblyVersion}.ConvertToMessage(attributeData);
+        var moduleWeaver = new ModuleWeaver
+                           {
+                               assemblyVersion = assemblyVersion
+                           };
+        var message = moduleWeaver.ConvertToMessage(attributeData);
         Assert.AreEqual("Custom Message.", message);
     }
 
@@ -29,14 +37,28 @@ public class AttributeDataFormatterTests
         var attributeData = new AttributeData
                                 {
                                     Message = "Custom Message.",
-                                    TreatAsErrorFromVersion = new Version(2,0,0,0),
-                                    RemoveInVersion = new Version(3, 0, 0, 0),
+                                    TreatAsErrorFromVersion = new Version(2,0,0),
+                                    RemoveInVersion = new Version(4, 0, 0),
                                     Replacement = "NewMember"
                                 };
         var assemblyVersion = new Version(1, 0, 0, 0);
         var dataFormatter = new ModuleWeaver {assemblyVersion = assemblyVersion};
         var message = dataFormatter.ConvertToMessage(attributeData);
-        Assert.AreEqual("Custom Message. Please use 'NewMember' instead. Will be treated as an error from version '2.0.0.0'. Will be removed in version '3.0.0.0'.", message);
+        Assert.AreEqual("Custom Message. Please use 'NewMember' instead. Will be treated as an error from version '2.0.0'. Will be removed in version '4.0.0'.", message);
+    }
+    [Test]
+    public void AssumedRemoveIn()
+    {
+        var attributeData = new AttributeData
+                                {
+                                    Message = "Custom Message.",
+                                    TreatAsErrorFromVersion = new Version(2,0,0,0),
+                                    Replacement = "NewMember"
+                                };
+        var assemblyVersion = new Version(1, 0, 0, 0);
+        var dataFormatter = new ModuleWeaver {assemblyVersion = assemblyVersion};
+        var message = dataFormatter.ConvertToMessage(attributeData);
+        Assert.AreEqual("Custom Message. Please use 'NewMember' instead. Will be treated as an error from version '2.0.0'. Will be removed in version '3.0.0'.", message);
     }
 
     [Test]
@@ -45,13 +67,13 @@ public class AttributeDataFormatterTests
         var attributeData = new AttributeData
                                 {
                                     Message = "Custom Message.",
-                                    TreatAsErrorFromVersion = new Version(2,0,0,0),
-                                    RemoveInVersion = new Version(4, 0, 0, 0),
+                                    TreatAsErrorFromVersion = new Version(2,0,0),
+                                    RemoveInVersion = new Version(4, 0, 0),
                                     Replacement = "NewClass"
                                 };
-        var dataFormatter1 = new ModuleWeaver { assemblyVersion = new Version(1, 0, 0, 0) };
+        var dataFormatter1 = new ModuleWeaver { assemblyVersion = new Version(1, 0, 0) };
         Debug.WriteLine(dataFormatter1.ConvertToMessage(attributeData));
-        var dataFormatter2 = new ModuleWeaver { assemblyVersion = new Version(3, 0, 0, 0) };
+        var dataFormatter2 = new ModuleWeaver { assemblyVersion = new Version(3, 0, 0) };
         Debug.WriteLine(dataFormatter2.ConvertToMessage(attributeData));
     }
 

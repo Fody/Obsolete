@@ -14,16 +14,24 @@ public partial class ModuleWeaver
         {
             stringBuilder.AppendFormat(ReplacementFormat, attributeData.Replacement);
         }
-        if (attributeData.TreatAsErrorFromVersion != null)
+        var treatAsErrorFrom = attributeData.TreatAsErrorFromVersion;
+        if (treatAsErrorFrom != null)
         {
-            if (assemblyVersion < attributeData.TreatAsErrorFromVersion)
+            if (assemblyVersion < treatAsErrorFrom)
             {
-                stringBuilder.AppendFormat(TreatAsErrorFormat, attributeData.TreatAsErrorFromVersion);
+                stringBuilder.AppendFormat(TreatAsErrorFormat, treatAsErrorFrom.ToSemVer());
             }
         }
-        if (attributeData.RemoveInVersion != null)
+        if (attributeData.RemoveInVersion == null)
         {
-            stringBuilder.AppendFormat(RemoveInVersionFormat, attributeData.RemoveInVersion);
+            if (treatAsErrorFrom != null)
+            {
+                stringBuilder.AppendFormat(RemoveInVersionFormat, treatAsErrorFrom.Add(VersionIncrement));
+            }
+        }
+        else
+        {
+            stringBuilder.AppendFormat(RemoveInVersionFormat, attributeData.RemoveInVersion.ToSemVer());
         }
 
         return stringBuilder.ToString().Trim();

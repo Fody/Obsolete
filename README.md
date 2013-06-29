@@ -31,7 +31,7 @@ When the target assembly version is less than `MarkAsErrorInVersion` an `Obsolet
 
 So given the above example when the assembly version is 1.0 the following will be injected
 
-    [Obsolete("Custom Message. Please use 'NewClass' instead. Will be treated as an error from version 2.0.0.0. Will be removed in version 4.0.0.0.")]
+    [Obsolete("Custom Message. Please use 'NewClass' instead. Will be treated as an error from version 2.0.0. Will be removed in version 4.0.0.")]
     public class ClassToMark{}
 
 ### Treat As Error Mode
@@ -42,7 +42,7 @@ When the target assembly version is greater than `WillBeRemovedInVersion` but le
 
 So given the above example when the assembly version is 3.0 the following will be injected
 
-    [Obsolete("Custom Message. Please use 'NewClass' instead. Will be removed in version 4.0.0.0.", true)]
+    [Obsolete("Custom Message. Please use 'NewClass' instead. Will be removed in version 4.0.0.", true)]
     public class ClassToMark{}
 
 ### Build Error Mode
@@ -53,7 +53,7 @@ When the target assembly version is greater  than `MarkAsErrorInVersion` a build
     
 So given the above example when the assembly version is 5.0 a compile error will be thrown with the following text
 
-     Cannot process 'ClassToMark'. The assembly version 5.0.0.0 is higher than version specified in RemoveInVersion 4.0.0.0. The member should be removed or RemoveInVersion increased.
+     Cannot process 'ClassToMark'. The assembly version 5.0.0 is higher than version specified in RemoveInVersion 4.0.0. The member should be removed or RemoveInVersion increased.
 
 ## The Message property 
 

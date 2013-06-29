@@ -79,6 +79,7 @@
     <Compile Include="AttributeDataFormatterTests.cs" />
     <Compile Include="BrowsableAttributeAdder.cs" />
     <Compile Include="ConfigReaderTests.cs" />
+    <Compile Include="DataReaderTests.cs" />
     <Compile Include="EditorBrowsableAttributeFinder.cs" />
     <Compile Include="IntegrationTests.cs" />
     <Compile Include="MockAssemblyResolver.cs" />
@@ -94,6 +95,8 @@
     <Compile Include="ReferenceCleaner.cs" />
     <Compile Include="ObsoleteTypeFinder.cs" />
     <Compile Include="Verifier.cs" />
+    <Compile Include="VersionExtensions.cs" />
+    <Compile Include="VersionExtensionTests.cs" />
     <Compile Include="WeavingException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

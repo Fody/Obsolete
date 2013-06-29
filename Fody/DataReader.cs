@@ -18,7 +18,7 @@ public static class DataReader
                    };
     }
 
-    static Version ConvertToVersion(string versionString)
+   public  static Version ConvertToVersion(string versionString)
     {
         if (versionString != null)
         {
@@ -33,6 +33,10 @@ public static class DataReader
             if (!(Version.TryParse(versionString, out version)))
             {
                 throw new WeavingException(string.Format("Could not convert '{0}' to a Version.", versionString));
+            }
+            if (version.Revision != -1)
+            {
+                throw new WeavingException(string.Format("Could not convert '{0}' to a Version. Obsolete Fody does not support Revision numbers.", versionString));
             }
             return version;
         }
