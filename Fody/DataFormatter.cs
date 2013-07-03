@@ -10,29 +10,18 @@ public partial class ModuleWeaver
         {
             stringBuilder.AppendFormat("{0} ", attributeData.Message);
         }
+
         if (attributeData.Replacement != null)
         {
             stringBuilder.AppendFormat(ReplacementFormat, attributeData.Replacement);
         }
-        var treatAsErrorFrom = attributeData.TreatAsErrorFromVersion;
-        if (treatAsErrorFrom != null)
+
+
+        if (assemblyVersion < attributeData.TreatAsErrorFromVersion)
         {
-            if (assemblyVersion < treatAsErrorFrom)
-            {
-                stringBuilder.AppendFormat(TreatAsErrorFormat, treatAsErrorFrom.ToSemVer());
-            }
+            stringBuilder.AppendFormat(TreatAsErrorFormat, attributeData.TreatAsErrorFromVersion.ToSemVer());
         }
-        if (attributeData.RemoveInVersion == null)
-        {
-            if (treatAsErrorFrom != null)
-            {
-                stringBuilder.AppendFormat(RemoveInVersionFormat, treatAsErrorFrom.Add(VersionIncrement));
-            }
-        }
-        else
-        {
-            stringBuilder.AppendFormat(RemoveInVersionFormat, attributeData.RemoveInVersion.ToSemVer());
-        }
+        stringBuilder.AppendFormat(RemoveInVersionFormat, attributeData.RemoveInVersion.ToSemVer());
 
         return stringBuilder.ToString().Trim();
     }

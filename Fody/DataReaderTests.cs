@@ -1,7 +1,5 @@
 ﻿using System;
-using Mono.Cecil;
 using NUnit.Framework;
-using NUnit.Framework.Constraints;
 
 [TestFixture]
 public class DataReaderTests

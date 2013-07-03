@@ -37,12 +37,28 @@ public partial class ModuleWeaver
 
         var attributeData = DataReader.ReadAttributeData(obsoleteExAttribute);
 
+
+        ApplyVersionConvention(attributeData);
+
+
         ValidateVersion(memberDefinition, attributeData);
 
         AddObsoleteAttribute(attributeData, customAttributes);
         if (HideObsoleteMembers)
         {
             AddEditorBrowsableAttribute(customAttributes);
+        }
+    }
+
+    public void ApplyVersionConvention(AttributeData attributeData)
+    {
+        if (attributeData.TreatAsErrorFromVersion == null)
+        {
+            attributeData.TreatAsErrorFromVersion = assemblyVersion.Add(VersionIncrement);
+        }
+        if (attributeData.RemoveInVersion == null)
+        {
+            attributeData.RemoveInVersion = attributeData.TreatAsErrorFromVersion.Add(VersionIncrement);
         }
     }
 
@@ -63,10 +79,12 @@ public partial class ModuleWeaver
 
     void ValidateVersion(IMemberDefinition memberDefinition, AttributeData attributeData)
     {
-        if (attributeData.RemoveInVersion == null)
+        if (attributeData.RemoveInVersion <= attributeData.TreatAsErrorFromVersion)
         {
-            return;
+            var message = string.Format("Cannot process '{0}'. The version specified in 'RemoveInVersion' {1} is less or equal to the version specified in 'TreatAsErrorFromVersion' {2}. The member should be removed or 'RemoveInVersion' increased.", memberDefinition.FullName, attributeData.RemoveInVersion, attributeData.TreatAsErrorFromVersion);
+            throw new WeavingException(message);
         }
+
         if (assemblyVersion >= attributeData.RemoveInVersion)
         {
             var message = string.Format("Cannot process '{0}'. The assembly version {1} is higher than version specified in 'RemoveInVersion' {2}. The member should be removed or 'RemoveInVersion' increased.", memberDefinition.FullName, assemblyVersion, attributeData.RemoveInVersion);

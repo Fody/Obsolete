@@ -7,31 +7,6 @@ public class AttributeDataFormatterTests
 {
 
     [Test]
-    public void Empty()
-    {
-        var assemblyVersion = new Version(1, 0, 0, 0);
-        var moduleWeaver = new ModuleWeaver
-                           {
-                               assemblyVersion = assemblyVersion
-                           };
-        var message = moduleWeaver.ConvertToMessage(new AttributeData());
-        Assert.AreEqual("", message);
-    }
-
-    [Test]
-    public void CustomMessage()
-    {
-        var attributeData = new AttributeData {Message = "Custom Message."};
-        var assemblyVersion = new Version(1, 0, 0, 0);
-        var moduleWeaver = new ModuleWeaver
-                           {
-                               assemblyVersion = assemblyVersion
-                           };
-        var message = moduleWeaver.ConvertToMessage(attributeData);
-        Assert.AreEqual("Custom Message.", message);
-    }
-
-    [Test]
     public void All()
     {
         var attributeData = new AttributeData
@@ -46,20 +21,7 @@ public class AttributeDataFormatterTests
         var message = dataFormatter.ConvertToMessage(attributeData);
         Assert.AreEqual("Custom Message. Please use 'NewMember' instead. Will be treated as an error from version '2.0.0'. Will be removed in version '4.0.0'.", message);
     }
-    [Test]
-    public void AssumedRemoveIn()
-    {
-        var attributeData = new AttributeData
-                                {
-                                    Message = "Custom Message.",
-                                    TreatAsErrorFromVersion = new Version(2,0,0,0),
-                                    Replacement = "NewMember"
-                                };
-        var assemblyVersion = new Version(1, 0, 0, 0);
-        var dataFormatter = new ModuleWeaver {assemblyVersion = assemblyVersion};
-        var message = dataFormatter.ConvertToMessage(attributeData);
-        Assert.AreEqual("Custom Message. Please use 'NewMember' instead. Will be treated as an error from version '2.0.0'. Will be removed in version '3.0.0'.", message);
-    }
+  
 
     [Test]
     public void ForSample()
