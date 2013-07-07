@@ -26,7 +26,7 @@ public partial class ModuleWeaver
         {
             if (methodDefinition.IsGetter || methodDefinition.IsSetter)
             {
-                var error = string.Format("ObsoleteExAttribute is not valid on property gets or sets. Member: '{0}'.", memberDefinition.FullName);
+                var error = string.Format("ObsoleteExAttribute is not valid on property gets or sets. Member: `{0}`.", memberDefinition.FullName);
 
                 LogError(error);
             }

@@ -19,7 +19,7 @@ public class AttributeDataFormatterTests
         var assemblyVersion = new Version(1, 0, 0, 0);
         var dataFormatter = new ModuleWeaver {assemblyVersion = assemblyVersion};
         var message = dataFormatter.ConvertToMessage(attributeData);
-        Assert.AreEqual("Custom Message. Please use 'NewMember' instead. Will be treated as an error from version '2.0.0'. Will be removed in version '4.0.0'.", message);
+        Assert.AreEqual("Custom Message. Please use `NewMember` instead. Will be treated as an error from version 2.0.0. Will be removed in version 4.0.0.", message);
     }
   
 

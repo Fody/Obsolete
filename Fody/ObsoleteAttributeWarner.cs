@@ -14,7 +14,7 @@ public partial class ModuleWeaver
         {
             return;
         }
-        var warning = string.Format("The member '{0}' has an ObsoleteAttribute. You should consider replacing it with an ObsoleteExAttribute.", memberDefinition.FullName);
+        var warning = string.Format("The member `{0}` has an ObsoleteAttribute. You should consider replacing it with an ObsoleteExAttribute.", memberDefinition.FullName);
         LogWarning(warning);
 
     }

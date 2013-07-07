@@ -3,10 +3,10 @@ using System.Linq;
 
 public partial class ModuleWeaver
 {
-    public string TreatAsErrorFormat = "Will be treated as an error from version '{0}'. ";
+    public string TreatAsErrorFormat = "Will be treated as an error from version {0}. ";
     public Version VersionIncrement = new Version(1, 0,0);
-    public string RemoveInVersionFormat = "Will be removed in version '{0}'. ";
-    public string ReplacementFormat = "Please use '{0}' instead. ";
+    public string RemoveInVersionFormat = "Will be removed in version {0}. ";
+    public string ReplacementFormat = "Please use `{0}` instead. ";
 
     public bool HideObsoleteMembers;
 

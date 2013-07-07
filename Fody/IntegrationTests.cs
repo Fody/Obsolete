@@ -58,21 +58,21 @@ public class IntegrationTests
         var type = assembly.GetType("ClassToMarkWithAssumedVersion");
         var customAttributes = ((ICustomAttributeProvider) type).GetCustomAttributes(typeof (ObsoleteAttribute), false);
         var obsoleteAttribute = (ObsoleteAttribute) customAttributes.First();
-        Assert.AreEqual("Custom message. Please use 'NewThing' instead. Will be treated as an error from version '2.0.0'. Will be removed in version '3.0.0'.", obsoleteAttribute.Message);
+        Assert.AreEqual("Custom message. Please use `NewThing` instead. Will be treated as an error from version 2.0.0. Will be removed in version 3.0.0.", obsoleteAttribute.Message);
         ValidateIsNotError(type);
     }
 
     [Test]
     public void Warnings()
     {
-        Assert.Contains("The member 'ClassWithObsoleteAttribute' has an ObsoleteAttribute. You should consider replacing it with an ObsoleteExAttribute.", warnings);
+        Assert.Contains("The member `ClassWithObsoleteAttribute` has an ObsoleteAttribute. You should consider replacing it with an ObsoleteExAttribute.", warnings);
     }
 
     [Test]
     public void Errors()
     {
-        Assert.Contains("ObsoleteExAttribute is not valid on property gets or sets. Member: 'System.Void ClassWithObsoleteOnGetSet::set_PropertyToMark(System.String)'.", errors);
-        Assert.Contains("ObsoleteExAttribute is not valid on property gets or sets. Member: 'System.String ClassWithObsoleteOnGetSet::get_PropertyToMark()'.", errors);
+        Assert.Contains("ObsoleteExAttribute is not valid on property gets or sets. Member: `System.Void ClassWithObsoleteOnGetSet::set_PropertyToMark(System.String)`.", errors);
+        Assert.Contains("ObsoleteExAttribute is not valid on property gets or sets. Member: `System.String ClassWithObsoleteOnGetSet::get_PropertyToMark()`.", errors);
     }
 
     [Test]
@@ -229,7 +229,7 @@ public class IntegrationTests
     {
         var customAttributes = attributeProvider.GetCustomAttributes(typeof (ObsoleteAttribute), false);
         var obsoleteAttribute = (ObsoleteAttribute) customAttributes.First();
-        Assert.AreEqual("Custom message. Please use 'NewThing' instead. Will be treated as an error from version '2.0.0'. Will be removed in version '4.0.0'.", obsoleteAttribute.Message);
+        Assert.AreEqual("Custom message. Please use `NewThing` instead. Will be treated as an error from version 2.0.0. Will be removed in version 4.0.0.", obsoleteAttribute.Message);
     }
 
     static void ValidateHidden(ICustomAttributeProvider attributeProvider)
