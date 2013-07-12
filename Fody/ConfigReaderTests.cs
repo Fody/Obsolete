@@ -15,6 +15,22 @@ public class ConfigReaderTests
         Assert.IsTrue(moduleWeaver.HideObsoleteMembers);
     }
     [Test]
+    public void FalseHideObsoleteMembers()
+    {
+        var xElement = XElement.Parse(@"<Obsolete HideObsoleteMembers='false'/>");
+        var moduleWeaver = new ModuleWeaver {Config = xElement};
+        moduleWeaver.ReadConfig();
+        Assert.IsFalse(moduleWeaver.HideObsoleteMembers);
+    }
+    [Test]
+    public void EmptyHideObsoleteMembers()
+    {
+        var xElement = XElement.Parse(@"<Obsolete/>");
+        var moduleWeaver = new ModuleWeaver {Config = xElement};
+        moduleWeaver.ReadConfig();
+        Assert.IsTrue(moduleWeaver.HideObsoleteMembers);
+    }
+    [Test]
     public void VersionIncrement()
     {
         var xElement = XElement.Parse(@"<Obsolete VersionIncrement='1.0.1'/>");

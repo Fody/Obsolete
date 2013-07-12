@@ -73,9 +73,9 @@ All configuration options are access by modifying the `Obsolete` node in FodyWea
 
 When this is `true` obsolete members will also have `[EditorBrowsable(EditorBrowsableState.Advanced)]` added to them.
 
-*Defaults to `false`*
+*Defaults to `true`*
 
-    <Obsolete HideObsoleteMembers='true'/>
+    <Obsolete HideObsoleteMembers='false'/>
 
 ## TreatAsErrorFormat
 
