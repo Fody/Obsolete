@@ -43,6 +43,7 @@ When the target assembly version is greater than `WillBeRemovedInVersion` but le
 So given the above example when the assembly version is 3.0 the following will be injected
 
     [Obsolete("Custom Message. Please use 'NewClass' instead. Will be removed in version 4.0.0.", true)]
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
     public class ClassToMark{}
 
 ### Build Error Mode
