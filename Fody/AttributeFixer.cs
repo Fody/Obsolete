@@ -54,7 +54,14 @@ public partial class ModuleWeaver
     {
         if (attributeData.TreatAsErrorFromVersion == null)
         {
-            attributeData.TreatAsErrorFromVersion = assemblyVersion.Add(VersionIncrement);
+            if (attributeData.RemoveInVersion == null)
+            {
+                attributeData.TreatAsErrorFromVersion = assemblyVersion.Add(VersionIncrement);
+            }
+            else
+            {
+                attributeData.TreatAsErrorFromVersion = attributeData.RemoveInVersion.Subtract(VersionIncrement);
+            }
         }
         if (attributeData.RemoveInVersion == null)
         {

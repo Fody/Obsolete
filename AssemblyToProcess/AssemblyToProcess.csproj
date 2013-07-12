@@ -51,7 +51,10 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="ClassToMark.cs" />
-    <Compile Include="ClassToMarkWithAssumedVersion.cs" />
+    <Compile Include="ClassToMarkWithAssumedRemoveInVersion.cs" />
+    <Compile Include="ClassToMarkWithAssumedTreatAsErrorFromVersion.cs" />
+    <Compile Include="ClassToMarkWithHigherAssumedRemoveInVersion.cs" />
+    <Compile Include="ClassToMarkWithHigherAssumedTreatAsErrorFromVersion.cs" />
     <Compile Include="ClassWithIsError.cs" />
     <Compile Include="ClassWithObsoleteAttribute.cs" />
     <Compile Include="ClassWithObsoleteOnGetSet.cs" />

@@ -3,6 +3,13 @@ using System;
 public static class VersionExtensions
 {
 
+    public static Version Subtract(this Version target, Version toSubtract)
+    {
+        var major = target.Major.OrZero() - toSubtract.Major.OrZero();
+        var minor = target.Minor.OrZero() - toSubtract.Minor.OrZero();
+        var build = target.Build.OrZero() - toSubtract.Build.OrZero();
+        return new Version(major, minor, build);
+    }
     public static Version Add(this Version target, Version toAdd)
     {
         var major = target.Major.OrZero() + toAdd.Major.OrZero();

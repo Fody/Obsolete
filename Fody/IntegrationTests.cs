@@ -53,13 +53,40 @@ public class IntegrationTests
         ValidateIsNotError(type);
     }
     [Test]
-    public void ClassWithAssumedVersion()
+    public void ClassWithHigherAssumedRemoveInVersion()
     {
-        var type = assembly.GetType("ClassToMarkWithAssumedVersion");
+        var type = assembly.GetType("ClassToMarkWithHigherAssumedRemoveInVersion");
         var customAttributes = ((ICustomAttributeProvider) type).GetCustomAttributes(typeof (ObsoleteAttribute), false);
         var obsoleteAttribute = (ObsoleteAttribute) customAttributes.First();
-        Assert.AreEqual("Custom message. Please use `NewThing` instead. Will be treated as an error from version 2.0.0. Will be removed in version 3.0.0.", obsoleteAttribute.Message);
+        Assert.AreEqual("Will be treated as an error from version 3.0.0. Will be removed in version 4.0.0.", obsoleteAttribute.Message);
         ValidateIsNotError(type);
+    }
+    [Test]
+    public void ClassToMarkWithHigherAssumedTreatAsErrorFromVersion()
+    {
+        var type = assembly.GetType("ClassToMarkWithHigherAssumedTreatAsErrorFromVersion");
+        var customAttributes = ((ICustomAttributeProvider) type).GetCustomAttributes(typeof (ObsoleteAttribute), false);
+        var obsoleteAttribute = (ObsoleteAttribute) customAttributes.First();
+        Assert.AreEqual("Will be treated as an error from version 2.0.0. Will be removed in version 3.0.0.", obsoleteAttribute.Message);
+        ValidateIsNotError(type);
+    }
+    [Test]
+    public void ClassWithAssumedRemoveInVersion()
+    {
+        var type = assembly.GetType("ClassToMarkWithAssumedRemoveInVersion");
+        var customAttributes = ((ICustomAttributeProvider) type).GetCustomAttributes(typeof (ObsoleteAttribute), false);
+        var obsoleteAttribute = (ObsoleteAttribute) customAttributes.First();
+        Assert.AreEqual("Will be treated as an error from version 2.0.0. Will be removed in version 3.0.0.", obsoleteAttribute.Message);
+        ValidateIsNotError(type);
+    }
+    [Test]
+    public void ClassToMarkWithAssumedTreatAsErrorFromVersion()
+    {
+        var type = assembly.GetType("ClassToMarkWithAssumedTreatAsErrorFromVersion");
+        var customAttributes = ((ICustomAttributeProvider) type).GetCustomAttributes(typeof (ObsoleteAttribute), false);
+        var obsoleteAttribute = (ObsoleteAttribute) customAttributes.First();
+        Assert.AreEqual("Will be removed in version 2.0.0.", obsoleteAttribute.Message);
+        ValidateIsError(type);
     }
 
     [Test]
