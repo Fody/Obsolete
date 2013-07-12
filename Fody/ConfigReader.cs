@@ -8,7 +8,7 @@ public partial class ModuleWeaver
     public string RemoveInVersionFormat = "Will be removed in version {0}. ";
     public string ReplacementFormat = "Please use `{0}` instead. ";
 
-    public bool HideObsoleteMembers;
+    public bool HideObsoleteMembers = true;
 
     public void ReadConfig()
     {
