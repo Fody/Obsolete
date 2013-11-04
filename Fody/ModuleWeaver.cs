@@ -4,7 +4,7 @@ using Mono.Cecil;
 
 public partial class ModuleWeaver
 {
-    public Version assemblyVersion;
+    public SemanticVersion assemblyVersion;
     public Action<string> LogInfo { get; set; }
     public Action<string> LogWarning { get; set; }
     public Action<string> LogError { get; set; }
@@ -23,7 +23,13 @@ public partial class ModuleWeaver
     {
         ReadConfig();
         FindSystemTypes();
-        assemblyVersion = ModuleDefinition.Assembly.Name.Version;
+        var version = ModuleDefinition.Assembly.Name.Version;
+        assemblyVersion = new SemanticVersion
+        {
+            Major = version.Major.OrZero(),
+            Minor = version.Minor.OrZero(),
+            Patch = version.Build.OrZero()
+        };
         FindObsoleteType();
 
 

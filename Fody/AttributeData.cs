@@ -1,12 +1,10 @@
-using System;
-
 public class AttributeData
 {
     public string Replacement;
 
-    public Version RemoveInVersion;
+    public SemanticVersion RemoveInVersion;
 
-    public Version TreatAsErrorFromVersion;
+    public SemanticVersion TreatAsErrorFromVersion;
 
     public string Message;
 }

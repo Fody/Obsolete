@@ -1,29 +1,28 @@
-using System;
 
 public static class VersionExtensions
 {
 
-    public static Version Subtract(this Version target, Version toSubtract)
+    public static SemanticVersion Subtract(this SemanticVersion target, SemanticVersion toSubtract)
     {
-        var major = target.Major.OrZero() - toSubtract.Major.OrZero();
-        var minor = target.Minor.OrZero() - toSubtract.Minor.OrZero();
-        var build = target.Build.OrZero() - toSubtract.Build.OrZero();
-        return new Version(major, minor, build);
+        var major = target.Major - toSubtract.Major;
+        var minor = target.Minor - toSubtract.Minor;
+        var patch = target.Patch - toSubtract.Patch;
+        return new SemanticVersion { Major = major, Minor = minor, Patch = patch };
     }
-    public static Version Add(this Version target, Version toAdd)
+    public static SemanticVersion Add(this SemanticVersion target, SemanticVersion toAdd)
     {
-        var major = target.Major.OrZero() + toAdd.Major.OrZero();
-        var minor = target.Minor.OrZero() + toAdd.Minor.OrZero();
-        var build = target.Build.OrZero() + toAdd.Build.OrZero();
-        return new Version(major, minor, build);
+        var major = target.Major + toAdd.Major;
+        var minor = target.Minor + toAdd.Minor;
+        var patch = target.Patch + toAdd.Patch;
+        return new SemanticVersion { Major = major, Minor = minor, Patch = patch };
     }
 
-    public static Version ToSemVer(this Version target)
+    public static SemanticVersion ToSemVer(this SemanticVersion target)
     {
-        var major = target.Major.OrZero();
-        var minor = target.Minor.OrZero();
-        var build = target.Build.OrZero() ;
-        return new Version(major, minor, build);
+        var major = target.Major;
+        var minor = target.Minor;
+        var patch = target.Patch;
+        return new SemanticVersion{Major = major,Minor = minor, Patch = patch};
     }
 
     public static int OrZero(this int target)

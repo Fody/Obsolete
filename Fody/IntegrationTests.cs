@@ -52,6 +52,7 @@ public class IntegrationTests
         ValidateMessage(type);
         ValidateIsNotError(type);
     }
+
     [Test]
     public void ClassWithHigherAssumedRemoveInVersion()
     {
@@ -61,6 +62,17 @@ public class IntegrationTests
         Assert.AreEqual("Will be treated as an error from version 3.0.0. Will be removed in version 4.0.0.", obsoleteAttribute.Message);
         ValidateIsNotError(type);
     }
+
+    [Test]
+    public void ClassToMarkWithSameRemoveAndTreatAsError()
+    {
+        var type = assembly.GetType("ClassToMarkWithSameRemoveAndTreatAsError");
+        var customAttributes = ((ICustomAttributeProvider) type).GetCustomAttributes(typeof (ObsoleteAttribute), false);
+        var obsoleteAttribute = (ObsoleteAttribute) customAttributes.First();
+        Assert.AreEqual("Will be treated as an error from version 1.2.0. Will be removed in version 1.2.0.", obsoleteAttribute.Message);
+        ValidateIsNotError(type);
+    }
+
     [Test]
     public void ClassToMarkWithHigherAssumedTreatAsErrorFromVersion()
     {
@@ -70,6 +82,7 @@ public class IntegrationTests
         Assert.AreEqual("Will be treated as an error from version 2.0.0. Will be removed in version 3.0.0.", obsoleteAttribute.Message);
         ValidateIsNotError(type);
     }
+
     [Test]
     public void ClassWithAssumedRemoveInVersion()
     {
@@ -79,6 +92,7 @@ public class IntegrationTests
         Assert.AreEqual("Will be treated as an error from version 2.0.0. Will be removed in version 3.0.0.", obsoleteAttribute.Message);
         ValidateIsNotError(type);
     }
+
     [Test]
     public void ClassToMarkWithAssumedTreatAsErrorFromVersion()
     {

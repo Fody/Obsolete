@@ -4,7 +4,7 @@ using System.Linq;
 public partial class ModuleWeaver
 {
     public string TreatAsErrorFormat = "Will be treated as an error from version {0}. ";
-    public Version VersionIncrement = new Version(1, 0,0);
+    public SemanticVersion VersionIncrement = "1";
     public string RemoveInVersionFormat = "Will be removed in version {0}. ";
     public string ReplacementFormat = "Please use `{0}` instead. ";
 
@@ -57,13 +57,9 @@ public partial class ModuleWeaver
         var xAttribute = Config.Attribute("VersionIncrement");
         if (xAttribute != null)
         {
-            if (!Version.TryParse(xAttribute.Value, out VersionIncrement))
+            if (!SemanticVersion.TryParse(xAttribute.Value, out VersionIncrement))
             {
                 throw new Exception(string.Format("Could not parse 'VersionIncrement' from '{0}'.", xAttribute.Value));
-            }
-            if (VersionIncrement.Revision != -1)
-            {
-                throw new Exception(string.Format("Could not parse 'VersionIncrement' from '{0}'. Revision not supported.", xAttribute.Value));
             }
         }
     }

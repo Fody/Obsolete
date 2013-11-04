@@ -99,6 +99,8 @@
     <Compile Include="..\CommonAssemblyInfo.cs" />
     <Compile Include="ReferenceCleaner.cs" />
     <Compile Include="ObsoleteTypeFinder.cs" />
+    <Compile Include="SemanticVersion.cs" />
+    <Compile Include="SemanticVersionTests.cs" />
     <Compile Include="Verifier.cs" />
     <Compile Include="VersionExtensions.cs" />
     <Compile Include="VersionExtensionTests.cs" />

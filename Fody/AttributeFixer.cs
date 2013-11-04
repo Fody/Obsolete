@@ -5,12 +5,11 @@ using Mono.Collections.Generic;
 
 public partial class ModuleWeaver
 {
-    
-    public void ProcessAttributes(IMemberDefinition memberDefinition)
+
+    void ProcessAttributes(IMemberDefinition memberDefinition)
     {
-            CheckForNormalAttribute(memberDefinition);
-            InnerProcess(memberDefinition);
-     
+        CheckForNormalAttribute(memberDefinition);
+        InnerProcess(memberDefinition);
     }
 
     void InnerProcess(IMemberDefinition memberDefinition)
@@ -50,7 +49,7 @@ public partial class ModuleWeaver
         }
     }
 
-    public void ApplyVersionConvention(AttributeData attributeData)
+    void ApplyVersionConvention(AttributeData attributeData)
     {
         if (attributeData.TreatAsErrorFromVersion == null)
         {
@@ -86,9 +85,15 @@ public partial class ModuleWeaver
 
     void ValidateVersion(IMemberDefinition memberDefinition, AttributeData attributeData)
     {
-        if (attributeData.RemoveInVersion <= attributeData.TreatAsErrorFromVersion)
+        if (attributeData.RemoveInVersion == attributeData.TreatAsErrorFromVersion)
         {
-            var message = string.Format("Cannot process '{0}'. The version specified in 'RemoveInVersion' {1} is less or equal to the version specified in 'TreatAsErrorFromVersion' {2}. The member should be removed or 'RemoveInVersion' increased.", memberDefinition.FullName, attributeData.RemoveInVersion, attributeData.TreatAsErrorFromVersion);
+            var message = string.Format("Cannot process '{0}'. The version specified in 'RemoveInVersion' {1} is equal to the version specified in 'TreatAsErrorFromVersion' {2}. This is not recommended, although in some edge cases it may be required.", memberDefinition.FullName, attributeData.RemoveInVersion, attributeData.TreatAsErrorFromVersion);
+            LogWarning(message);
+        }
+
+        if ( attributeData.RemoveInVersion < attributeData.TreatAsErrorFromVersion)
+        {
+            var message = string.Format("Cannot process '{0}'. The version specified in 'RemoveInVersion' {1} is less than the version specified in 'TreatAsErrorFromVersion' {2}. The member should be removed or 'RemoveInVersion' increased.", memberDefinition.FullName, attributeData.RemoveInVersion, attributeData.TreatAsErrorFromVersion);
             throw new WeavingException(message);
         }
 
