@@ -4,7 +4,7 @@ using System.Linq;
 public partial class ModuleWeaver
 {
     public string TreatAsErrorFormat = "Will be treated as an error from version {0}. ";
-    public SemanticVersion VersionIncrement = "1";
+    public StepType StepType = StepType.Major;
     public string RemoveInVersionFormat = "Will be removed in version {0}. ";
     public string ReplacementFormat = "Please use `{0}` instead. ";
 
@@ -19,6 +19,7 @@ public partial class ModuleWeaver
         ReadFormats();
         ReadHideObsoleteMembers();
         ReadVersionIncrement();
+        ReadStepType();
     }
 
     void ReadFormats()
@@ -52,14 +53,24 @@ public partial class ModuleWeaver
             }
         }
     }
+    
     void ReadVersionIncrement()
     {
         var xAttribute = Config.Attribute("VersionIncrement");
         if (xAttribute != null)
         {
-            if (!SemanticVersion.TryParse(xAttribute.Value, out VersionIncrement))
+            throw new WeavingException("VersionIncrement is no longer supported. Use StepType instead.");
+        }
+    }
+
+    void ReadStepType()
+    {
+        var xAttribute = Config.Attribute("StepType");
+        if (xAttribute != null)
+        {
+            if (!Enum.TryParse(xAttribute.Value, out StepType))
             {
-                throw new Exception(string.Format("Could not parse 'VersionIncrement' from '{0}'.", xAttribute.Value));
+                throw new Exception(string.Format("Could not parse 'StepType' from '{0}'.", xAttribute.Value));
             }
         }
     }

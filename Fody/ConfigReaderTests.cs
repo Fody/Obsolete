@@ -1,5 +1,4 @@
-﻿using System;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 using NUnit.Framework;
 
 [TestFixture]
@@ -14,6 +13,7 @@ public class ConfigReaderTests
         moduleWeaver.ReadConfig();
         Assert.IsTrue(moduleWeaver.HideObsoleteMembers);
     }
+
     [Test]
     public void FalseHideObsoleteMembers()
     {
@@ -22,6 +22,7 @@ public class ConfigReaderTests
         moduleWeaver.ReadConfig();
         Assert.IsFalse(moduleWeaver.HideObsoleteMembers);
     }
+
     [Test]
     public void EmptyHideObsoleteMembers()
     {
@@ -30,22 +31,24 @@ public class ConfigReaderTests
         moduleWeaver.ReadConfig();
         Assert.IsTrue(moduleWeaver.HideObsoleteMembers);
     }
+
     [Test]
-    public void VersionIncrement()
+    public void CanParseStepType()
+    {
+        var xElement = XElement.Parse(@"<Obsolete StepType='Minor'/>");
+        var moduleWeaver = new ModuleWeaver {Config = xElement};
+        moduleWeaver.ReadConfig();
+        Assert.AreEqual(StepType.Minor, moduleWeaver.StepType);
+    }
+
+    [Test]
+    public void VersionIncrementThrows()
     {
         var xElement = XElement.Parse(@"<Obsolete VersionIncrement='1.0.1'/>");
         var moduleWeaver = new ModuleWeaver {Config = xElement};
-        moduleWeaver.ReadConfig();
-        Assert.IsTrue(new SemanticVersion{Major = 1,Minor = 0,Patch = 1}== moduleWeaver.VersionIncrement);
+        var exception = Assert.Throws<WeavingException>(moduleWeaver.ReadConfig);
+        Assert.AreEqual("VersionIncrement is no longer supported. Use StepType instead.", exception.Message);
     }
-    [Test]
-    public void InvalidRevision()
-    {
-        var xElement = XElement.Parse(@"<Obsolete VersionIncrement='1.0.1.1'/>");
-        var moduleWeaver = new ModuleWeaver {Config = xElement};
-
-        var exception = Assert.Throws<Exception>(moduleWeaver.ReadConfig);
-        Assert.AreEqual("Could not parse 'VersionIncrement' from '1.0.1.1'.", exception.Message);
-    }
+    
 
 }

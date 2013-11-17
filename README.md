@@ -18,14 +18,14 @@ To Install from the Nuget Package Manager Console
 
     [ObsoleteEx(
     Message = "Custom message.", 
-    MarkAsErrorInVersion = "2.0", 
-    WillBeRemovedInVersion = "4.0", 
+    TreatAsErrorFromVersion = "2.0", 
+    RemoveInVersion = "4.0", 
     ReplacedWith = "NewClass")]
     public class ClassToMark {}
 
 ### Treat As Warning Mode
 
-When the target assembly version is less than `MarkAsErrorInVersion` an `ObsoleteAttribute` with "treat as warning" will be injected. It will have the following format
+When the target assembly version is less than `RemoveInVersion` an `ObsoleteAttribute` with "treat as warning" will be injected. It will have the following format
 
     [Obsolete("MESSAGE. Please use 'REPLACED_WITH' instead. Will be treated as an error from version MARK_AS_VERSION_IN. Will be removed in version WILL_BE_REMOVED_IN_VERSION.")]
 
@@ -36,7 +36,7 @@ So given the above example when the assembly version is 1.0 the following will b
 
 ### Treat As Error Mode
 
-When the target assembly version is greater than `WillBeRemovedInVersion` but less than `MarkAsErrorInVersion` an `ObsoleteAttribute` with "treat as error" will be injected. It will have the following format
+When the target assembly version is greater than `RemoveInVersion` but less than `TreatAsErrorFromVersion` an `ObsoleteAttribute` with "treat as error" will be injected. It will have the following format
 
     [Obsolete("MESSAGE. Please use 'REPLACED_WITH' instead. Will be removed in version WILL_BE_REMOVED_IN_VERSION.", true)]
 
@@ -48,7 +48,7 @@ So given the above example when the assembly version is 3.0 the following will b
 
 ### Build Error Mode
 
-When the target assembly version is greater  than `MarkAsErrorInVersion` a build error will be generated. It will have the following format
+When the target assembly version is greater  than `TreatAsErrorFromVersion` a build error will be generated. It will have the following format
 
      Cannot process 'MEMBER_NAME'. The assembly version ASSEMBLY_VERSION is higher than version specified in 'RemoveInVersion' WILL_BE_REMOVED_IN_VERSION. The member should be removed or 'RemoveInVersion' increased.
     
@@ -101,6 +101,17 @@ The string used when informing the user of an alternative member to use instead 
 *Defaults to `Please use '{0}' instead. `*
 
     <Obsolete ReplacementFormat="Please use '{0}' instead. "/>
+
+## StepType
+
+Used in two cases
+
+ * To derive `TreatAsErrorFromVersion` if `RemoveInVersion` is not defined.
+ * To derive `RemoveInVersion` if `TreatAsErrorFromVersion` is not defined.   
+
+*Defaults to  `Major`. Other options are `Minor` and `Patch`*
+
+    <Obsolete StepType="Minor"/>
 
 ## Icon
 

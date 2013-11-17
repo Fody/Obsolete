@@ -2,14 +2,15 @@ using System.Linq;
 using Mono.Cecil;
 using Mono.Collections.Generic;
 
-
 public partial class ModuleWeaver
 {
 
     void ProcessAttributes(IMemberDefinition memberDefinition)
     {
         CheckForNormalAttribute(memberDefinition);
-        InnerProcess(memberDefinition);
+        
+            InnerProcess(memberDefinition);
+
     }
 
     void InnerProcess(IMemberDefinition memberDefinition)
@@ -31,14 +32,19 @@ public partial class ModuleWeaver
             }
         }
 
-        customAttributes.Remove(obsoleteExAttribute);   
+        customAttributes.Remove(obsoleteExAttribute);
 
 
         var attributeData = DataReader.ReadAttributeData(obsoleteExAttribute);
 
-
-        ApplyVersionConvention(attributeData);
-
+        try
+        {
+            ApplyVersionConvention(attributeData);
+        }
+        catch (WeavingException exception)
+        {
+            throw new WeavingException(string.Format("Could not process {0}. {1}", memberDefinition.FullName, exception.Message));
+        }
 
         ValidateVersion(memberDefinition, attributeData);
 
@@ -55,16 +61,16 @@ public partial class ModuleWeaver
         {
             if (attributeData.RemoveInVersion == null)
             {
-                attributeData.TreatAsErrorFromVersion = assemblyVersion.Add(VersionIncrement);
+                attributeData.TreatAsErrorFromVersion = assemblyVersion.Increment(StepType);
             }
             else
             {
-                attributeData.TreatAsErrorFromVersion = attributeData.RemoveInVersion.Subtract(VersionIncrement);
+                attributeData.TreatAsErrorFromVersion = attributeData.RemoveInVersion.Decrement(StepType);
             }
         }
         if (attributeData.RemoveInVersion == null)
         {
-            attributeData.RemoveInVersion = attributeData.TreatAsErrorFromVersion.Add(VersionIncrement);
+            attributeData.RemoveInVersion = attributeData.TreatAsErrorFromVersion.Increment(StepType);
         }
     }
 

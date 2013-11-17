@@ -26,7 +26,7 @@ public sealed class ObsoleteExAttribute : Attribute
     /// </summary>
     /// <remarks>
     /// When the assembly version is equal to or higher than this value the <see cref="ObsoleteAttribute.IsError"/> will be marked to true.
-    /// Must be convertable to a <see cref="Version"/>.
+    /// Must be convertible to a <see cref="Version"/>.
     /// </remarks>
     public string TreatAsErrorFromVersion { get; set; }
 
@@ -35,12 +35,12 @@ public sealed class ObsoleteExAttribute : Attribute
     /// </summary>
     /// <remarks>
     /// If the assembly version is equal to or higher than this value then a compile error will thrown since it should not exist in the assembly anymore.
-    /// Must be convertable to a <see cref="Version"/>.
+    /// Must be convertible to a <see cref="Version"/>.
     /// </remarks>
     public string RemoveInVersion { get; set; }
 
     /// <summary>
-    /// A value pointing to the name of the remplacement member if avaliable.
+    /// A value pointing to the name of the replacement member if available.
     /// </summary>
     public string Replacement { get; set; }
 }
