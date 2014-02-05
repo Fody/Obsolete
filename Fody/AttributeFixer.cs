@@ -99,7 +99,7 @@ public partial class ModuleWeaver
 
         if (assemblyVersion >= attributeData.RemoveInVersion)
         {
-            var message = string.Format("Cannot process '{0}'. The assembly version {1} is higher than version specified in 'RemoveInVersion' {2}. The member should be removed or 'RemoveInVersion' increased.", memberDefinition.FullName, assemblyVersion, attributeData.RemoveInVersion);
+            var message = string.Format("Cannot process '{0}'. The assembly version {1} is equal to or greater than version specified in 'RemoveInVersion' {2}. The member should be removed or 'RemoveInVersion' increased.", memberDefinition.FullName, assemblyVersion, attributeData.RemoveInVersion);
             throw new WeavingException(message);
         }
     }
