@@ -1,6 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AttributeAssembly", "AttributeAssembly", "{C0D1EED2-B62F-4CC0-9EE7-58816BF29966}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fody", "Fody\Fody.csproj", "{C3578A7B-09A6-4444-9383-0DEAFA4958BD}"
 	ProjectSection(ProjectDependencies) = postProject
 		{40939411-32F0-48DD-B17B-FA46DD5D9B25} = {40939411-32F0-48DD-B17B-FA46DD5D9B25}
@@ -9,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fody", "Fody\Fody.csproj", 
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyToProcess", "AssemblyToProcess\AssemblyToProcess.csproj", "{40939411-32F0-48DD-B17B-FA46DD5D9B25}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AttributeAssembly", "AttributeAssembly", "{C0D1EED2-B62F-4CC0-9EE7-58816BF29966}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Obsolete_3.5", "AttributeAssembly\Obsolete_3.5.csproj", "{9BC15CD4-32A5-4046-ACB5-83EB221047D3}"
 EndProject

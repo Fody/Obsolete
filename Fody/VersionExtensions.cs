@@ -16,8 +16,8 @@ public static class VersionExtensions
                 return new SemanticVersion
                     {
                         Major = target.Major -1,
-                        Minor = target.Minor,
-                        Patch = target.Patch
+                        Minor = 0,
+                        Patch = 0
                     };
             case StepType.Minor:
                 if (target.Minor == 0)
@@ -28,7 +28,7 @@ public static class VersionExtensions
                     {
                         Major = target.Major,
                         Minor = target.Minor - 1,
-                        Patch = target.Patch
+                        Patch = 0
                     };
             case StepType.Patch:
                 if (target.Patch == 0)
@@ -54,15 +54,15 @@ public static class VersionExtensions
                 return new SemanticVersion
                 {
                     Major = target.Major + 1,
-                    Minor = target.Minor,
-                    Patch = target.Patch
+                    Minor = 0,
+                    Patch = 0
                 };
             case StepType.Minor:
                 return new SemanticVersion
                 {
                     Major = target.Major,
                     Minor = target.Minor + 1,
-                    Patch = target.Patch
+                    Patch = 0
                 };
             case StepType.Patch:
                 return new SemanticVersion

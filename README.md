@@ -68,7 +68,7 @@ The message property should only be used for useful information. The fact that i
 
 # Configuration Options
 
-All configuration options are access by modifying the `Obsolete` node in FodyWeavers.xml
+All configuration options are access by modifying the `Obsolete` node in `FodyWeavers.xml`
 
 ## HideObsoleteMembers
 

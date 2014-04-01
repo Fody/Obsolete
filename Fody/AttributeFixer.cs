@@ -91,7 +91,7 @@ public partial class ModuleWeaver
 
     void ValidateVersion(IMemberDefinition memberDefinition, AttributeData attributeData)
     {
-        if ( attributeData.RemoveInVersion < attributeData.TreatAsErrorFromVersion)
+        if (attributeData.RemoveInVersion < attributeData.TreatAsErrorFromVersion)
         {
             var message = string.Format("Cannot process '{0}'. The version specified in 'RemoveInVersion' {1} is less than the version specified in 'TreatAsErrorFromVersion' {2}. The member should be removed or 'RemoveInVersion' increased.", memberDefinition.FullName, attributeData.RemoveInVersion, attributeData.TreatAsErrorFromVersion);
             throw new WeavingException(message);
