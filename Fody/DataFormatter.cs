@@ -6,16 +6,18 @@ public partial class ModuleWeaver
     public string ConvertToMessage(AttributeData attributeData)
     {
         var stringBuilder = new StringBuilder();
-        if (attributeData.Message != null)
+        var message = attributeData.Message;
+        if (message != null)
         {
-            stringBuilder.AppendFormat("{0} ", attributeData.Message);
+            message = message.Trim();
+            message = message.Trim('.');
+            stringBuilder.AppendFormat("{0}. ", message);
         }
 
         if (attributeData.Replacement != null)
         {
             stringBuilder.AppendFormat(ReplacementFormat, attributeData.Replacement);
         }
-
 
         if (assemblyVersion < attributeData.TreatAsErrorFromVersion)
         {

@@ -5,7 +5,7 @@ public partial class ModuleWeaver
 {
     public string TreatAsErrorFormat = "Will be treated as an error from version {0}. ";
     public StepType StepType = StepType.Major;
-    public string RemoveInVersionFormat = "Will be removed in version {0}. ";
+    public string RemoveInVersionFormat = "Will be removed in version {0}.";
     public string ReplacementFormat = "Please use `{0}` instead. ";
 
     public bool HideObsoleteMembers = true;
