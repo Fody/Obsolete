@@ -65,6 +65,7 @@ The message property should only be used for useful information. The fact that i
  * "Do not call this method"
  * "This method will be removed"
  * "This method is obsolete"
+ * "The replacement method is"
 
 # Configuration Options
 
