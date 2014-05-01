@@ -20,7 +20,7 @@ To Install from the Nuget Package Manager Console
     Message = "Custom message.", 
     TreatAsErrorFromVersion = "2.0", 
     RemoveInVersion = "4.0", 
-    ReplacedWith = "NewClass")]
+    Replacement = "NewClass")]
     public class ClassToMark {}
 
 ### Treat As Warning Mode
