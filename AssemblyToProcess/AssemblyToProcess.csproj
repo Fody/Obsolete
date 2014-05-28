@@ -98,9 +98,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AttributeAssembly\Obsolete_PCL.csproj">
-      <Project>{40235741-D750-45B1-8DC5-49576025ABA9}</Project>
-      <Name>Obsolete_PCL</Name>
+    <ProjectReference Include="..\AttributeAssembly\Obsolete.csproj">
+      <Project>{5D6191BF-F0EE-474D-B168-BB92418A0F3D}</Project>
+      <Name>Obsolete</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

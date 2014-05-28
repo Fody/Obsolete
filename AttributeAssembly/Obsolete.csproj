@@ -4,7 +4,7 @@
     <BaseIntermediateOutputPath>obj\PCL</BaseIntermediateOutputPath>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{40235741-D750-45B1-8DC5-49576025ABA9}</ProjectGuid>
+    <ProjectGuid>{5D6191BF-F0EE-474D-B168-BB92418A0F3D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Obsolete</RootNamespace>
@@ -51,9 +51,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Serialization" />
     <Compile Include="..\CommonAssemblyInfo.cs" />
     <Compile Include="ObsoleteExAttribute.cs" />
   </ItemGroup>
