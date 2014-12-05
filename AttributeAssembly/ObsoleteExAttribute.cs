@@ -13,7 +13,7 @@
     AttributeTargets.Constructor | 
     AttributeTargets.Enum | 
     AttributeTargets.Struct | 
-    AttributeTargets.Class, Inherited = false,AllowMultiple = false)]
+    AttributeTargets.Class, Inherited = false)]
 public sealed class ObsoleteExAttribute : Attribute
 {
     /// <summary>
