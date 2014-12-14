@@ -17,10 +17,10 @@ To Install from the Nuget Package Manager Console
 ### Your Code
 
     [ObsoleteEx(
-    Message = "Custom message.", 
-    TreatAsErrorFromVersion = "2.0", 
-    RemoveInVersion = "4.0", 
-    Replacement = "NewClass")]
+                Message = "Custom message.", 
+                TreatAsErrorFromVersion = "2.0", 
+                RemoveInVersion = "4.0", 
+                Replacement = "NewClass")]
     public class ClassToMark {}
 
 ### Treat As Warning Mode
