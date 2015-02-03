@@ -6,12 +6,10 @@ Helps keep usages of [ObsoleteAttribute](http://msdn.microsoft.com/en-us/library
 
 [Introduction to Fody](http://github.com/Fody/Fody/wiki/SampleUsage)
 
-## Nuget
+## The nuget package  [![NuGet Status](http://img.shields.io/nuget/v/Obsolete.Fody.svg?style=flat)](https://www.nuget.org/packages/Obsolete.Fody/)
 
-Nuget package http://nuget.org/packages/Obsolete.Fody 
+https://nuget.org/packages/Obsolete.Fody/
 
-To Install from the Nuget Package Manager Console 
-    
     PM> Install-Package Obsolete.Fody
 
 ### Your Code
