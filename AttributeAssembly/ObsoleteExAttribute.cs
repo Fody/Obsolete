@@ -42,5 +42,8 @@ public sealed class ObsoleteExAttribute : Attribute
     /// <summary>
     /// A value pointing to the name of the replacement member if available.
     /// </summary>
+    public string ReplacementTypeOrMember { get; set; }
+
+    [Obsolete("Use ReplacementTypeOrMember instead",true)]
     public string Replacement { get; set; }
 }

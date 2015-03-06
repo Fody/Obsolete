@@ -11,7 +11,7 @@ public static class DataReader
         return new AttributeData
                    {
                        Message = obsoleteExAttribute.GetValue("Message"),
-                       Replacement = obsoleteExAttribute.GetValue("Replacement"),
+                       Replacement = obsoleteExAttribute.GetValue("ReplacementTypeOrMember"),
                        TreatAsErrorFromVersion = treatAsErrorFromVersionString,
                        RemoveInVersion = removeInVersionString,
                    };

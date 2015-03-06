@@ -18,7 +18,7 @@ https://nuget.org/packages/Obsolete.Fody/
                 Message = "Custom message.", 
                 TreatAsErrorFromVersion = "2.0", 
                 RemoveInVersion = "4.0", 
-                Replacement = "NewClass")]
+                ReplacementTypeOrMember = "NewClass")]
     public class ClassToMark {}
 
 ### Treat As Warning Mode
