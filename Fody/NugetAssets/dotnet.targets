@@ -2,17 +2,17 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Target
     AfterTargets="AfterBuild"
-    Name="FodyXXXVerification">
+    Name="FodyObsoleteVerification">
 
-    <Delete Files="$(TargetDir)XXX.dll" />
+    <Delete Files="$(TargetDir)Obsolete.dll" />
 
     <Error
       Condition="$(FodyExecutedWeavers) == '*Undefined*'"
       Text="Could not find `FodyWeaversExecuted` MSBuild property. It is possible you need to update Fody." />
 
     <Error
-      Condition="!$(FodyExecutedWeavers.Contains('XXX;'))"
-      Text="XXX expected to be executed. You may need to manually add '&lt;XXX /&gt;' into your FodyWeavers.xml. eg &lt;Weavers&gt;&lt;XXX/&gt;&lt;/Weavers&gt;. See https://github.com/Fody/Fody/wiki/SampleUsage" />
+      Condition="!$(FodyExecutedWeavers.Contains('Obsolete;'))"
+      Text="Obsolete expected to be executed. You may need to manually add '&lt;Obsolete /&gt;' into your FodyWeavers.xml. eg &lt;Weavers&gt;&lt;Obsolete/&gt;&lt;/Weavers&gt;. See https://github.com/Fody/Fody/wiki/SampleUsage" />
 
   </Target>
 </Project>
