@@ -13,7 +13,7 @@ public partial class ModuleWeaver
             x.Parameters.Count == 2
             && x.Parameters[0].ParameterType.Name == "String"
             && x.Parameters[1].ParameterType.Name == "Boolean");
-        ObsoleteConstructorReference = ModuleDefinition.Import(constructor);
+        ObsoleteConstructorReference = ModuleDefinition.ImportReference(constructor);
 
     }
 
