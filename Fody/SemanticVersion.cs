@@ -20,7 +20,7 @@ public class SemanticVersion
 
     public static implicit operator string(SemanticVersion d)
     {
-        return string.Format("{0}.{1}.{2}", d.Major, d.Minor, d.Patch);
+        return $"{d.Major}.{d.Minor}.{d.Patch}";
     }
 
     public static implicit operator SemanticVersion(string d)

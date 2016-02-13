@@ -26,7 +26,7 @@ public partial class ModuleWeaver
         {
             if (methodDefinition.IsGetter || methodDefinition.IsSetter)
             {
-                var error = string.Format("ObsoleteExAttribute is not valid on property gets or sets. Member: `{0}`.", memberDefinition.FullName);
+                var error = $"ObsoleteExAttribute is not valid on property gets or sets. Member: `{memberDefinition.FullName}`.";
 
                 LogError(error);
             }
@@ -43,7 +43,7 @@ public partial class ModuleWeaver
         }
         catch (WeavingException exception)
         {
-            throw new WeavingException(string.Format("Could not process {0}. {1}", memberDefinition.FullName, exception.Message));
+            throw new WeavingException($"Could not process {memberDefinition.FullName}. {exception.Message}");
         }
 
         ValidateVersion(memberDefinition, attributeData);
@@ -93,13 +93,13 @@ public partial class ModuleWeaver
     {
         if (attributeData.RemoveInVersion < attributeData.TreatAsErrorFromVersion)
         {
-            var message = string.Format("Cannot process '{0}'. The version specified in 'RemoveInVersion' {1} is less than the version specified in 'TreatAsErrorFromVersion' {2}. The member should be removed or 'RemoveInVersion' increased.", memberDefinition.FullName, attributeData.RemoveInVersion, attributeData.TreatAsErrorFromVersion);
+            var message = $"Cannot process '{memberDefinition.FullName}'. The version specified in 'RemoveInVersion' {attributeData.RemoveInVersion} is less than the version specified in 'TreatAsErrorFromVersion' {attributeData.TreatAsErrorFromVersion}. The member should be removed or 'RemoveInVersion' increased.";
             throw new WeavingException(message);
         }
 
         if (assemblyVersion >= attributeData.RemoveInVersion)
         {
-            var message = string.Format("Cannot process '{0}'. The assembly version {1} is equal to or greater than version specified in 'RemoveInVersion' {2}. The member should be removed or 'RemoveInVersion' increased.", memberDefinition.FullName, assemblyVersion, attributeData.RemoveInVersion);
+            var message = $"Cannot process '{memberDefinition.FullName}'. The assembly version {assemblyVersion} is equal to or greater than version specified in 'RemoveInVersion' {attributeData.RemoveInVersion}. The member should be removed or 'RemoveInVersion' increased.";
             throw new WeavingException(message);
         }
     }

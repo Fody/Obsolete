@@ -11,7 +11,7 @@ public static class VersionExtensions
             case StepType.Major:
                 if (target.Major == 0)
                 {
-                    throw new WeavingException(string.Format("Can not derive `TreatAsErrorFromVersion` from '{0}' since Major is 0.", target));
+                    throw new WeavingException($"Can not derive `TreatAsErrorFromVersion` from '{target}' since Major is 0.");
                 }
                 return new SemanticVersion
                     {
@@ -22,7 +22,7 @@ public static class VersionExtensions
             case StepType.Minor:
                 if (target.Minor == 0)
                 {
-                    throw new WeavingException(string.Format("Can not derive `TreatAsErrorFromVersion` from '{0}' since Minor is 0.", target));
+                    throw new WeavingException($"Can not derive `TreatAsErrorFromVersion` from '{target}' since Minor is 0.");
                 }
                 return new SemanticVersion
                     {
@@ -33,7 +33,7 @@ public static class VersionExtensions
             case StepType.Patch:
                 if (target.Patch == 0)
                 {
-                    throw new WeavingException(string.Format("Can not derive `TreatAsErrorFromVersion` from '{0}' since Patch is 0.", target));
+                    throw new WeavingException($"Can not derive `TreatAsErrorFromVersion` from '{target}' since Patch is 0.");
                 }
                 return new SemanticVersion
                     {

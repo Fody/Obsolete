@@ -49,7 +49,7 @@ public partial class ModuleWeaver
         {
             if (!bool.TryParse(xAttribute.Value, out HideObsoleteMembers))
             {
-                throw new Exception(string.Format("Could not parse 'HideObsoleteMembers' from '{0}'.", xAttribute.Value));
+                throw new Exception($"Could not parse 'HideObsoleteMembers' from '{xAttribute.Value}'.");
             }
         }
     }
@@ -70,7 +70,7 @@ public partial class ModuleWeaver
         {
             if (!Enum.TryParse(xAttribute.Value, out StepType))
             {
-                throw new Exception(string.Format("Could not parse 'StepType' from '{0}'.", xAttribute.Value));
+                throw new Exception($"Could not parse 'StepType' from '{xAttribute.Value}'.");
             }
         }
     }
