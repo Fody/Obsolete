@@ -10,7 +10,7 @@ namespace Before
 
 namespace AfterVersion1
 {
-    [Obsolete("Custom Message. Please use `NewClass` instead. Will be treated as an error from version 2.0.0.0. Will be removed in version 4.0.0.0.", false)]
+    [Obsolete("Custom Message. Use `NewClass` instead. Will be treated as an error from version 2.0.0.0. Will be removed in version 4.0.0.0.", false)]
     public class ClassToMark
     {
     }
@@ -18,7 +18,7 @@ namespace AfterVersion1
 
 namespace AfterVersion3
 {
-    [Obsolete("Custom Message. Please use `NewClass` instead. Will be removed in version 4.0.0.0.", false)]
+    [Obsolete("Custom Message. Use `NewClass` instead. Will be removed in version 4.0.0.0.", false)]
     public class ClassToMark
     {
     }

@@ -31,7 +31,7 @@ public partial class ModuleWeaver
         }
         catch (Exception)
         {
-            throw new WeavingException("Could not enable HideObsoleteMembers due to problem finding EditorBrowsableAttribute. Please disable HideObsoleteMembers and raise an issue detailing what runtime you are compiling against.");
+            throw new WeavingException("Could not enable HideObsoleteMembers due to problem finding EditorBrowsableAttribute. Disable HideObsoleteMembers and raise an issue detailing what runtime you are compiling against.");
         }
     }
 

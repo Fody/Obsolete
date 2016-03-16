@@ -270,7 +270,7 @@ public class IntegrationTests
     {
         var customAttributes = attributeProvider.GetCustomAttributes(typeof (ObsoleteAttribute), false);
         var obsoleteAttribute = (ObsoleteAttribute) customAttributes.First();
-        Assert.AreEqual("Custom message. Please use `NewThing` instead. Will be treated as an error from version 2.0.0. Will be removed in version 4.0.0.", obsoleteAttribute.Message);
+        Assert.AreEqual("Custom message. Use `NewThing` instead. Will be treated as an error from version 2.0.0. Will be removed in version 4.0.0.", obsoleteAttribute.Message);
     }
 
     static void ValidateHidden(ICustomAttributeProvider attributeProvider)
