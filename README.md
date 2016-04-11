@@ -94,13 +94,13 @@ The string used when informing the user what version the member will be treated 
     <Obsolete TreatAsErrorFormat="Will be treated as an error from version {0}. "/>
 
 
-## MemberThrowsNotImplementedText
+## ThrowsNotImplementedText
 
 The string used when informing the user when the member currently throws a [NotImplementedException](https://msdn.microsoft.com/en-us/library/system.notimplementedexception.aspx).
 
 *Defaults to `The member currently throws a NotImplementedException. `*
 
-    <Obsolete MemberThrowsNotImplementedText="The member currently throws a NotImplementedException. "/>
+    <Obsolete ThrowsNotImplementedText="The member currently throws a NotImplementedException. "/>
 
 
 ## RemoveInVersionFormat

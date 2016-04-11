@@ -25,7 +25,7 @@ public partial class ModuleWeaver
         }
         if (attributeData.ThrowsNotImplemented)
         {
-            stringBuilder.Append(MemberThrowsNotImplementedText);
+            stringBuilder.Append(ThrowsNotImplementedText);
         }
         stringBuilder.AppendFormat(RemoveInVersionFormat, attributeData.RemoveInVersion.ToSemVer());
 

@@ -15,12 +15,12 @@ public class ConfigReaderTests
     }
 
     [Test]
-    public void MemberThrowsNotImplementedText()
+    public void ThrowsNotImplementedText()
     {
-        var xElement = XElement.Parse(@"<Obsolete MemberThrowsNotImplementedText='Custom Text'/>");
+        var xElement = XElement.Parse(@"<Obsolete ThrowsNotImplementedText='Custom Text'/>");
         var moduleWeaver = new ModuleWeaver {Config = xElement};
         moduleWeaver.ReadConfig();
-        Assert.AreEqual("Custom Text", moduleWeaver.MemberThrowsNotImplementedText);
+        Assert.AreEqual("Custom Text", moduleWeaver.ThrowsNotImplementedText);
     }
 
     [Test]

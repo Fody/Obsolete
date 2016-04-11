@@ -6,7 +6,7 @@ public partial class ModuleWeaver
     public string TreatAsErrorFormat = "Will be treated as an error from version {0}. ";
     public StepType StepType = StepType.Major;
     public string RemoveInVersionFormat = "Will be removed in version {0}.";
-    public string MemberThrowsNotImplementedText = "The member currently throws a NotImplementedException. ";
+    public string ThrowsNotImplementedText = "The member currently throws a NotImplementedException. ";
     public string ReplacementFormat = "Use `{0}` instead. ";
 
     public bool HideObsoleteMembers = true;
@@ -30,10 +30,10 @@ public partial class ModuleWeaver
         {
             TreatAsErrorFormat = treatAsErrorFormat.Value;
         }
-        var memberThrowsNotImplementedText = Config.Attributes("MemberThrowsNotImplementedText").FirstOrDefault();
-        if (memberThrowsNotImplementedText != null)
+        var throwsNotImplementedText = Config.Attributes("ThrowsNotImplementedText").FirstOrDefault();
+        if (throwsNotImplementedText != null)
         {
-            MemberThrowsNotImplementedText = memberThrowsNotImplementedText.Value;
+            ThrowsNotImplementedText = throwsNotImplementedText.Value;
         }
 
         var removeInVersionFormat = Config.Attributes("RemoveInVersionFormat").FirstOrDefault();
