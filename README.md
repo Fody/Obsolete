@@ -6,11 +6,13 @@ Helps keep usages of [ObsoleteAttribute](http://msdn.microsoft.com/en-us/library
 
 [Introduction to Fody](http://github.com/Fody/Fody/wiki/SampleUsage)
 
+
 ## The nuget package  [![NuGet Status](http://img.shields.io/nuget/v/Obsolete.Fody.svg?style=flat)](https://www.nuget.org/packages/Obsolete.Fody/)
 
 https://nuget.org/packages/Obsolete.Fody/
 
     PM> Install-Package Obsolete.Fody
+
 
 ### Your Code
 
@@ -20,6 +22,7 @@ https://nuget.org/packages/Obsolete.Fody/
                 RemoveInVersion = "4.0", 
                 ReplacementTypeOrMember = "NewClass")]
     public class ClassToMark {}
+
 
 ### Treat As Warning Mode
 
@@ -31,6 +34,7 @@ So given the above example when the assembly version is 1.0 the following will b
 
     [Obsolete("Custom Message. Please use 'NewClass' instead. Will be treated as an error from version 2.0.0. Will be removed in version 4.0.0.")]
     public class ClassToMark{}
+
 
 ### Treat As Error Mode
 
@@ -49,10 +53,11 @@ So given the above example when the assembly version is 3.0 the following will b
 When the target assembly version is greater  than `TreatAsErrorFromVersion` a build error will be generated. It will have the following format
 
      Cannot process 'MEMBER_NAME'. The assembly version ASSEMBLY_VERSION is higher than version specified in 'RemoveInVersion' WILL_BE_REMOVED_IN_VERSION. The member should be removed or 'RemoveInVersion' increased.
-    
+
 So given the above example when the assembly version is 5.0 a compile error will be thrown with the following text
 
      Cannot process 'ClassToMark'. The assembly version 5.0.0 is higher than version specified in RemoveInVersion 4.0.0. The member should be removed or RemoveInVersion increased.
+
 
 ## The Message property 
 
@@ -65,9 +70,11 @@ The message property should only be used for useful information. The fact that i
  * "This method is obsolete"
  * "The replacement method is"
 
+
 # Configuration Options
 
 All configuration options are access by modifying the `Obsolete` node in `FodyWeavers.xml`
+
 
 ## HideObsoleteMembers
 
@@ -77,21 +84,33 @@ When this is `true` obsolete members will also have `[EditorBrowsable(EditorBrow
 
     <Obsolete HideObsoleteMembers='false'/>
 
+
 ## TreatAsErrorFormat
 
 The string used when informing the user what version the member will be treated as an error.
 
-*Defaults to  `Will be treated as an error from version {0}. `*
+*Defaults to `Will be treated as an error from version {0}. `*
 
     <Obsolete TreatAsErrorFormat="Will be treated as an error from version {0}. "/>
+
+
+## MemberThrowsNotImplementedText
+
+The string used when informing the user when the member currently throws a [NotImplementedException](https://msdn.microsoft.com/en-us/library/system.notimplementedexception.aspx).
+
+*Defaults to `The member currently throws a NotImplementedException. `*
+
+    <Obsolete MemberThrowsNotImplementedText="The member currently throws a NotImplementedException. "/>
+
 
 ## RemoveInVersionFormat
 
 The string used when informing the user what version the member will be removed it.
 
-*Defaults to  `Will be removed in version {0}. `*
+*Defaults to `Will be removed in version {0}. `*
 
     <Obsolete RemoveInVersionFormat="Will be removed in version {0}. "/>
+
 
 ## ReplacementFormat
 
@@ -100,6 +119,7 @@ The string used when informing the user of an alternative member to use instead 
 *Defaults to `Please use {0} instead. `*
 
     <Obsolete ReplacementFormat="Please use {0} instead. "/>
+
 
 ## StepType
 
@@ -112,8 +132,7 @@ Used in two cases
 
     <Obsolete StepType="Minor"/>
 
+
 ## Icon
 
 Icon courtesy of [The Noun Project](http://thenounproject.com)
-
-

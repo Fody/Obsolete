@@ -2,9 +2,7 @@
 using System.Diagnostics;
 using NUnit.Framework;
 using System.IO;
-using Scalpel;
 
-[Remove]
 public static class Verifier
 {
     public static void Verify(string assemblyPath2)

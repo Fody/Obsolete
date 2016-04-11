@@ -15,6 +15,15 @@ public class ConfigReaderTests
     }
 
     [Test]
+    public void MemberThrowsNotImplementedText()
+    {
+        var xElement = XElement.Parse(@"<Obsolete MemberThrowsNotImplementedText='Custom Text'/>");
+        var moduleWeaver = new ModuleWeaver {Config = xElement};
+        moduleWeaver.ReadConfig();
+        Assert.AreEqual("Custom Text", moduleWeaver.MemberThrowsNotImplementedText);
+    }
+
+    [Test]
     public void FalseHideObsoleteMembers()
     {
         var xElement = XElement.Parse(@"<Obsolete HideObsoleteMembers='false'/>");
@@ -49,6 +58,6 @@ public class ConfigReaderTests
         var exception = Assert.Throws<WeavingException>(moduleWeaver.ReadConfig);
         Assert.AreEqual("VersionIncrement is no longer supported. Use StepType instead.", exception.Message);
     }
-    
+
 
 }

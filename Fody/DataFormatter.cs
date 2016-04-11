@@ -23,6 +23,10 @@ public partial class ModuleWeaver
         {
             stringBuilder.AppendFormat(TreatAsErrorFormat, attributeData.TreatAsErrorFromVersion.ToSemVer());
         }
+        if (attributeData.ThrowsNotImplemented)
+        {
+            stringBuilder.Append(MemberThrowsNotImplementedText);
+        }
         stringBuilder.AppendFormat(RemoveInVersionFormat, attributeData.RemoveInVersion.ToSemVer());
 
         return stringBuilder.ToString().Trim();

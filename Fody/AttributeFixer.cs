@@ -8,9 +8,8 @@ public partial class ModuleWeaver
     void ProcessAttributes(IMemberDefinition memberDefinition)
     {
         CheckForNormalAttribute(memberDefinition);
-        
-            InnerProcess(memberDefinition);
 
+        InnerProcess(memberDefinition);
     }
 
     void InnerProcess(IMemberDefinition memberDefinition)
@@ -21,21 +20,30 @@ public partial class ModuleWeaver
         {
             return;
         }
+        var throwsNotImplmented = false;
         var methodDefinition = memberDefinition as MethodDefinition;
         if (methodDefinition != null)
         {
+            throwsNotImplmented = ThrowsNotImplmented(methodDefinition);
             if (methodDefinition.IsGetter || methodDefinition.IsSetter)
             {
                 var error = $"ObsoleteExAttribute is not valid on property gets or sets. Member: `{memberDefinition.FullName}`.";
-
                 LogError(error);
+            }
+        }
+        else
+        {
+            var propertyDefinition = memberDefinition as PropertyDefinition;
+            if (propertyDefinition != null)
+            {
+                throwsNotImplmented = ThrowsNotImplmented(propertyDefinition);
             }
         }
 
         customAttributes.Remove(obsoleteExAttribute);
 
 
-        var attributeData = DataReader.ReadAttributeData(obsoleteExAttribute);
+        var attributeData = DataReader.ReadAttributeData(obsoleteExAttribute, throwsNotImplmented);
 
         try
         {
@@ -53,6 +61,34 @@ public partial class ModuleWeaver
         {
             AddEditorBrowsableAttribute(customAttributes);
         }
+    }
+
+    static bool ThrowsNotImplmented(PropertyDefinition propertyDefinition)
+    {
+        if (propertyDefinition.SetMethod != null)
+        {
+            if (ThrowsNotImplmented(propertyDefinition.SetMethod))
+            {
+                return true;
+            }
+        }
+        if (propertyDefinition.GetMethod != null)
+        {
+            if (ThrowsNotImplmented(propertyDefinition.GetMethod))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static bool ThrowsNotImplmented(MethodDefinition methodDefinition)
+    {
+        return methodDefinition.HasBody && methodDefinition.Body.Instructions
+            .Select(instruction => instruction.Operand)
+            .OfType<MethodReference>()
+            .Select(methodReference => methodReference.FullName)
+            .Any(fullName => fullName == "System.Void System.NotImplementedException::.ctor()");
     }
 
     void ApplyVersionConvention(AttributeData attributeData)
