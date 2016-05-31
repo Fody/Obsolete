@@ -28,11 +28,11 @@ https://nuget.org/packages/Obsolete.Fody/
 
 When the target assembly version is less than `RemoveInVersion` an `ObsoleteAttribute` with "treat as warning" will be injected. It will have the following format
 
-    [Obsolete("MESSAGE. Please use 'REPLACED_WITH' instead. Will be treated as an error from version MARK_AS_VERSION_IN. Will be removed in version WILL_BE_REMOVED_IN_VERSION.")]
+    [Obsolete("MESSAGE. Use 'REPLACED_WITH' instead. Will be treated as an error from version MARK_AS_VERSION_IN. Will be removed in version WILL_BE_REMOVED_IN_VERSION.")]
 
 So given the above example when the assembly version is 1.0 the following will be injected
 
-    [Obsolete("Custom Message. Please use 'NewClass' instead. Will be treated as an error from version 2.0.0. Will be removed in version 4.0.0.")]
+    [Obsolete("Custom Message. Use 'NewClass' instead. Will be treated as an error from version 2.0.0. Will be removed in version 4.0.0.")]
     public class ClassToMark{}
 
 
@@ -40,11 +40,11 @@ So given the above example when the assembly version is 1.0 the following will b
 
 When the target assembly version is greater than `RemoveInVersion` but less than `TreatAsErrorFromVersion` an `ObsoleteAttribute` with "treat as error" will be injected. It will have the following format
 
-    [Obsolete("MESSAGE. Please use 'REPLACED_WITH' instead. Will be removed in version WILL_BE_REMOVED_IN_VERSION.", true)]
+    [Obsolete("MESSAGE. Use 'REPLACED_WITH' instead. Will be removed in version WILL_BE_REMOVED_IN_VERSION.", true)]
 
 So given the above example when the assembly version is 3.0 the following will be injected
 
-    [Obsolete("Custom Message. Please use 'NewClass' instead. Will be removed in version 4.0.0.", true)]
+    [Obsolete("Custom Message. Use 'NewClass' instead. Will be removed in version 4.0.0.", true)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public class ClassToMark{}
 
@@ -116,9 +116,9 @@ The string used when informing the user what version the member will be removed 
 
 The string used when informing the user of an alternative member to use instead of the obsolete member.
 
-*Defaults to `Please use {0} instead. `*
+*Defaults to `Use {0} instead. `*
 
-    <Obsolete ReplacementFormat="Please use {0} instead. "/>
+    <Obsolete ReplacementFormat="Use {0} instead. "/>
 
 
 ## StepType
