@@ -20,11 +20,11 @@ public partial class ModuleWeaver
         {
             return;
         }
-        var throwsNotImplmented = false;
+        var throwsNotImplemented = false;
         var methodDefinition = memberDefinition as MethodDefinition;
         if (methodDefinition != null)
         {
-            throwsNotImplmented = ThrowsNotImplmented(methodDefinition);
+            throwsNotImplemented = ThrowsNotImplemented(methodDefinition);
             if (methodDefinition.IsGetter || methodDefinition.IsSetter)
             {
                 var error = $"ObsoleteExAttribute is not valid on property gets or sets. Member: `{memberDefinition.FullName}`.";
@@ -36,14 +36,14 @@ public partial class ModuleWeaver
             var propertyDefinition = memberDefinition as PropertyDefinition;
             if (propertyDefinition != null)
             {
-                throwsNotImplmented = ThrowsNotImplmented(propertyDefinition);
+                throwsNotImplemented = ThrowsNotImplemented(propertyDefinition);
             }
         }
 
         customAttributes.Remove(obsoleteExAttribute);
 
 
-        var attributeData = DataReader.ReadAttributeData(obsoleteExAttribute, throwsNotImplmented);
+        var attributeData = DataReader.ReadAttributeData(obsoleteExAttribute, throwsNotImplemented);
 
         try
         {
@@ -63,18 +63,18 @@ public partial class ModuleWeaver
         }
     }
 
-    static bool ThrowsNotImplmented(PropertyDefinition propertyDefinition)
+    static bool ThrowsNotImplemented(PropertyDefinition propertyDefinition)
     {
         if (propertyDefinition.SetMethod != null)
         {
-            if (ThrowsNotImplmented(propertyDefinition.SetMethod))
+            if (ThrowsNotImplemented(propertyDefinition.SetMethod))
             {
                 return true;
             }
         }
         if (propertyDefinition.GetMethod != null)
         {
-            if (ThrowsNotImplmented(propertyDefinition.GetMethod))
+            if (ThrowsNotImplemented(propertyDefinition.GetMethod))
             {
                 return true;
             }
@@ -82,7 +82,7 @@ public partial class ModuleWeaver
         return false;
     }
 
-    static bool ThrowsNotImplmented(MethodDefinition methodDefinition)
+    static bool ThrowsNotImplemented(MethodDefinition methodDefinition)
     {
         return methodDefinition.HasBody && methodDefinition.Body.Instructions
             .Select(instruction => instruction.Operand)

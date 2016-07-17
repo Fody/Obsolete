@@ -3,7 +3,7 @@ using Mono.Cecil;
 public static class DataReader
 {
 
-    public static AttributeData ReadAttributeData(CustomAttribute obsoleteExAttribute, bool throwsNotImplmented)
+    public static AttributeData ReadAttributeData(CustomAttribute obsoleteExAttribute, bool throwsNotImplemented)
     {
         var treatAsErrorFromVersionString = obsoleteExAttribute.GetValue("TreatAsErrorFromVersion");
         var removeInVersionString = obsoleteExAttribute.GetValue("RemoveInVersion");
@@ -14,7 +14,7 @@ public static class DataReader
                        Replacement = obsoleteExAttribute.GetValue("ReplacementTypeOrMember"),
                        TreatAsErrorFromVersion = treatAsErrorFromVersionString,
                        RemoveInVersion = removeInVersionString,
-                       ThrowsNotImplemented = throwsNotImplmented
+                       ThrowsNotImplemented = throwsNotImplemented
         };
     }
 
