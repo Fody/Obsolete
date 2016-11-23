@@ -63,7 +63,7 @@ So given the above example when the assembly version is 5.0 a compile error will
 
 The message property should only be used for useful information. The fact that it is obsoleted does not need to be reiterated in the message.
 
-**DO NOT**  use and of the following redundant messages
+**DO NOT**  use any of the following redundant messages
 
  * "Do not call this method"
  * "This method will be removed"
