@@ -105,12 +105,12 @@ public class SemanticVersion
 
     public static bool operator >(SemanticVersion v1, SemanticVersion v2)
     {
-        return (v2 < v1);
+        return v2 < v1;
     }
 
     public static bool operator >=(SemanticVersion v1, SemanticVersion v2)
     {
-        return (v2 <= v1);
+        return v2 <= v1;
     }
 
     public static bool operator <=(SemanticVersion v1, SemanticVersion v2)
@@ -119,7 +119,7 @@ public class SemanticVersion
         {
             throw new ArgumentNullException("v1");
         }
-        return (v1.CompareTo(v2) <= 0);
+        return v1.CompareTo(v2) <= 0;
     }
 
     public static bool operator <(SemanticVersion v1, SemanticVersion v2)
@@ -128,7 +128,7 @@ public class SemanticVersion
         {
             throw new ArgumentNullException("v1");
         }
-        return (v1.CompareTo(v2) < 0);
+        return v1.CompareTo(v2) < 0;
     }
 
     public int CompareTo(SemanticVersion value)

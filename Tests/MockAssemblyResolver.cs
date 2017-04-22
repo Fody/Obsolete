@@ -6,12 +6,12 @@ public class MockAssemblyResolver : IAssemblyResolver
 {
     public AssemblyDefinition Resolve(AssemblyNameReference name)
     {
-        throw new NotImplementedException();
+        return Resolve(name.FullName);
     }
 
     public AssemblyDefinition Resolve(AssemblyNameReference name, ReaderParameters parameters)
     {
-        throw new NotImplementedException();
+        return Resolve(name.FullName);
     }
 
     public AssemblyDefinition Resolve(string fullName)
@@ -21,8 +21,7 @@ public class MockAssemblyResolver : IAssemblyResolver
         return AssemblyDefinition.ReadAssembly(codeBase);
     }
 
-    public AssemblyDefinition Resolve(string fullName, ReaderParameters parameters)
+    public void Dispose()
     {
-        throw new NotImplementedException();
     }
 }

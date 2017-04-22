@@ -20,14 +20,14 @@ public partial class ModuleWeaver
     TypeDefinition GetDefinition()
     {
 
-        var msCoreLibDefinition = AssemblyResolver.Resolve("mscorlib");
+        var msCoreLibDefinition = AssemblyResolver.Resolve(new AssemblyNameReference("mscorlib", null));
         var obsoleteDefinition = msCoreLibDefinition
             .MainModule
             .Types
             .FirstOrDefault(x => x.Name == "ObsoleteAttribute");
         if (obsoleteDefinition == null)
         {
-            var systemRuntime = AssemblyResolver.Resolve("System.Runtime");
+            var systemRuntime = AssemblyResolver.Resolve(new AssemblyNameReference("System.Runtime", null));
             obsoleteDefinition = systemRuntime.MainModule.Types.First(x => x.Name == "ObsoleteAttribute");
         }
         return obsoleteDefinition;

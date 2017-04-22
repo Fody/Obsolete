@@ -17,7 +17,7 @@ public partial class ModuleWeaver
         }
         try
         {
-            var assemblyDefinition = ModuleDefinition.AssemblyResolver.Resolve("System");
+            var assemblyDefinition = ModuleDefinition.AssemblyResolver.Resolve(new AssemblyNameReference("System", null));
             var typeDefinitions = assemblyDefinition.MainModule.Types;
             if (typeDefinitions.Any(x => x.Name == "EditorBrowsableAttribute"))
             {
@@ -25,7 +25,7 @@ public partial class ModuleWeaver
             }
             else
             {
-                var systemRuntime = AssemblyResolver.Resolve("System.Runtime");
+                var systemRuntime = AssemblyResolver.Resolve(new AssemblyNameReference("System.Runtime", null));
                 FindFromTypes(systemRuntime.MainModule.Types);
             }
         }
