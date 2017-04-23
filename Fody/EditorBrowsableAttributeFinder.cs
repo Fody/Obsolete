@@ -17,7 +17,7 @@ public partial class ModuleWeaver
         }
         try
         {
-            var assemblyDefinition = AssemblyResolver.Resolve(new AssemblyNameReference("System", null));
+            var assemblyDefinition = ModuleDefinition.AssemblyResolver.Resolve(new AssemblyNameReference("System", null));
             if (assemblyDefinition != null && assemblyDefinition.MainModule.Types.Any(x => x.Name == "EditorBrowsableAttribute"))
             {
                 FindFromTypes(assemblyDefinition.MainModule.Types);
