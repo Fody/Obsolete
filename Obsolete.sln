@@ -4,11 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 14.0.22823.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fody", "Fody\Fody.csproj", "{C3578A7B-09A6-4444-9383-0DEAFA4958BD}"
-	ProjectSection(ProjectDependencies) = postProject
-		{40939411-32F0-48DD-B17B-FA46DD5D9B25} = {40939411-32F0-48DD-B17B-FA46DD5D9B25}
-		{5D6191BF-F0EE-474D-B168-BB92418A0F3D} = {5D6191BF-F0EE-474D-B168-BB92418A0F3D}
-		{D1756CE7-D9F7-4B39-A6F4-03364E52B888} = {D1756CE7-D9F7-4B39-A6F4-03364E52B888}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyToProcess", "AssemblyToProcess\AssemblyToProcess.csproj", "{40939411-32F0-48DD-B17B-FA46DD5D9B25}"
 EndProject
@@ -20,6 +15,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttributeAssemblyNetStandard", "AttributeAssemblyNetStandard\AttributeAssemblyNetStandard.csproj", "{D1756CE7-D9F7-4B39-A6F4-03364E52B888}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nuget", "NuGet\Nuget.csproj", "{66DDADC1-1631-4EC7-8CB2-DD8080188234}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C3578A7B-09A6-4444-9383-0DEAFA4958BD} = {C3578A7B-09A6-4444-9383-0DEAFA4958BD}
+		{5D6191BF-F0EE-474D-B168-BB92418A0F3D} = {5D6191BF-F0EE-474D-B168-BB92418A0F3D}
+		{D1756CE7-D9F7-4B39-A6F4-03364E52B888} = {D1756CE7-D9F7-4B39-A6F4-03364E52B888}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{D1756CE7-D9F7-4B39-A6F4-03364E52B888}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1756CE7-D9F7-4B39-A6F4-03364E52B888}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1756CE7-D9F7-4B39-A6F4-03364E52B888}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66DDADC1-1631-4EC7-8CB2-DD8080188234}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66DDADC1-1631-4EC7-8CB2-DD8080188234}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66DDADC1-1631-4EC7-8CB2-DD8080188234}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66DDADC1-1631-4EC7-8CB2-DD8080188234}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
