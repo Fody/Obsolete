@@ -17,11 +17,10 @@ public partial class ModuleWeaver
         }
         try
         {
-            var assemblyDefinition = ModuleDefinition.AssemblyResolver.Resolve(new AssemblyNameReference("System", null));
-            var typeDefinitions = assemblyDefinition.MainModule.Types;
-            if (typeDefinitions.Any(x => x.Name == "EditorBrowsableAttribute"))
+            var assemblyDefinition = AssemblyResolver.Resolve(new AssemblyNameReference("System", null));
+            if (assemblyDefinition != null && assemblyDefinition.MainModule.Types.Any(x => x.Name == "EditorBrowsableAttribute"))
             {
-                FindFromTypes(typeDefinitions);
+                FindFromTypes(assemblyDefinition.MainModule.Types);
             }
             else
             {
@@ -29,9 +28,9 @@ public partial class ModuleWeaver
                 FindFromTypes(systemRuntime.MainModule.Types);
             }
         }
-        catch (Exception)
+        catch (Exception exception)
         {
-            throw new WeavingException("Could not enable HideObsoleteMembers due to problem finding EditorBrowsableAttribute. Disable HideObsoleteMembers and raise an issue detailing what runtime you are compiling against.");
+            throw new WeavingException($"Could not enable HideObsoleteMembers due to problem finding EditorBrowsableAttribute. Disable HideObsoleteMembers and raise an issue detailing what runtime you are compiling against. Inner Exception:{exception}");
         }
     }
 

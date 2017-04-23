@@ -3,7 +3,6 @@ using Mono.Cecil;
 
 public partial class ModuleWeaver
 {
-    
 
     public void CheckForNormalAttribute(IMemberDefinition memberDefinition)
     {
@@ -16,6 +15,5 @@ public partial class ModuleWeaver
         }
         var warning = $"The member `{memberDefinition.FullName}` has an ObsoleteAttribute. You should consider replacing it with an ObsoleteExAttribute.";
         LogWarning(warning);
-
     }
 }

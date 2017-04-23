@@ -1,23 +1,24 @@
 ﻿using System;
 
 /// <summary>
-/// Marks the program elements that are no longer in use. 
+/// Marks the program elements that are no longer in use.
 /// </summary>
 [AttributeUsage(
-    AttributeTargets.Delegate | 
-    AttributeTargets.Interface | 
-    AttributeTargets.Event | 
-    AttributeTargets.Field | 
-    AttributeTargets.Property | 
-    AttributeTargets.Method | 
-    AttributeTargets.Constructor | 
-    AttributeTargets.Enum | 
-    AttributeTargets.Struct | 
-    AttributeTargets.Class, Inherited = false)]
+    AttributeTargets.Delegate |
+    AttributeTargets.Interface |
+    AttributeTargets.Event |
+    AttributeTargets.Field |
+    AttributeTargets.Property |
+    AttributeTargets.Method |
+    AttributeTargets.Constructor |
+    AttributeTargets.Enum |
+    AttributeTargets.Struct |
+    AttributeTargets.Class,
+    Inherited = false)]
 public sealed class ObsoleteExAttribute : Attribute
 {
     /// <summary>
-    /// The text string that describes alternative workarounds. 
+    /// The text string that describes alternative workarounds.
     /// </summary>
     public string Message { get; set; }
 
@@ -44,6 +45,4 @@ public sealed class ObsoleteExAttribute : Attribute
     /// </summary>
     public string ReplacementTypeOrMember { get; set; }
 
-    [Obsolete("Use ReplacementTypeOrMember instead",true)]
-    public string Replacement { get; set; }
 }
