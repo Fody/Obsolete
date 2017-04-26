@@ -4,11 +4,13 @@
     <TargetFramework>netstandard1.4</TargetFramework>
     <AssemblyName>Obsolete</AssemblyName>
     <RootNamespace>Obsolete</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>bin\Release\</OutputPath>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <DocumentationFile>bin\Release\netstandard1.4\Obsolete.xml</DocumentationFile>
   </PropertyGroup>
 
@@ -19,6 +21,7 @@
 
   <ItemGroup>
     <Compile Include="..\AttributeAssembly\ObsoleteExAttribute.cs" Link="ObsoleteExAttribute.cs" />
+    <Compile Include="..\CommonAssemblyInfo.cs" Link="CommonAssemblyInfo.cs" />
   </ItemGroup>
 
 </Project>
