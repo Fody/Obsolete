@@ -78,7 +78,6 @@
     <Compile Include="AttributeDataFormatterTests.cs" />
     <Compile Include="ConfigReaderTests.cs" />
     <Compile Include="IntegrationTests.cs" />
-    <Compile Include="MockAssemblyResolver.cs" />
     <Compile Include="SemanticVersionTests.cs" />
     <Compile Include="Verifier.cs" />
     <Compile Include="VersionExtensionTests.cs" />

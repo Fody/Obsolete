@@ -33,7 +33,7 @@ public class IntegrationTests
             var weavingTask = new ModuleWeaver
             {
                 ModuleDefinition = moduleDefinition,
-                AssemblyResolver = new MockAssemblyResolver(),
+                AssemblyResolver = new DefaultAssemblyResolver(),
                 LogWarning = s => warnings.Add(s),
                 LogError = s => errors.Add(s),
                 HideObsoleteMembers = true

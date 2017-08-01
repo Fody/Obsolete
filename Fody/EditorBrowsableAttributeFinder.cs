@@ -34,11 +34,18 @@ public partial class ModuleWeaver
 
     void AddAssemblyIfExists(string name, List<TypeDefinition> types)
     {
-        var msCoreLibDefinition = ModuleDefinition.AssemblyResolver.Resolve(new AssemblyNameReference(name, null));
-
-        if (msCoreLibDefinition != null)
+        try
         {
-            types.AddRange(msCoreLibDefinition.MainModule.Types);
+            var msCoreLibDefinition = AssemblyResolver.Resolve(new AssemblyNameReference(name, null));
+
+            if (msCoreLibDefinition != null)
+            {
+                types.AddRange(msCoreLibDefinition.MainModule.Types);
+            }
+        }
+        catch (AssemblyResolutionException)
+        {
+            LogInfo($"Failed to resolve '{name}'. So skipping its types.");
         }
     }
 
