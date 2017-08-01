@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Xml.Linq;
 using Mono.Cecil;
 
@@ -22,7 +23,10 @@ public partial class ModuleWeaver
     public void Execute()
     {
         ReadConfig();
-        FindSystemTypes();
+        var systemTypes = FindSystemTypes();
+        FindEditorBrowsableTypes(systemTypes);
+        FindObsoleteType(systemTypes);
+
         var version = ModuleDefinition.Assembly.Name.Version;
         assemblyVersion = new SemanticVersion
         {
@@ -30,11 +34,38 @@ public partial class ModuleWeaver
             Minor = version.Minor.OrZero(),
             Patch = version.Build.OrZero()
         };
-        FindObsoleteType();
-
 
         ProcessAssembly();
 
         CleanReferences();
+    }
+
+    public List<TypeDefinition> FindSystemTypes()
+    {
+        var types = new List<TypeDefinition>();
+
+        AddAssemblyIfExists("mscorlib", types);
+        AddAssemblyIfExists("System", types);
+        AddAssemblyIfExists("System.Runtime", types);
+        AddAssemblyIfExists("netstandard", types);
+
+        return types;
+    }
+
+    void AddAssemblyIfExists(string name, List<TypeDefinition> types)
+    {
+        try
+        {
+            var msCoreLibDefinition = AssemblyResolver.Resolve(new AssemblyNameReference(name, null));
+
+            if (msCoreLibDefinition != null)
+            {
+                types.AddRange(msCoreLibDefinition.MainModule.Types);
+            }
+        }
+        catch (AssemblyResolutionException)
+        {
+            LogInfo($"Failed to resolve '{name}'. So skipping its types.");
+        }
     }
 }
