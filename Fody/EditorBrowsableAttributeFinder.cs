@@ -1,7 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Mono.Cecil;
-using Mono.Collections.Generic;
 
 public partial class ModuleWeaver
 {
@@ -15,18 +15,16 @@ public partial class ModuleWeaver
         {
             return;
         }
+
         try
         {
-            var assemblyDefinition = ModuleDefinition.AssemblyResolver.Resolve(new AssemblyNameReference("System", null));
-            if (assemblyDefinition != null && assemblyDefinition.MainModule.Types.Any(x => x.Name == "EditorBrowsableAttribute"))
-            {
-                FindFromTypes(assemblyDefinition.MainModule.Types);
-            }
-            else
-            {
-                var systemRuntime = AssemblyResolver.Resolve(new AssemblyNameReference("System.Runtime", null));
-                FindFromTypes(systemRuntime.MainModule.Types);
-            }
+            var types = new List<TypeDefinition>();
+
+            AddAssemblyIfExists("System", types);
+            AddAssemblyIfExists("System.Runtime", types);
+            AddAssemblyIfExists("netstandard", types);
+
+            FindFromTypes(types);
         }
         catch (Exception exception)
         {
@@ -34,7 +32,17 @@ public partial class ModuleWeaver
         }
     }
 
-    void FindFromTypes(Collection<TypeDefinition> typeDefinitions)
+    void AddAssemblyIfExists(string name, List<TypeDefinition> types)
+    {
+        var msCoreLibDefinition = ModuleDefinition.AssemblyResolver.Resolve(new AssemblyNameReference(name, null));
+
+        if (msCoreLibDefinition != null)
+        {
+            types.AddRange(msCoreLibDefinition.MainModule.Types);
+        }
+    }
+
+    void FindFromTypes(List<TypeDefinition> typeDefinitions)
     {
         var attributeType = typeDefinitions.First(x => x.Name == "EditorBrowsableAttribute");
         EditorBrowsableConstructor = ModuleDefinition.ImportReference(attributeType.Methods.First(IsDesiredConstructor));
