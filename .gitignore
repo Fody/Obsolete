@@ -65,6 +65,8 @@ Backup*/
 UpgradeLog*.XML
 
 
+.vs/
+
 ############
 ## Windows
 ############
