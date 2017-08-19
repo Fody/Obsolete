@@ -107,7 +107,7 @@ public class IntegrationTests
     [Test]
     public void Warnings()
     {
-        Assert.Contains("The member `ClassWithObsoleteAttribute` has an ObsoleteAttribute. You should consider replacing it with an ObsoleteExAttribute.", warnings);
+        Assert.Contains("The member `ClassWithObsoleteAttribute` has an ObsoleteAttribute. Consider replacing it with an ObsoleteExAttribute.", warnings);
     }
 
     [Test]

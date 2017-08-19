@@ -13,7 +13,7 @@ public partial class ModuleWeaver
         {
             return;
         }
-        var warning = $"The member `{memberDefinition.FullName}` has an ObsoleteAttribute. You should consider replacing it with an ObsoleteExAttribute.";
+        var warning = $"The member `{memberDefinition.FullName}` has an ObsoleteAttribute. Consider replacing it with an ObsoleteExAttribute.";
         LogWarning(warning);
     }
 }
