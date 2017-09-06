@@ -111,6 +111,12 @@ public class IntegrationTests
     }
 
     [Test]
+    public void NoWarnings()
+    {
+        Assert.That(warnings, Does.Not.Contains("The member `ClassWithObsoleteAttributeToSkip` has an ObsoleteAttribute. Consider replacing it with an ObsoleteExAttribute."));
+    }
+
+    [Test]
     public void Errors()
     {
         Assert.Contains("ObsoleteExAttribute is not valid on property gets or sets. Member: `System.Void ClassWithObsoleteOnGetSet::set_PropertyToMark(System.String)`.", errors);

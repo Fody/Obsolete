@@ -37,6 +37,7 @@
     <DocumentationFile>bin\Release\Obsolete.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DoNotWarnAboutObsoleteUsageAttribute.cs" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
