@@ -137,6 +137,15 @@ Used in two cases
     <Obsolete StepType="Minor"/>
 
 
+
+## Mute warnings about Obsolete usage
+
+For `ObsoleteAttribute` is used and should not be replaced, use `DoNotWarnAboutObsoleteUsageAttribute` to mute Fody warnings during build time.
+
+    [Obsolete]
+    [DoNotWarnAboutObsoleteUsage]
+    public class LegacyCode {}
+
 ## Icon
 
 Icon courtesy of [The Noun Project](http://thenounproject.com)
