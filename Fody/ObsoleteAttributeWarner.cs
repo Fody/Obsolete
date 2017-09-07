@@ -6,16 +6,17 @@ public partial class ModuleWeaver
 
     public void CheckForNormalAttribute(IMemberDefinition memberDefinition)
     {
-        var skip = memberDefinition
-            .CustomAttributes
-            .Any(x => x.AttributeType.Name == "DoNotWarnAboutObsoleteUsageAttribute");
-        if (skip)
+        var customAttributes = memberDefinition
+            .CustomAttributes;
+        var doNotWarnAboutObsoleteUsageAttribute = customAttributes
+            .FirstOrDefault(x => x.AttributeType.Name == "DoNotWarnAboutObsoleteUsageAttribute");
+        if (doNotWarnAboutObsoleteUsageAttribute != null)
         {
+            customAttributes.Remove(doNotWarnAboutObsoleteUsageAttribute);
             return;
         }
 
-        var obsoleteExAttribute = memberDefinition
-            .CustomAttributes
+        var obsoleteExAttribute = customAttributes
             .FirstOrDefault(x => x.AttributeType.Name == "ObsoleteAttribute");
         if (obsoleteExAttribute == null)
         {
