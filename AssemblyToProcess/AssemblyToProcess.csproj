@@ -66,6 +66,7 @@
     <Compile Include="ClassWithIsError.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ClassWithObsoleteAttributeToSkip.cs" />
     <Compile Include="ClassWithObsoleteAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
