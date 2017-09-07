@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mono.Cecil;
@@ -8,8 +7,6 @@ public partial class ModuleWeaver
     public MethodReference EditorBrowsableConstructor;
     public TypeDefinition EditorBrowsableStateType;
     public int AdvancedStateConstant;
-
-
 
     void FindEditorBrowsableTypes(List<TypeDefinition> typeDefinitions)
     {

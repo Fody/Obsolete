@@ -21,8 +21,7 @@ public partial class ModuleWeaver
             return;
         }
         var throwsNotImplemented = false;
-        var methodDefinition = memberDefinition as MethodDefinition;
-        if (methodDefinition != null)
+        if (memberDefinition is MethodDefinition methodDefinition)
         {
             throwsNotImplemented = ThrowsNotImplemented(methodDefinition);
             if (methodDefinition.IsGetter || methodDefinition.IsSetter)
@@ -33,8 +32,7 @@ public partial class ModuleWeaver
         }
         else
         {
-            var propertyDefinition = memberDefinition as PropertyDefinition;
-            if (propertyDefinition != null)
+            if (memberDefinition is PropertyDefinition propertyDefinition)
             {
                 throwsNotImplemented = ThrowsNotImplemented(propertyDefinition);
             }
