@@ -20,7 +20,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\AttributeAssembly\ObsoleteExAttribute.cs" Link="ObsoleteExAttribute.cs" />
+    <Compile Include="..\AttributeAssembly\*.cs" />
     <Compile Include="..\CommonAssemblyInfo.cs" Link="CommonAssemblyInfo.cs" />
   </ItemGroup>
 
