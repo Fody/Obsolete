@@ -61,8 +61,9 @@ public partial class ModuleWeaver
 
             if (msCoreLibDefinition != null)
             {
-                types.AddRange(msCoreLibDefinition.MainModule.Types);
-                types.AddRange(msCoreLibDefinition.MainModule.ExportedTypes.Select(x => x.Resolve()));
+                var module = msCoreLibDefinition.MainModule;
+                types.AddRange(module.Types);
+                types.AddRange(module.ExportedTypes.Select(x => x.Resolve()).Where(x => x != null));
             }
         }
         catch (AssemblyResolutionException)
