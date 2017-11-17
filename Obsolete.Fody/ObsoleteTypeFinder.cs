@@ -9,7 +9,11 @@ public partial class ModuleWeaver
     public void FindObsoleteType(List<TypeDefinition> systemTypes)
     {
         var obsoleteDefinition = systemTypes
-            .Single(x => x.Name == "ObsoleteAttribute");
+            .FirstOrDefault(x => x.Name == "ObsoleteAttribute");
+        if (obsoleteDefinition == null)
+        {
+            throw new WeavingException("Could not find ObsoleteAttribute");
+        }
         var constructor = obsoleteDefinition.Methods.First(x =>
             x.Parameters.Count == 2
             && x.Parameters[0].ParameterType.Name == "String"

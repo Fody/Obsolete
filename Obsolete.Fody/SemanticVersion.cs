@@ -25,8 +25,7 @@ public class SemanticVersion
 
     public static implicit operator SemanticVersion(string d)
     {
-        SemanticVersion semver;
-        if (TryParse(d, out semver))
+        if (TryParse(d, out var semver))
         {
             return semver;
         }
@@ -53,8 +52,7 @@ public class SemanticVersion
             return false;
         }
 
-        int major;
-        if (!int.TryParse(stableParts[0], out major))
+        if (!int.TryParse(stableParts[0], out var major))
         {
             semanticVersion = null;
             return false;
@@ -65,8 +63,7 @@ public class SemanticVersion
         };
         if (stableParts.Length > 1)
         {
-            int minor;
-            if (!int.TryParse(stableParts[1], out minor))
+            if (!int.TryParse(stableParts[1], out var minor))
             {
                 semanticVersion = null;
                 return false;
@@ -76,8 +73,7 @@ public class SemanticVersion
 
         if (stableParts.Length > 2)
         {
-            int patch;
-            if (!int.TryParse(stableParts[2], out patch))
+            if (!int.TryParse(stableParts[2], out var patch))
             {
                 semanticVersion = null;
                 return false;

@@ -4,7 +4,6 @@ using Mono.Collections.Generic;
 
 public partial class ModuleWeaver
 {
-
     void ProcessAttributes(IMemberDefinition memberDefinition)
     {
         CheckForNormalAttribute(memberDefinition);

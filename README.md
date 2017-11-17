@@ -1,9 +1,9 @@
 [![Chat on Gitter](https://img.shields.io/gitter/room/fody/fody.svg?style=flat)](https://gitter.im/Fody/Fody)
 [![NuGet Status](http://img.shields.io/nuget/v/Obsolete.Fody.svg?style=flat)](https://www.nuget.org/packages/Obsolete.Fody/)
 
-## This is an add-in for [Fody](https://github.com/Fody/Fody/) 
+## This is an add-in for [Fody](https://github.com/Fody/Fody/)
 
-![Icon](https://raw.github.com/Fody/Obsolete/master/Icons/package_icon.png)
+![Icon](https://raw.github.com/Fody/Obsolete/master/package_icon.png)
 
 Helps keep usages of [ObsoleteAttribute](http://msdn.microsoft.com/en-us/library/fwz0y5c2) consistent.
 

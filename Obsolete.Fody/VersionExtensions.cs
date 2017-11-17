@@ -3,7 +3,6 @@ using System;
 
 public static class VersionExtensions
 {
-
     public static SemanticVersion Decrement(this SemanticVersion target, StepType stepType)
     {
         switch (stepType)

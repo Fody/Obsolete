@@ -3,7 +3,6 @@ using Mono.Cecil;
 
 public partial class ModuleWeaver
 {
-
     public void CheckForNormalAttribute(IMemberDefinition memberDefinition)
     {
         var customAttributes = memberDefinition

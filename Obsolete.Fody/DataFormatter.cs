@@ -2,7 +2,6 @@ using System.Text;
 
 public partial class ModuleWeaver
 {
-
     public string ConvertToMessage(AttributeData attributeData)
     {
         var stringBuilder = new StringBuilder();

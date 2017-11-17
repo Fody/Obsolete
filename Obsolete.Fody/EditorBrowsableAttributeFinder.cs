@@ -14,9 +14,17 @@ public partial class ModuleWeaver
         {
             return;
         }
-        var attributeType = typeDefinitions.First(x => x.Name == "EditorBrowsableAttribute");
+        var attributeType = typeDefinitions.FirstOrDefault(x => x.Name == "EditorBrowsableAttribute");
+        if (attributeType == null)
+        {
+            throw new WeavingException("Could not find EditorBrowsableAttribute");
+        }
         EditorBrowsableConstructor = ModuleDefinition.ImportReference(attributeType.Methods.First(IsDesiredConstructor));
-        EditorBrowsableStateType = typeDefinitions.First(x => x.Name == "EditorBrowsableState");
+        EditorBrowsableStateType = typeDefinitions.FirstOrDefault(x => x.Name == "EditorBrowsableState");
+        if (EditorBrowsableStateType == null)
+        {
+            throw new WeavingException("Could not find EditorBrowsableAttribute");
+        }
         var fieldDefinition = EditorBrowsableStateType.Fields.First(x => x.Name == "Advanced");
         AdvancedStateConstant = (int) fieldDefinition.Constant;
     }
@@ -33,5 +41,4 @@ public partial class ModuleWeaver
         }
         return x.Parameters[0].ParameterType.Name == "EditorBrowsableState";
     }
-
 }

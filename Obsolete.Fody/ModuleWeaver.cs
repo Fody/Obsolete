@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 using Mono.Cecil;
 
@@ -61,6 +62,7 @@ public partial class ModuleWeaver
             if (msCoreLibDefinition != null)
             {
                 types.AddRange(msCoreLibDefinition.MainModule.Types);
+                types.AddRange(msCoreLibDefinition.MainModule.ExportedTypes.Select(x => x.Resolve()));
             }
         }
         catch (AssemblyResolutionException)

@@ -1,6 +1,5 @@
 public partial class ModuleWeaver
 {
-
     public void ProcessAssembly()
     {
         foreach (var typeDefinition in ModuleDefinition.GetTypes())
@@ -24,5 +23,4 @@ public partial class ModuleWeaver
             }
         }
     }
-
 }

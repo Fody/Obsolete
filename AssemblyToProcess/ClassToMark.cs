@@ -1,4 +1,8 @@
 using System;
+// ReSharper disable NotAccessedField.Local
+// ReSharper disable EventNeverSubscribedTo.Global
+#pragma warning disable 67
+#pragma warning disable 649
 
 [ObsoleteEx(TreatAsErrorFromVersion = "2.0", RemoveInVersion = "4.0", Message = "Custom message.", ReplacementTypeOrMember = "NewThing")]
 public class ClassToMark
@@ -9,21 +13,15 @@ public class ClassToMark
     [ObsoleteEx(TreatAsErrorFromVersion = "2.0", RemoveInVersion = "4.0", Message = "Custom message.", ReplacementTypeOrMember = "NewThing")]
     public string PropertyWithSetExceptionToMark
     {
-        get { return propertyWithSetExceptionToMark; }
-        set
-        {
-            throw new NotImplementedException();
-        }
+        get => propertyWithSetExceptionToMark;
+        set => throw new NotImplementedException();
     }
 
     [ObsoleteEx(TreatAsErrorFromVersion = "2.0", RemoveInVersion = "4.0", Message = "Custom message.", ReplacementTypeOrMember = "NewThing")]
     public string PropertyWithGetExceptionToMark
     {
-        get
-        {
-            throw new NotImplementedException();
-        }
-        set { propertyWithGetExceptionToMark = value; }
+        get => throw new NotImplementedException();
+        set => propertyWithGetExceptionToMark = value;
     }
 
     [ObsoleteEx(TreatAsErrorFromVersion = "2.0", RemoveInVersion = "4.0", Message = "Custom message.", ReplacementTypeOrMember = "NewThing")]

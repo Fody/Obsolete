@@ -35,7 +35,7 @@ public class ConfigReaderTests
     [Test]
     public void EmptyHideObsoleteMembers()
     {
-        var xElement = XElement.Parse(@"<Obsolete/>");
+        var xElement = XElement.Parse("<Obsolete/>");
         var moduleWeaver = new ModuleWeaver {Config = xElement};
         moduleWeaver.ReadConfig();
         Assert.IsTrue(moduleWeaver.HideObsoleteMembers);
