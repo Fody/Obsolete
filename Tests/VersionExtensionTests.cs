@@ -1,128 +1,126 @@
-﻿using NUnit.Framework;
+﻿using Xunit;
 
-[TestFixture]
 public class VersionExtensionTests
 {
-
-    [Test]
+    [Fact]
     public void IncrementMajor()
     {
         SemanticVersion version1 = "2";
         var version = version1.Increment(StepType.Major);
-        Assert.AreEqual("3.0.0",(string)version);
+        Assert.Equal("3.0.0",version);
     }
 
-    [Test]
+    [Fact]
     public void IncrementMajorWithMinor()
     {
         SemanticVersion version1 = "2.1";
         var version = version1.Increment(StepType.Major);
-        Assert.AreEqual("3.0.0",(string)version);
+        Assert.Equal("3.0.0",version);
     }
 
-    [Test]
+    [Fact]
     public void IncrementMajorWithMinorAndPatch()
     {
         SemanticVersion version1 = "2.1.1";
         var version = version1.Increment(StepType.Major);
-        Assert.AreEqual("3.0.0",(string)version);
+        Assert.Equal("3.0.0",version);
     }
 
-    [Test]
+    [Fact]
     public void IncrementMinor()
     {
         SemanticVersion version1 = "2";
         var version = version1.Increment(StepType.Minor);
-        Assert.AreEqual("2.1.0",(string)version);
+        Assert.Equal("2.1.0",version);
     }
 
-    [Test]
+    [Fact]
     public void IncrementMinorWithPatch()
     {
         SemanticVersion version1 = "2.0.1";
         var version = version1.Increment(StepType.Minor);
-        Assert.AreEqual("2.1.0",(string)version);
+        Assert.Equal("2.1.0",version);
     }
 
-    [Test]
+    [Fact]
     public void IncrementPatch()
     {
         SemanticVersion version1 = "2";
         var version = version1.Increment(StepType.Patch);
-        Assert.AreEqual("2.0.1",(string)version);
+        Assert.Equal("2.0.1",version);
     }
 
-    [Test]
+    [Fact]
     public void IncrementPatchWithMinor()
     {
         SemanticVersion version1 = "2.1";
         var version = version1.Increment(StepType.Patch);
-        Assert.AreEqual("2.1.1",(string)version);
+        Assert.Equal("2.1.1",version);
     }
 
-    [Test]
+    [Fact]
     public void DecrementMajor()
     {
         SemanticVersion version1 = "2";
         var version = version1.Decrement(StepType.Major);
-        Assert.AreEqual("1.0.0", (string)version);
+        Assert.Equal("1.0.0", version);
     }
 
-    [Test]
+    [Fact]
     public void DecrementMajorWithMinor()
     {
         SemanticVersion version1 = "2.1";
         var version = version1.Decrement(StepType.Major);
-        Assert.AreEqual("1.0.0", (string)version);
+        Assert.Equal("1.0.0", version);
     }
 
-    [Test]
+    [Fact]
     public void DecrementMajorWithMinorAndPatch()
     {
         SemanticVersion version1 = "2.1.1";
         var version = version1.Decrement(StepType.Major);
-        Assert.AreEqual("1.0.0", (string)version);
+        Assert.Equal("1.0.0", version);
     }
 
-    [Test]
+    [Fact]
     public void DecrementMajorError()
     {
         SemanticVersion version1 = "0";
         Assert.Throws<WeavingException>(() => version1.Decrement(StepType.Major));
     }
 
-    [Test]
+    [Fact]
     public void DecrementMinor()
     {
         SemanticVersion version1 = "2.1";
         var version = version1.Decrement(StepType.Minor);
-        Assert.AreEqual("2.0.0", (string)version);
+        Assert.Equal("2.0.0", version);
     }
 
-    [Test]
+    [Fact]
     public void DecrementMinorWithPatch()
     {
         SemanticVersion version1 = "2.1.1";
         var version = version1.Decrement(StepType.Minor);
-        Assert.AreEqual("2.0.0", (string)version);
+        Assert.Equal("2.0.0", version);
     }
 
-    [Test]
+    [Fact]
     public void DecrementMinorError()
     {
         SemanticVersion version1 = "2.0";
         Assert.Throws<WeavingException>(() => version1.Decrement(StepType.Minor));
     }
 
-    [Test]
+    [Fact]
     public void DecrementPatch()
     {
         SemanticVersion version1 = "2.1.1";
         var version = version1.Decrement(StepType.Patch);
-        Assert.AreEqual("2.1.0", (string)version);
+        Assert.Equal("2.1.0", version);
     }
 
-    [Test]
+    [Fact]
     public void DecrementPatchError()
     {
         SemanticVersion version1 = "2.1.0";

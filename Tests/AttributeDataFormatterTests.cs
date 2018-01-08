@@ -1,11 +1,9 @@
 using System.Diagnostics;
-using NUnit.Framework;
+using Xunit;
 
-[TestFixture]
 public class AttributeDataFormatterTests
 {
-
-    [Test]
+    [Fact]
     public void All()
     {
         var attributeData = new AttributeData
@@ -18,11 +16,10 @@ public class AttributeDataFormatterTests
         SemanticVersion assemblyVersion = "1";
         var dataFormatter = new ModuleWeaver {assemblyVersion = assemblyVersion};
         var message = dataFormatter.ConvertToMessage(attributeData);
-        Assert.AreEqual("Custom Message. Use `NewMember` instead. Will be treated as an error from version 2.0.0. Will be removed in version 4.0.0.", message);
+        Assert.Equal("Custom Message. Use `NewMember` instead. Will be treated as an error from version 2.0.0. Will be removed in version 4.0.0.", message);
     }
-  
 
-    [Test]
+    [Fact]
     public void ForSample()
     {
         var attributeData = new AttributeData
@@ -33,10 +30,8 @@ public class AttributeDataFormatterTests
                                     Replacement = "NewClass"
                                 };
         var dataFormatter1 = new ModuleWeaver { assemblyVersion = "1"};
-        Debug.WriteLine(dataFormatter1.ConvertToMessage(attributeData));
+        Trace.WriteLine(dataFormatter1.ConvertToMessage(attributeData));
         var dataFormatter2 = new ModuleWeaver { assemblyVersion = "3"};
-        Debug.WriteLine(dataFormatter2.ConvertToMessage(attributeData));
+        Trace.WriteLine(dataFormatter2.ConvertToMessage(attributeData));
     }
-
-    
 }

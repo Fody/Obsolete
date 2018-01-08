@@ -1,48 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using Mono.Cecil;
-using NUnit.Framework;
+using Fody;
+using Xunit;
 using ICustomAttributeProvider = System.Reflection.ICustomAttributeProvider;
+#pragma warning disable 618
 
-[TestFixture]
 public class IntegrationTests
 {
-    Assembly assembly;
-    List<string> warnings = new List<string>();
-    List<string> errors = new List<string>();
-    string beforeAssemblyPath;
-    string afterAssemblyPath;
+    static Assembly assembly;
+    static TestResult testResult;
 
-    public IntegrationTests()
+    static IntegrationTests()
     {
-        beforeAssemblyPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "AssemblyToProcess.dll");
-
-        afterAssemblyPath = beforeAssemblyPath.Replace(".dll", "2.dll");
-        File.Copy(beforeAssemblyPath, afterAssemblyPath, true);
-
-        using (var moduleDefinition = ModuleDefinition.ReadModule(beforeAssemblyPath))
+        var weavingTask = new ModuleWeaver
         {
-            var weavingTask = new ModuleWeaver
-            {
-                ModuleDefinition = moduleDefinition,
-                AssemblyResolver = new DefaultAssemblyResolver(),
-                LogWarning = s => warnings.Add(s),
-                LogError = s => errors.Add(s),
-                HideObsoleteMembers = true
-            };
-
-            weavingTask.Execute();
-            moduleDefinition.Write(afterAssemblyPath);
-        }
-
-        assembly = Assembly.LoadFile(afterAssemblyPath);
+            HideObsoleteMembers = true
+        };
+        testResult = weavingTask.ExecuteTestRun("AssemblyToProcess.dll");
+        assembly = testResult.Assembly;
     }
 
-    [Test]
+    [Fact]
     public void Class()
     {
         var type = assembly.GetType("ClassToMark");
@@ -50,76 +30,76 @@ public class IntegrationTests
         ValidateIsNotError(type);
     }
 
-    [Test]
+    [Fact]
     public void ClassWithHigherAssumedRemoveInVersion()
     {
         var type = assembly.GetType("ClassToMarkWithHigherAssumedRemoveInVersion");
-        var customAttributes = ((ICustomAttributeProvider) type).GetCustomAttributes(typeof(ObsoleteAttribute), false);
-        var obsoleteAttribute = (ObsoleteAttribute) customAttributes.First();
-        Assert.AreEqual("Will be treated as an error from version 3.0.0. Will be removed in version 4.0.0.", obsoleteAttribute.Message);
+        var customAttributes = ((ICustomAttributeProvider)type).GetCustomAttributes(typeof(ObsoleteAttribute), false);
+        var obsoleteAttribute = (ObsoleteAttribute)customAttributes.First();
+        Assert.Equal("Will be treated as an error from version 3.0.0. Will be removed in version 4.0.0.", obsoleteAttribute.Message);
         ValidateIsNotError(type);
     }
 
-    [Test]
+    [Fact]
     public void ClassToMarkWithSameRemoveAndTreatAsError()
     {
         var type = assembly.GetType("ClassToMarkWithSameRemoveAndTreatAsError");
-        var customAttributes = ((ICustomAttributeProvider) type).GetCustomAttributes(typeof(ObsoleteAttribute), false);
-        var obsoleteAttribute = (ObsoleteAttribute) customAttributes.First();
-        Assert.AreEqual("Will be treated as an error from version 1.2.0. Will be removed in version 1.2.0.", obsoleteAttribute.Message);
+        var customAttributes = ((ICustomAttributeProvider)type).GetCustomAttributes(typeof(ObsoleteAttribute), false);
+        var obsoleteAttribute = (ObsoleteAttribute)customAttributes.First();
+        Assert.Equal("Will be treated as an error from version 1.2.0. Will be removed in version 1.2.0.", obsoleteAttribute.Message);
         ValidateIsNotError(type);
     }
 
-    [Test]
+    [Fact]
     public void ClassToMarkWithHigherAssumedTreatAsErrorFromVersion()
     {
         var type = assembly.GetType("ClassToMarkWithHigherAssumedTreatAsErrorFromVersion");
-        var customAttributes = ((ICustomAttributeProvider) type).GetCustomAttributes(typeof(ObsoleteAttribute), false);
-        var obsoleteAttribute = (ObsoleteAttribute) customAttributes.First();
-        Assert.AreEqual("Will be treated as an error from version 2.0.0. Will be removed in version 3.0.0.", obsoleteAttribute.Message);
+        var customAttributes = ((ICustomAttributeProvider)type).GetCustomAttributes(typeof(ObsoleteAttribute), false);
+        var obsoleteAttribute = (ObsoleteAttribute)customAttributes.First();
+        Assert.Equal("Will be treated as an error from version 2.0.0. Will be removed in version 3.0.0.", obsoleteAttribute.Message);
         ValidateIsNotError(type);
     }
 
-    [Test]
+    [Fact]
     public void ClassWithAssumedRemoveInVersion()
     {
         var type = assembly.GetType("ClassToMarkWithAssumedRemoveInVersion");
-        var customAttributes = ((ICustomAttributeProvider) type).GetCustomAttributes(typeof(ObsoleteAttribute), false);
-        var obsoleteAttribute = (ObsoleteAttribute) customAttributes.First();
-        Assert.AreEqual("Will be treated as an error from version 2.0.0. Will be removed in version 3.0.0.", obsoleteAttribute.Message);
+        var customAttributes = ((ICustomAttributeProvider)type).GetCustomAttributes(typeof(ObsoleteAttribute), false);
+        var obsoleteAttribute = (ObsoleteAttribute)customAttributes.First();
+        Assert.Equal("Will be treated as an error from version 2.0.0. Will be removed in version 3.0.0.", obsoleteAttribute.Message);
         ValidateIsNotError(type);
     }
 
-    [Test]
+    [Fact]
     public void ClassToMarkWithAssumedTreatAsErrorFromVersion()
     {
         var type = assembly.GetType("ClassToMarkWithAssumedTreatAsErrorFromVersion");
-        var customAttributes = ((ICustomAttributeProvider) type).GetCustomAttributes(typeof(ObsoleteAttribute), false);
-        var obsoleteAttribute = (ObsoleteAttribute) customAttributes.First();
-        Assert.AreEqual("Will be removed in version 2.0.0.", obsoleteAttribute.Message);
+        var customAttributes = ((ICustomAttributeProvider)type).GetCustomAttributes(typeof(ObsoleteAttribute), false);
+        var obsoleteAttribute = (ObsoleteAttribute)customAttributes.First();
+        Assert.Equal("Will be removed in version 2.0.0.", obsoleteAttribute.Message);
         ValidateIsError(type);
     }
 
-    [Test]
+    [Fact]
     public void Warnings()
     {
-        Assert.Contains("The member `ClassWithObsoleteAttribute` has an ObsoleteAttribute. Consider replacing it with an ObsoleteExAttribute.", warnings);
+        Assert.Contains("The member `ClassWithObsoleteAttribute` has an ObsoleteAttribute. Consider replacing it with an ObsoleteExAttribute.", testResult.Warnings.Select(x => x.Text));
     }
 
-    [Test]
+    [Fact]
     public void NoWarnings()
     {
-        Assert.That(warnings, Does.Not.Contains("The member `ClassWithObsoleteAttributeToSkip` has an ObsoleteAttribute. Consider replacing it with an ObsoleteExAttribute."));
+        Assert.DoesNotContain("The member `ClassWithObsoleteAttributeToSkip` has an ObsoleteAttribute. Consider replacing it with an ObsoleteExAttribute.", testResult.Warnings.Select(x => x.Text));
     }
 
-    [Test]
+    [Fact]
     public void Errors()
     {
-        Assert.Contains("ObsoleteExAttribute is not valid on property gets or sets. Member: `System.Void ClassWithObsoleteOnGetSet::set_PropertyToMark(System.String)`.", errors);
-        Assert.Contains("ObsoleteExAttribute is not valid on property gets or sets. Member: `System.String ClassWithObsoleteOnGetSet::get_PropertyToMark()`.", errors);
+        Assert.Contains("ObsoleteExAttribute is not valid on property gets or sets. Member: `System.Void ClassWithObsoleteOnGetSet::set_PropertyToMark(System.String)`.", testResult.Errors.Select(x => x.Text));
+        Assert.Contains("ObsoleteExAttribute is not valid on property gets or sets. Member: `System.String ClassWithObsoleteOnGetSet::get_PropertyToMark()`.", testResult.Errors.Select(x => x.Text));
     }
 
-    [Test]
+    [Fact]
     public void Interface()
     {
         var type = assembly.GetType("InterfaceToMark");
@@ -128,28 +108,28 @@ public class IntegrationTests
         ValidateIsNotError(type);
     }
 
-    [Test]
+    [Fact]
     public void ClassWithIsError()
     {
         var type = assembly.GetType("ClassWithIsError");
         ValidateIsError(type);
     }
 
-    [Test]
+    [Fact]
     public void Enum()
     {
         var type = assembly.GetType("EnumToMark");
         ValidateIsNotError(type);
     }
 
-    [Test]
+    [Fact]
     public void Struct()
     {
         var type = assembly.GetType("StructToMark");
         ValidateIsNotError(type);
     }
 
-    [Test]
+    [Fact]
     public void EnumField()
     {
         var type = assembly.GetType("EnumToMark");
@@ -159,7 +139,7 @@ public class IntegrationTests
         ValidateIsNotError(info);
     }
 
-    [Test]
+    [Fact]
     public void ClassMethod()
     {
         var type = assembly.GetType("ClassToMark");
@@ -169,18 +149,18 @@ public class IntegrationTests
         ValidateIsNotError(info);
     }
 
-    [Test]
+    [Fact]
     public void ClassMethodThatThrows()
     {
         var type = assembly.GetType("ClassToMark");
         var info = type.GetMethod("MethodWithExceptionToMark");
         var obsoleteAttribute = ReadAttribute(info);
-        Assert.AreEqual("Custom message. Use `NewThing` instead. Will be treated as an error from version 2.0.0. The member currently throws a NotImplementedException. Will be removed in version 4.0.0.", obsoleteAttribute.Message);
+        Assert.Equal("Custom message. Use `NewThing` instead. Will be treated as an error from version 2.0.0. The member currently throws a NotImplementedException. Will be removed in version 4.0.0.", obsoleteAttribute.Message);
         ValidateHidden(info);
         ValidateIsNotError(info);
     }
 
-    [Test]
+    [Fact]
     public void InterfaceMethod()
     {
         var type = assembly.GetType("InterfaceToMark");
@@ -190,7 +170,7 @@ public class IntegrationTests
         ValidateIsNotError(info);
     }
 
-    [Test]
+    [Fact]
     public void StructMethod()
     {
         var type = assembly.GetType("StructToMark");
@@ -200,29 +180,29 @@ public class IntegrationTests
         ValidateIsNotError(info);
     }
 
-    [Test]
+    [Fact]
     public void ClassPropertySetThatThrows()
     {
         var type = assembly.GetType("ClassToMark");
         var info = type.GetProperty("PropertyWithSetExceptionToMark");
         var obsoleteAttribute = ReadAttribute(info);
-        Assert.AreEqual("Custom message. Use `NewThing` instead. Will be treated as an error from version 2.0.0. The member currently throws a NotImplementedException. Will be removed in version 4.0.0.", obsoleteAttribute.Message);
+        Assert.Equal("Custom message. Use `NewThing` instead. Will be treated as an error from version 2.0.0. The member currently throws a NotImplementedException. Will be removed in version 4.0.0.", obsoleteAttribute.Message);
         ValidateHidden(info);
         ValidateIsNotError(info);
     }
 
-    [Test]
+    [Fact]
     public void ClassPropertyGetThatThrows()
     {
         var type = assembly.GetType("ClassToMark");
         var info = type.GetProperty("PropertyWithGetExceptionToMark");
         var obsoleteAttribute = ReadAttribute(info);
-        Assert.AreEqual("Custom message. Use `NewThing` instead. Will be treated as an error from version 2.0.0. The member currently throws a NotImplementedException. Will be removed in version 4.0.0.", obsoleteAttribute.Message);
+        Assert.Equal("Custom message. Use `NewThing` instead. Will be treated as an error from version 2.0.0. The member currently throws a NotImplementedException. Will be removed in version 4.0.0.", obsoleteAttribute.Message);
         ValidateHidden(info);
         ValidateIsNotError(info);
     }
 
-    [Test]
+    [Fact]
     public void ClassProperty()
     {
         var type = assembly.GetType("ClassToMark");
@@ -232,7 +212,7 @@ public class IntegrationTests
         ValidateIsNotError(info);
     }
 
-    [Test]
+    [Fact]
     public void ClassField()
     {
         var type = assembly.GetType("ClassToMark");
@@ -242,7 +222,7 @@ public class IntegrationTests
         ValidateIsNotError(info);
     }
 
-    [Test]
+    [Fact]
     public void InterfaceEvent()
     {
         var type = assembly.GetType("InterfaceToMark");
@@ -252,7 +232,7 @@ public class IntegrationTests
         ValidateIsNotError(info);
     }
 
-    [Test]
+    [Fact]
     public void ClassEvent()
     {
         var type = assembly.GetType("ClassToMark");
@@ -262,7 +242,7 @@ public class IntegrationTests
         ValidateIsNotError(info);
     }
 
-    [Test]
+    [Fact]
     public void StructEvent()
     {
         var type = assembly.GetType("StructToMark");
@@ -272,7 +252,7 @@ public class IntegrationTests
         ValidateIsNotError(info);
     }
 
-    [Test]
+    [Fact]
     public void InterfaceProperty()
     {
         var type = assembly.GetType("InterfaceToMark");
@@ -282,7 +262,7 @@ public class IntegrationTests
         ValidateIsNotError(info);
     }
 
-    [Test]
+    [Fact]
     public void StructProperty()
     {
         var type = assembly.GetType("StructToMark");
@@ -292,7 +272,7 @@ public class IntegrationTests
         ValidateIsNotError(info);
     }
 
-    [Test]
+    [Fact]
     public void StructField()
     {
         var type = assembly.GetType("StructToMark");
@@ -305,41 +285,31 @@ public class IntegrationTests
     static void ValidateMessage(ICustomAttributeProvider attributeProvider)
     {
         var obsoleteAttribute = ReadAttribute(attributeProvider);
-        Assert.AreEqual("Custom message. Use `NewThing` instead. Will be treated as an error from version 2.0.0. Will be removed in version 4.0.0.", obsoleteAttribute.Message);
+        Assert.Equal("Custom message. Use `NewThing` instead. Will be treated as an error from version 2.0.0. Will be removed in version 4.0.0.", obsoleteAttribute.Message);
     }
 
     static ObsoleteAttribute ReadAttribute(ICustomAttributeProvider attributeProvider)
     {
         var customAttributes = attributeProvider.GetCustomAttributes(typeof(ObsoleteAttribute), false);
-        return (ObsoleteAttribute) customAttributes.First();
+        return (ObsoleteAttribute)customAttributes.First();
     }
 
     static void ValidateHidden(ICustomAttributeProvider attributeProvider)
     {
         var customAttributes = attributeProvider.GetCustomAttributes(typeof(EditorBrowsableAttribute), false);
-        var attribute = (EditorBrowsableAttribute) customAttributes.First();
-        Assert.AreEqual(EditorBrowsableState.Advanced, attribute.State);
+        var attribute = (EditorBrowsableAttribute)customAttributes.First();
+        Assert.Equal(EditorBrowsableState.Advanced, attribute.State);
     }
 
     static void ValidateIsError(ICustomAttributeProvider attributeProvider)
     {
         var obsoleteAttribute = ReadAttribute(attributeProvider);
-        Assert.IsTrue(obsoleteAttribute.IsError);
+        Assert.True(obsoleteAttribute.IsError);
     }
 
     static void ValidateIsNotError(ICustomAttributeProvider attributeProvider)
     {
         var obsoleteAttribute = ReadAttribute(attributeProvider);
-        Assert.IsFalse(obsoleteAttribute.IsError);
+        Assert.False(obsoleteAttribute.IsError);
     }
-
-
-#if(DEBUG)
-    [Test]
-    public void PeVerify()
-    {
-        Verifier.Verify(beforeAssemblyPath, afterAssemblyPath);
-    }
-#endif
-
 }

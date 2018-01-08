@@ -2,7 +2,11 @@ using System;
 
 namespace Before
 {
-    [ObsoleteEx(Message = "Custom message.", ReplacementTypeOrMember = "NewClass", TreatAsErrorFromVersion = "2.0", RemoveInVersion = "3.0")]
+    [ObsoleteEx(
+        Message = "Custom message.",
+        ReplacementTypeOrMember = "NewClass",
+        TreatAsErrorFromVersion = "2.0",
+        RemoveInVersion = "3.0")]
     public class ClassToMark
     {
     }

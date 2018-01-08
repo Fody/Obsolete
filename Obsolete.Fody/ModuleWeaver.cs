@@ -1,32 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Xml.Linq;
-using Mono.Cecil;
+﻿using System.Collections.Generic;
+using Fody;
 
-public partial class ModuleWeaver
+public partial class ModuleWeaver:BaseModuleWeaver
 {
     public SemanticVersion assemblyVersion;
-    public Action<string> LogInfo { get; set; }
-    public Action<string> LogWarning { get; set; }
-    public Action<string> LogError { get; set; }
-    public ModuleDefinition ModuleDefinition { get; set; }
-    public IAssemblyResolver AssemblyResolver { get; set; }
-    public XElement Config { get; set; }
 
-    public ModuleWeaver()
-    {
-        LogInfo = s => { };
-        LogWarning = s => { };
-        LogError = s => { };
-    }
-
-    public void Execute()
+    public override void Execute()
     {
         ReadConfig();
-        var systemTypes = FindSystemTypes();
-        FindEditorBrowsableTypes(systemTypes);
-        FindObsoleteType(systemTypes);
+        FindEditorBrowsableTypes();
+        FindObsoleteType();
 
         var version = ModuleDefinition.Assembly.Name.Version;
         assemblyVersion = new SemanticVersion
@@ -37,38 +20,15 @@ public partial class ModuleWeaver
         };
 
         ProcessAssembly();
-
-        CleanReferences();
     }
 
-    public List<TypeDefinition> FindSystemTypes()
+    public override IEnumerable<string> GetAssembliesForScanning()
     {
-        var types = new List<TypeDefinition>();
-
-        AddAssemblyIfExists("mscorlib", types);
-        AddAssemblyIfExists("System", types);
-        AddAssemblyIfExists("System.Runtime", types);
-        AddAssemblyIfExists("netstandard", types);
-
-        return types;
+        yield return "mscorlib";
+        yield return "System";
+        yield return "System.Runtime";
+        yield return "netstandard";
     }
 
-    void AddAssemblyIfExists(string name, List<TypeDefinition> types)
-    {
-        try
-        {
-            var msCoreLibDefinition = AssemblyResolver.Resolve(new AssemblyNameReference(name, null));
-
-            if (msCoreLibDefinition != null)
-            {
-                var module = msCoreLibDefinition.MainModule;
-                types.AddRange(module.Types);
-                types.AddRange(module.ExportedTypes.Select(x => x.Resolve()).Where(x => x != null));
-            }
-        }
-        catch (AssemblyResolutionException)
-        {
-            LogInfo($"Failed to resolve '{name}'. So skipping its types.");
-        }
-    }
+    public override bool ShouldCleanReference => true;
 }

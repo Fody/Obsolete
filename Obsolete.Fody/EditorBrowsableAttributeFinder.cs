@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using Mono.Cecil;
 
@@ -8,23 +7,15 @@ public partial class ModuleWeaver
     public TypeDefinition EditorBrowsableStateType;
     public int AdvancedStateConstant;
 
-    void FindEditorBrowsableTypes(List<TypeDefinition> typeDefinitions)
+    void FindEditorBrowsableTypes()
     {
         if (!HideObsoleteMembers)
         {
             return;
         }
-        var attributeType = typeDefinitions.FirstOrDefault(x => x.Name == "EditorBrowsableAttribute");
-        if (attributeType == null)
-        {
-            throw new WeavingException("Could not find EditorBrowsableAttribute");
-        }
+        var attributeType = FindType("System.ComponentModel.EditorBrowsableAttribute");
         EditorBrowsableConstructor = ModuleDefinition.ImportReference(attributeType.Methods.First(IsDesiredConstructor));
-        EditorBrowsableStateType = typeDefinitions.FirstOrDefault(x => x.Name == "EditorBrowsableState");
-        if (EditorBrowsableStateType == null)
-        {
-            throw new WeavingException("Could not find EditorBrowsableAttribute");
-        }
+        EditorBrowsableStateType = FindType("System.ComponentModel.EditorBrowsableState");
         var fieldDefinition = EditorBrowsableStateType.Fields.First(x => x.Name == "Advanced");
         AdvancedStateConstant = (int) fieldDefinition.Constant;
     }

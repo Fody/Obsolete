@@ -10,8 +10,7 @@ public partial class ModuleWeaver
         {
             return;
         }
-        var customAttribute = new CustomAttribute(EditorBrowsableConstructor);
-        customAttribute.ConstructorArguments.Add(new CustomAttributeArgument(EditorBrowsableStateType, AdvancedStateConstant));
+        var customAttribute = new CustomAttribute(EditorBrowsableConstructor);        var customAttributeArgument = new CustomAttributeArgument(EditorBrowsableStateType, AdvancedStateConstant);        customAttribute.ConstructorArguments.Add(customAttributeArgument);
         customAttributes.Add(customAttribute);
     }
 }

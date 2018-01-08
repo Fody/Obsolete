@@ -29,12 +29,9 @@ public partial class ModuleWeaver
                 LogError(error);
             }
         }
-        else
+        else if (memberDefinition is PropertyDefinition propertyDefinition)
         {
-            if (memberDefinition is PropertyDefinition propertyDefinition)
-            {
-                throwsNotImplemented = ThrowsNotImplemented(propertyDefinition);
-            }
+            throwsNotImplemented = ThrowsNotImplemented(propertyDefinition);
         }
 
         customAttributes.Remove(obsoleteExAttribute);

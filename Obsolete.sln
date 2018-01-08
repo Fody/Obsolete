@@ -1,20 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2009
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 14.0.22823.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Obsolete.Fody", "Obsolete.Fody\Obsolete.Fody.csproj", "{C3578A7B-09A6-4444-9383-0DEAFA4958BD}"
-	ProjectSection(ProjectDependencies) = postProject
-		{5D6191BF-F0EE-474D-B168-BB92418A0F3D} = {5D6191BF-F0EE-474D-B168-BB92418A0F3D}
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssemblyToProcess", "AssemblyToProcess\AssemblyToProcess.csproj", "{40939411-32F0-48DD-B17B-FA46DD5D9B25}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Obsolete", "Obsolete\Obsolete.csproj", "{5D6191BF-F0EE-474D-B168-BB92418A0F3D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{DAB36D28-050A-4F2A-AA93-B3163F92D71A}"
-	ProjectSection(ProjectDependencies) = postProject
-		{40939411-32F0-48DD-B17B-FA46DD5D9B25} = {40939411-32F0-48DD-B17B-FA46DD5D9B25}
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{542159B5-0A1C-4A9E-9F8B-419440F21481}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
 Global
