@@ -1,5 +1,6 @@
 
 using System;
+using Fody;
 
 public static class VersionExtensions
 {

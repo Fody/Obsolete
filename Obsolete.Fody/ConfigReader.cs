@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Fody;
 
 public partial class ModuleWeaver
 {
