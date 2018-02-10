@@ -2,7 +2,7 @@
 <Project>
   <PropertyGroup>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <PackageVersion>4.3.7</PackageVersion>
+    <Version>4.3.7</Version>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 </Project>
