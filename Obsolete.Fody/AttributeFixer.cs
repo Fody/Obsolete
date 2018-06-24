@@ -110,11 +110,11 @@ public partial class ModuleWeaver
         var customAttribute = new CustomAttribute(ObsoleteConstructorReference);
 
         var message = ConvertToMessage(attributeData);
-        var messageArgument = new CustomAttributeArgument(ModuleDefinition.TypeSystem.String, message);
+        var messageArgument = new CustomAttributeArgument(TypeSystem.StringReference, message);
         customAttribute.ConstructorArguments.Add(messageArgument);
 
         var isError = GetIsError(attributeData);
-        var isErrorArgument = new CustomAttributeArgument(ModuleDefinition.TypeSystem.Boolean, isError);
+        var isErrorArgument = new CustomAttributeArgument(TypeSystem.BooleanReference, isError);
         customAttribute.ConstructorArguments.Add(isErrorArgument);
 
         customAttributes.Add(customAttribute);

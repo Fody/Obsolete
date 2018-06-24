@@ -25,9 +25,9 @@ public class SemanticVersion
 
     public static implicit operator SemanticVersion(string d)
     {
-        if (TryParse(d, out var semver))
+        if (TryParse(d, out var semVer))
         {
-            return semver;
+            return semVer;
         }
         throw new Exception("Could not parse " + d);
     }
