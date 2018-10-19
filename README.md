@@ -19,12 +19,12 @@ See also [Fody usage](https://github.com/Fody/Fody#usage).
 
 Install the [Obsolete.Fody NuGet package](https://nuget.org/packages/Obsolete.Fody/) and update the [Fody NuGet package](https://nuget.org/packages/Fody/):
 
-```
+```powershell
+PM> Install-Package Fody
 PM> Install-Package Obsolete.Fody
-PM> Update-Package Fody
 ```
 
-The `Update-Package Fody` is required since NuGet always defaults to the oldest, and most buggy, version of any dependency.
+The `Install-Package Fody` is required since NuGet always defaults to the oldest, and most buggy, version of any dependency.
 
 
 ### Add to FodyWeavers.xml
@@ -41,7 +41,7 @@ Add `<Obsolete/>` to [FodyWeavers.xml](https://github.com/Fody/Fody#add-fodyweav
 
 ### Your Code
 
-```
+```csharp
 [ObsoleteEx(
             Message = "Custom message.", 
             TreatAsErrorFromVersion = "2.0", 
@@ -55,13 +55,13 @@ public class ClassToMark {}
 
 When the target assembly version is less than `RemoveInVersion` an `ObsoleteAttribute` with "treat as warning" will be injected. It will have the following format
 
-```
+```csharp
 [Obsolete("MESSAGE. Use 'REPLACED_WITH' instead. Will be treated as an error from version MARK_AS_VERSION_IN. Will be removed in version WILL_BE_REMOVED_IN_VERSION.")]
 ```
 
 So given the above example when the assembly version is 1.0 the following will be injected
 
-```
+```csharp
 [Obsolete("Custom Message. Use 'NewClass' instead. Will be treated as an error from version 2.0.0. Will be removed in version 4.0.0.")]
     public class ClassToMark{}
 ```
@@ -71,13 +71,13 @@ So given the above example when the assembly version is 1.0 the following will b
 
 When the target assembly version is greater than `RemoveInVersion` but less than `TreatAsErrorFromVersion` an `ObsoleteAttribute` with "treat as error" will be injected. It will have the following format
 
-```
+```csharp
 [Obsolete("MESSAGE. Use 'REPLACED_WITH' instead. Will be removed in version WILL_BE_REMOVED_IN_VERSION.", true)]
 ```
 
 So given the above example when the assembly version is 3.0 the following will be injected
 
-```
+```csharp
 [Obsolete("Custom Message. Use 'NewClass' instead. Will be removed in version 4.0.0.", true)]
 [EditorBrowsable(EditorBrowsableState.Advanced)]
 public class ClassToMark{}
@@ -100,7 +100,7 @@ So given the above example when the assembly version is 5.0 a compile error will
 
 The message property should only be used for useful information. The fact that it is obsoleted does not need to be reiterated in the message.
 
-**DO NOT**  use any of the following redundant messages
+**DO NOT** use any of the following redundant messages
 
  * "Do not call this method"
  * "This method will be removed"
@@ -177,14 +177,16 @@ Used in two cases
 
 *Defaults to  `Major`. Other options are `Minor` and `Patch`*
 
-    <Obsolete StepType="Minor"/>
+```xml
+<Obsolete StepType="Minor"/>
+```
 
 
 ## Mute warnings about Obsolete usage
 
 For `ObsoleteAttribute` is used and should not be replaced, use `DoNotWarnAboutObsoleteUsageAttribute` to mute Fody warnings during build time.
 
-```
+```csharp
 [Obsolete]
 [DoNotWarnAboutObsoleteUsage]
 public class LegacyCode {}
