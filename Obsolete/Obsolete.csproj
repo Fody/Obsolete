@@ -7,6 +7,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Description>Allows a more expressive use of the ObsoleteAttribute.</Description>
     <PackageTags>Obsolete, ObsoleteAttribute, ILWeaving, Fody, Cecil</PackageTags>
+    <PackageOutputPath>$(SolutionDir)nugets</PackageOutputPath>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Fody" Version="4.0.2" PrivateAssets="None" />
