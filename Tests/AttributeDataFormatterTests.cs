@@ -1,7 +1,9 @@
 using System.Diagnostics;
 using Xunit;
+using Xunit.Abstractions;
 
-public class AttributeDataFormatterTests
+public class AttributeDataFormatterTests :
+    XunitLoggingBase
 {
     [Fact]
     public void All()
@@ -33,5 +35,10 @@ public class AttributeDataFormatterTests
         Trace.WriteLine(dataFormatter1.ConvertToMessage(attributeData));
         var dataFormatter2 = new ModuleWeaver { assemblyVersion = "3"};
         Trace.WriteLine(dataFormatter2.ConvertToMessage(attributeData));
+    }
+
+    public AttributeDataFormatterTests(ITestOutputHelper output) : 
+        base(output)
+    {
     }
 }

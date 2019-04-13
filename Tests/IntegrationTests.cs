@@ -4,10 +4,11 @@ using System.Linq;
 using System.Reflection;
 using Fody;
 using Xunit;
+using Xunit.Abstractions;
 using ICustomAttributeProvider = System.Reflection.ICustomAttributeProvider;
-#pragma warning disable 618
 
-public class IntegrationTests
+public class IntegrationTests :
+    XunitLoggingBase
 {
     static Assembly assembly;
     static TestResult testResult;
@@ -311,5 +312,9 @@ public class IntegrationTests
     {
         var obsoleteAttribute = ReadAttribute(attributeProvider);
         Assert.False(obsoleteAttribute.IsError);
+    }
+
+    public IntegrationTests(ITestOutputHelper output) : base(output)
+    {
     }
 }

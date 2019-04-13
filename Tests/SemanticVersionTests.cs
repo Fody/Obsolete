@@ -1,6 +1,8 @@
 ﻿using Xunit;
+using Xunit.Abstractions;
 
-public class SemanticVersionTests
+public class SemanticVersionTests :
+    XunitLoggingBase
 {
     [Fact]
     public void TryParse()
@@ -16,5 +18,10 @@ public class SemanticVersionTests
         Assert.Equal(0, version2.Major);
         Assert.Equal(1, version2.Minor);
         Assert.Equal(0, version2.Patch);
+    }
+
+    public SemanticVersionTests(ITestOutputHelper output) :
+        base(output)
+    {
     }
 }
