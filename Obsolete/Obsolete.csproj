@@ -8,6 +8,9 @@
     <Description>Allows a more expressive use of the ObsoleteAttribute.</Description>
     <PackageTags>Obsolete, ObsoleteAttribute, ILWeaving, Fody, Cecil</PackageTags>
     <PackageOutputPath>$(SolutionDir)nugets</PackageOutputPath>
+    <PackageIconUrl>https://raw.githubusercontent.com/Fody/Obsolete/master/package_icon.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/Fody/Obsolete</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Fody" Version="5.0.6" PrivateAssets="None" />
