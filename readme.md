@@ -192,4 +192,4 @@ public class LegacyCode {}
 
 ## Icon
 
-Icon courtesy of [The Noun Project](http://thenounproject.com)
+Icon courtesy of [The Noun Project](https://thenounproject.com)
