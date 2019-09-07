@@ -3,7 +3,7 @@ using Xunit;
 using Xunit.Abstractions;
 
 public class AttributeDataFormatterTests :
-    XunitLoggingBase
+    XunitApprovalBase
 {
     [Fact]
     public void All()

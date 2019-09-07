@@ -8,7 +8,7 @@ using Xunit.Abstractions;
 using ICustomAttributeProvider = System.Reflection.ICustomAttributeProvider;
 
 public class IntegrationTests :
-    XunitLoggingBase
+    XunitApprovalBase
 {
     static Assembly assembly;
     static TestResult testResult;

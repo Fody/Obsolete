@@ -2,7 +2,7 @@
 using Xunit.Abstractions;
 
 public class SemanticVersionTests :
-    XunitLoggingBase
+    XunitApprovalBase
 {
     [Fact]
     public void TryParse()

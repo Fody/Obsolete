@@ -3,7 +3,7 @@ using Xunit;
 using Xunit.Abstractions;
 
 public class VersionExtensionTests :
-    XunitLoggingBase
+    XunitApprovalBase
 {
     [Fact]
     public void IncrementMajor()
