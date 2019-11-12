@@ -117,6 +117,13 @@ public class IntegrationTests :
     }
 
     [Fact]
+    public void ClassWithIsErrorFromInformationalVersion()
+    {
+        var type = assembly.GetType("ClassWithIsErrorFromInformationalVersion");
+        ValidateIsError(type);
+    }
+
+    [Fact]
     public void Enum()
     {
         var type = assembly.GetType("EnumToMark");

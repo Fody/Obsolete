@@ -40,10 +40,10 @@ Add `<Obsolete/>` to [FodyWeavers.xml](https://github.com/Fody/Home/blob/master/
 
 ```csharp
 [ObsoleteEx(
-            Message = "Custom message.", 
-            TreatAsErrorFromVersion = "2.0", 
-            RemoveInVersion = "4.0", 
-            ReplacementTypeOrMember = "NewClass")]
+    Message = "Custom message.", 
+    TreatAsErrorFromVersion = "2.0", 
+    RemoveInVersion = "4.0", 
+    ReplacementTypeOrMember = "NewClass")]
 public class ClassToMark {}
 ```
 
@@ -93,7 +93,12 @@ So given the above example when the assembly version is 5.0 a compile error will
 > Cannot process 'ClassToMark'. The assembly version 5.0.0 is higher than version specified in RemoveInVersion 4.0.0. The member should be removed or RemoveInVersion increased.
 
 
-## The Message property 
+## Version convention
+
+By default the prefix of [AssemblyInformationalVersionAttribute](https://docs.microsoft.com/en-us/dotnet/api/system.reflection.assemblyinformationalversionattribute) will be used, if it can be parsed to a version. Otherwise the [assembly version](https://docs.microsoft.com/en-us/dotnet/standard/assembly/versioning) is used.
+
+
+## The Message property
 
 The message property should only be used for useful information. The fact that it is obsoleted does not need to be reiterated in the message.
 
@@ -105,12 +110,12 @@ The message property should only be used for useful information. The fact that i
  * "The replacement method is"
 
 
-# Configuration Options
+## Configuration Options
 
 All configuration options are access by modifying the `Obsolete` node in `FodyWeavers.xml`
 
 
-## HideObsoleteMembers
+### HideObsoleteMembers
 
 When this is `true` obsolete members will also have `[EditorBrowsable(EditorBrowsableState.Advanced)]` added to them.
 
@@ -121,7 +126,7 @@ When this is `true` obsolete members will also have `[EditorBrowsable(EditorBrow
 ```
 
 
-## TreatAsErrorFormat
+### TreatAsErrorFormat
 
 The string used when informing the user what version the member will be treated as an error.
 
@@ -132,7 +137,7 @@ The string used when informing the user what version the member will be treated 
 ```
 
 
-## ThrowsNotImplementedText
+### ThrowsNotImplementedText
 
 The string used when informing the user when the member currently throws a [NotImplementedException](https://msdn.microsoft.com/en-us/library/system.notimplementedexception.aspx).
 
@@ -143,7 +148,7 @@ The string used when informing the user when the member currently throws a [NotI
 ```
 
 
-## RemoveInVersionFormat
+### RemoveInVersionFormat
 
 The string used when informing the user what version the member will be removed it.
 
@@ -154,7 +159,7 @@ The string used when informing the user what version the member will be removed 
 ```
 
 
-## ReplacementFormat
+### ReplacementFormat
 
 The string used when informing the user of an alternative member to use instead of the obsolete member.
 
@@ -165,12 +170,12 @@ The string used when informing the user of an alternative member to use instead 
 ```
 
 
-## StepType
+### StepType
 
 Used in two cases
 
  * To derive `TreatAsErrorFromVersion` if `RemoveInVersion` is not defined.
- * To derive `RemoveInVersion` if `TreatAsErrorFromVersion` is not defined.   
+ * To derive `RemoveInVersion` if `TreatAsErrorFromVersion` is not defined.
 
 *Defaults to  `Major`. Other options are `Minor` and `Patch`*
 
@@ -179,7 +184,7 @@ Used in two cases
 ```
 
 
-## Mute warnings about Obsolete usage
+### Mute warnings about Obsolete usage
 
 For `ObsoleteAttribute` is used and should not be replaced, use `DoNotWarnAboutObsoleteUsageAttribute` to mute Fody warnings during build time.
 

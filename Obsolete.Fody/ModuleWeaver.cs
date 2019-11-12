@@ -11,13 +11,7 @@ public partial class ModuleWeaver:BaseModuleWeaver
         FindEditorBrowsableTypes();
         FindObsoleteType();
 
-        var version = ModuleDefinition.Assembly.Name.Version;
-        assemblyVersion = new SemanticVersion
-        {
-            Major = version.Major.OrZero(),
-            Minor = version.Minor.OrZero(),
-            Patch = version.Build.OrZero()
-        };
+        assemblyVersion = VersionReader.Read(ModuleDefinition.Assembly);
 
         ProcessAssembly();
     }
