@@ -3,12 +3,13 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Fody;
+using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 using ICustomAttributeProvider = System.Reflection.ICustomAttributeProvider;
 
 public class IntegrationTests :
-    XunitApprovalBase
+    VerifyBase
 {
     static Assembly assembly;
     static TestResult testResult;
@@ -321,7 +322,8 @@ public class IntegrationTests :
         Assert.False(obsoleteAttribute.IsError);
     }
 
-    public IntegrationTests(ITestOutputHelper output) : base(output)
+    public IntegrationTests(ITestOutputHelper output) :
+        base(output)
     {
     }
 }

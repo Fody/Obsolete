@@ -1,16 +1,17 @@
 ﻿using Fody;
+using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 
 public class VersionExtensionTests :
-    XunitApprovalBase
+    VerifyBase
 {
     [Fact]
     public void IncrementMajor()
     {
         SemanticVersion version1 = "2";
         var version = version1.Increment(StepType.Major);
-        Assert.Equal("3.0.0",version);
+        Assert.Equal("3.0.0", version);
     }
 
     [Fact]
@@ -18,7 +19,7 @@ public class VersionExtensionTests :
     {
         SemanticVersion version1 = "2.1";
         var version = version1.Increment(StepType.Major);
-        Assert.Equal("3.0.0",version);
+        Assert.Equal("3.0.0", version);
     }
 
     [Fact]
@@ -26,7 +27,7 @@ public class VersionExtensionTests :
     {
         SemanticVersion version1 = "2.1.1";
         var version = version1.Increment(StepType.Major);
-        Assert.Equal("3.0.0",version);
+        Assert.Equal("3.0.0", version);
     }
 
     [Fact]
@@ -34,7 +35,7 @@ public class VersionExtensionTests :
     {
         SemanticVersion version1 = "2";
         var version = version1.Increment(StepType.Minor);
-        Assert.Equal("2.1.0",version);
+        Assert.Equal("2.1.0", version);
     }
 
     [Fact]
@@ -42,7 +43,7 @@ public class VersionExtensionTests :
     {
         SemanticVersion version1 = "2.0.1";
         var version = version1.Increment(StepType.Minor);
-        Assert.Equal("2.1.0",version);
+        Assert.Equal("2.1.0", version);
     }
 
     [Fact]
@@ -50,7 +51,7 @@ public class VersionExtensionTests :
     {
         SemanticVersion version1 = "2";
         var version = version1.Increment(StepType.Patch);
-        Assert.Equal("2.0.1",version);
+        Assert.Equal("2.0.1", version);
     }
 
     [Fact]
@@ -58,7 +59,7 @@ public class VersionExtensionTests :
     {
         SemanticVersion version1 = "2.1";
         var version = version1.Increment(StepType.Patch);
-        Assert.Equal("2.1.1",version);
+        Assert.Equal("2.1.1", version);
     }
 
     [Fact]
