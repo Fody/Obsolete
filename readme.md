@@ -1,11 +1,14 @@
+# <img src="/package_icon.png" height="30px"> Obsolete.Fody
+
 [![Chat on Gitter](https://img.shields.io/gitter/room/fody/fody.svg)](https://gitter.im/Fody/Fody)
 [![NuGet Status](https://img.shields.io/nuget/v/Obsolete.Fody.svg)](https://www.nuget.org/packages/Obsolete.Fody/)
 
-## This is an add-in for [Fody](https://github.com/Fody/Home/)
-
-![Icon](https://raw.githubusercontent.com/Fody/Obsolete/master/package_icon.png)
-
 Helps keep usages of [ObsoleteAttribute](http://msdn.microsoft.com/en-us/library/fwz0y5c2) consistent.
+
+
+### This is an add-in for [Fody](https://github.com/Fody/Home/)
+
+**It is expected that all developers using Fody either [become a Patron on OpenCollective](https://opencollective.com/fody/), or have a [Tidelift Subscription](https://tidelift.com/subscription/pkg/nuget-fody?utm_source=nuget-fody&utm_medium=referral&utm_campaign=enterprise).**
 
 
 ## Usage
