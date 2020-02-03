@@ -7,7 +7,7 @@ public partial class ModuleWeaver
 
     public void FindObsoleteType()
     {
-        var obsoleteDefinition = FindType("System.ObsoleteAttribute");
+        var obsoleteDefinition = FindTypeDefinition("System.ObsoleteAttribute");
         var constructor = obsoleteDefinition.Methods.First(x =>
             x.Parameters.Count == 2
             && x.Parameters[0].ParameterType.Name == "String"

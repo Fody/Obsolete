@@ -13,9 +13,9 @@ public partial class ModuleWeaver
         {
             return;
         }
-        var attributeType = FindType("System.ComponentModel.EditorBrowsableAttribute");
+        var attributeType = FindTypeDefinition("System.ComponentModel.EditorBrowsableAttribute");
         EditorBrowsableConstructor = ModuleDefinition.ImportReference(attributeType.Methods.First(IsDesiredConstructor));
-        EditorBrowsableStateType = FindType("System.ComponentModel.EditorBrowsableState");
+        EditorBrowsableStateType = FindTypeDefinition("System.ComponentModel.EditorBrowsableState");
         var fieldDefinition = EditorBrowsableStateType.Fields.First(x => x.Name == "Advanced");
         AdvancedStateConstant = (int) fieldDefinition.Constant;
     }

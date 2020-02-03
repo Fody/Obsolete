@@ -22,6 +22,6 @@ public partial class ModuleWeaver
             return;
         }
         var warning = $"The member `{memberDefinition.FullName}` has an ObsoleteAttribute. Consider replacing it with an ObsoleteExAttribute.";
-        LogWarning(warning);
+        WriteWarning(warning);
     }
 }
