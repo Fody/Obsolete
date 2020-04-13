@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using Fody;
 
-public partial class ModuleWeaver:BaseModuleWeaver
+public partial class ModuleWeaver :
+    BaseModuleWeaver
 {
     public SemanticVersion assemblyVersion;
 
