@@ -2,7 +2,7 @@
 using System.Linq;
 using Mono.Cecil;
 
-static class VersionReader
+public static class VersionReader
 {
     public static SemanticVersion Read(AssemblyDefinition assembly)
     {
@@ -12,12 +12,19 @@ static class VersionReader
         {
             var value = (string)informationalAttribute.ConstructorArguments.Single().Value;
             var indexOf = value.IndexOf(x => x != '.' && !char.IsNumber(x));
-            if (indexOf != -1)
+            if (indexOf == -1)
+            {
+                if (SemanticVersion.TryParse(value, out var informationalVersion))
+                {
+                    return informationalVersion;
+                }
+            }
+            else
             {
                 var substring = value.Substring(0, indexOf);
-                if (SemanticVersion.TryParse(substring, out var versionFromInformational))
+                if (SemanticVersion.TryParse(substring, out var informationalVersion))
                 {
-                    return versionFromInformational;
+                    return informationalVersion;
                 }
             }
         }
