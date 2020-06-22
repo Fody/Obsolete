@@ -1,7 +1,5 @@
 using System.Diagnostics;
-using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
 public class AttributeDataFormatterTests
 {
@@ -44,10 +42,5 @@ public class AttributeDataFormatterTests
             assemblyVersion = "3"
         };
         Trace.WriteLine(dataFormatter2.ConvertToMessage(attributeData));
-    }
-
-    public AttributeDataFormatterTests(ITestOutputHelper output) :
-        base(output)
-    {
     }
 }

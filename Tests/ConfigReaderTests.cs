@@ -1,8 +1,6 @@
 ﻿using System.Xml.Linq;
 using Fody;
-using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
 public class ConfigReaderTests
 {
@@ -76,10 +74,5 @@ public class ConfigReaderTests
         };
         var exception = Assert.Throws<WeavingException>(() => moduleWeaver.ReadConfig());
         Assert.Equal("VersionIncrement is no longer supported. Use StepType instead.", exception.Message);
-    }
-
-    public ConfigReaderTests(ITestOutputHelper output) :
-        base(output)
-    {
     }
 }

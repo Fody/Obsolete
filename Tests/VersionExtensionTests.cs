@@ -1,7 +1,5 @@
 ﻿using Fody;
-using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 
 public class VersionExtensionTests
 {
@@ -128,10 +126,5 @@ public class VersionExtensionTests
     {
         SemanticVersion version1 = "2.1.0";
         Assert.Throws<WeavingException>(() => version1.Decrement(StepType.Patch));
-    }
-
-    public VersionExtensionTests(ITestOutputHelper output) :
-        base(output)
-    {
     }
 }

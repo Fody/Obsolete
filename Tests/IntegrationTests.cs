@@ -3,9 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Fody;
-using VerifyXunit;
 using Xunit;
-using Xunit.Abstractions;
 using ICustomAttributeProvider = System.Reflection.ICustomAttributeProvider;
 
 public class IntegrationTests
@@ -319,10 +317,5 @@ public class IntegrationTests
     {
         var obsoleteAttribute = ReadAttribute(attributeProvider);
         Assert.False(obsoleteAttribute.IsError);
-    }
-
-    public IntegrationTests(ITestOutputHelper output) :
-        base(output)
-    {
     }
 }
