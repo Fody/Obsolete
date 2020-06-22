@@ -3,8 +3,7 @@ using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 
-public class VersionExtensionTests :
-    VerifyBase
+public class VersionExtensionTests
 {
     [Fact]
     public void IncrementMajor()

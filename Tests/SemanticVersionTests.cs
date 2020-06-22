@@ -2,8 +2,7 @@
 using Xunit;
 using Xunit.Abstractions;
 
-public class SemanticVersionTests :
-    VerifyBase
+public class SemanticVersionTests
 {
     [Fact]
     public void TryParse()

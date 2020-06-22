@@ -8,8 +8,7 @@ using Xunit;
 using Xunit.Abstractions;
 using ICustomAttributeProvider = System.Reflection.ICustomAttributeProvider;
 
-public class IntegrationTests :
-    VerifyBase
+public class IntegrationTests
 {
     static Assembly assembly;
     static TestResult testResult;

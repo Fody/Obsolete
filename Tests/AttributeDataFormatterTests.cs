@@ -3,8 +3,7 @@ using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 
-public class AttributeDataFormatterTests :
-    VerifyBase
+public class AttributeDataFormatterTests
 {
     [Fact]
     public void All()

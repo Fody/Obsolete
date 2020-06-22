@@ -4,8 +4,7 @@ using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 
-public class ConfigReaderTests :
-    VerifyBase
+public class ConfigReaderTests
 {
     [Fact]
     public void TrueHideObsoleteMembers()
