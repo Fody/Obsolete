@@ -13,8 +13,8 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="FodyPackaging" Version="6.5.2" PrivateAssets="All" />
-    <PackageReference Include="Fody" Version="6.5.2" PrivateAssets="none" />
+    <PackageReference Include="FodyPackaging" Version="6.5.3" PrivateAssets="All" />
+    <PackageReference Include="Fody" Version="6.5.3" PrivateAssets="none" />
     <Compile Include="..\AttributeAssembly\*.cs" />
   </ItemGroup>
 </Project>
