@@ -120,9 +120,13 @@ All configuration options are access by modifying the `Obsolete` node in `FodyWe
 
 ### HideObsoleteMembers
 
-When this is `true` obsolete members will also have `[EditorBrowsable(EditorBrowsableState.Advanced)]` added to them.
+When this is `advanced` or `true` obsolete members will also have `[EditorBrowsable(EditorBrowsableState.Advanced)]` added to them.
 
-*Defaults to `true`*
+*Defaults to `advanced`*
+
+When this is `never` obsolete members will also have `[EditorBrowsable(EditorBrowsableState.Never)]` added to them.
+
+When this is `off` or `false` obsolete members will not have `[EditorBrowsable]` added to them.
 
 ```xml
 <Obsolete HideObsoleteMembers='false'/>

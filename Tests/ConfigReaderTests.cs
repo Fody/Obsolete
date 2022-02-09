@@ -5,18 +5,6 @@ using Xunit;
 public class ConfigReaderTests
 {
     [Fact]
-    public void TrueHideObsoleteMembers()
-    {
-        var xElement = XElement.Parse(@"<Obsolete HideObsoleteMembers='true'/>");
-        var moduleWeaver = new ModuleWeaver
-        {
-            Config = xElement
-        };
-        moduleWeaver.ReadConfig();
-        Assert.True(moduleWeaver.HideObsoleteMembers);
-    }
-
-    [Fact]
     public void ThrowsNotImplementedText()
     {
         var xElement = XElement.Parse(@"<Obsolete ThrowsNotImplementedText='Custom Text'/>");
@@ -28,18 +16,28 @@ public class ConfigReaderTests
         Assert.Equal("Custom Text", moduleWeaver.ThrowsNotImplementedText);
     }
 
-    [Fact]
-    public void FalseHideObsoleteMembers()
+    [Theory]
+    [InlineData("false", ModuleWeaver.HideObsoleteMembersState.Off)]
+    [InlineData("False", ModuleWeaver.HideObsoleteMembersState.Off)]
+    [InlineData("true", ModuleWeaver.HideObsoleteMembersState.Advanced)]
+    [InlineData("True", ModuleWeaver.HideObsoleteMembersState.Advanced)]
+    [InlineData("advanced", ModuleWeaver.HideObsoleteMembersState.Advanced)]
+    [InlineData("Advanced", ModuleWeaver.HideObsoleteMembersState.Advanced)]
+    [InlineData("never", ModuleWeaver.HideObsoleteMembersState.Never)]
+    [InlineData("Never", ModuleWeaver.HideObsoleteMembersState.Never)]
+    [InlineData("off", ModuleWeaver.HideObsoleteMembersState.Off)]
+    [InlineData("Off", ModuleWeaver.HideObsoleteMembersState.Off)]
+    public void HideObsoleteMembers(string state, ModuleWeaver.HideObsoleteMembersState expected)
     {
-        var xElement = XElement.Parse(@"<Obsolete HideObsoleteMembers='false'/>");
+        var xElement = XElement.Parse($"<Obsolete HideObsoleteMembers='{state}'/>");
         var moduleWeaver = new ModuleWeaver
         {
             Config = xElement
         };
         moduleWeaver.ReadConfig();
-        Assert.False(moduleWeaver.HideObsoleteMembers);
+        Assert.Equal(expected, moduleWeaver.HideObsoleteMembers);
     }
-
+    
     [Fact]
     public void EmptyHideObsoleteMembers()
     {
@@ -49,7 +47,7 @@ public class ConfigReaderTests
             Config = xElement
         };
         moduleWeaver.ReadConfig();
-        Assert.True(moduleWeaver.HideObsoleteMembers);
+        Assert.Equal(ModuleWeaver.HideObsoleteMembersState.Advanced, moduleWeaver.HideObsoleteMembers);
     }
 
     [Fact]

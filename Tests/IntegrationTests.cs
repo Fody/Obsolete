@@ -6,19 +6,65 @@ using Fody;
 using Xunit;
 using ICustomAttributeProvider = System.Reflection.ICustomAttributeProvider;
 
-public class IntegrationTests
+public class IntegrationTestsDefaultHidding : IntegrationTestsBase
 {
-    static Assembly assembly;
-    static TestResult testResult;
-
-    static IntegrationTests()
+    public IntegrationTestsDefaultHidding(IntegrationTestFixture fixture) : base(fixture, ModuleWeaver.HideObsoleteMembersState.Advanced)
     {
+    }
+}
+
+public class IntegrationTestsNeverHidding : IntegrationTestsBase
+{
+    public IntegrationTestsNeverHidding(IntegrationTestFixture fixture) : base(fixture, ModuleWeaver.HideObsoleteMembersState.Never)
+    {
+    }
+}
+
+public class IntegrationTestsHiddingDisabled : IntegrationTestsBase
+{
+    public IntegrationTestsHiddingDisabled(IntegrationTestFixture fixture) : base(fixture, ModuleWeaver.HideObsoleteMembersState.Off)
+    {
+    }
+}
+
+public class IntegrationTestFixture : IDisposable
+{
+    public void Initialize(ModuleWeaver.HideObsoleteMembersState state)
+    {
+        if (TestResult != null)
+        {
+            return;
+        }
+        
         var weavingTask = new ModuleWeaver
         {
-            HideObsoleteMembers = true
+            HideObsoleteMembers = state
         };
-        testResult = weavingTask.ExecuteTestRun("AssemblyToProcess.dll");
-        assembly = testResult.Assembly;
+        TestResult = weavingTask.ExecuteTestRun("AssemblyToProcess.dll");
+        Assembly = TestResult.Assembly;
+    }
+    
+    public TestResult TestResult { get; set; }
+    public Assembly Assembly { get; set; }
+
+    public void Dispose()
+    {
+    }
+}
+
+[Collection("IntegrationTestsBase")]
+public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestFixture>
+{
+    Assembly assembly;
+    TestResult testResult;
+    ModuleWeaver.HideObsoleteMembersState expectedBrowsableState;
+
+    protected IntegrationTestsBase(IntegrationTestFixture fixture, ModuleWeaver.HideObsoleteMembersState state)
+    {
+        fixture.Initialize(state);
+        assembly = fixture.Assembly;
+        testResult = fixture.TestResult;
+        expectedBrowsableState = state;
     }
 
     [Fact]
@@ -26,6 +72,7 @@ public class IntegrationTests
     {
         var type = assembly.GetType("ClassToMark");
         ValidateMessage(type);
+        ValidateHiddenState(type, expectedBrowsableState);
         ValidateIsNotError(type);
     }
 
@@ -103,7 +150,7 @@ public class IntegrationTests
     {
         var type = assembly.GetType("InterfaceToMark");
         ValidateMessage(type);
-        ValidateHidden(type);
+        ValidateHiddenState(type, expectedBrowsableState);
         ValidateIsNotError(type);
     }
 
@@ -141,7 +188,7 @@ public class IntegrationTests
         var type = assembly.GetType("EnumToMark");
         var info = type.GetField("Foo");
         ValidateMessage(info);
-        ValidateHidden(info);
+        ValidateHiddenState(info, expectedBrowsableState);
         ValidateIsNotError(info);
     }
 
@@ -151,7 +198,7 @@ public class IntegrationTests
         var type = assembly.GetType("ClassToMark");
         var info = type.GetMethod("MethodToMark");
         ValidateMessage(info);
-        ValidateHidden(info);
+        ValidateHiddenState(info, expectedBrowsableState);
         ValidateIsNotError(info);
     }
 
@@ -162,7 +209,7 @@ public class IntegrationTests
         var info = type.GetMethod("MethodWithExceptionToMark");
         var obsoleteAttribute = ReadAttribute(info);
         Assert.Equal("Custom message. Use `NewThing` instead. Will be treated as an error from version 2.0.0. The member currently throws a NotImplementedException. Will be removed in version 4.0.0.", obsoleteAttribute.Message);
-        ValidateHidden(info);
+        ValidateHiddenState(info, expectedBrowsableState);
         ValidateIsNotError(info);
     }
 
@@ -172,7 +219,7 @@ public class IntegrationTests
         var type = assembly.GetType("InterfaceToMark");
         var info = type.GetMethod("MethodToMark");
         ValidateMessage(info);
-        ValidateHidden(info);
+        ValidateHiddenState(info, expectedBrowsableState);
         ValidateIsNotError(info);
     }
 
@@ -182,7 +229,7 @@ public class IntegrationTests
         var type = assembly.GetType("StructToMark");
         var info = type.GetMethod("MethodToMark");
         ValidateMessage(info);
-        ValidateHidden(info);
+        ValidateHiddenState(info, expectedBrowsableState);
         ValidateIsNotError(info);
     }
 
@@ -193,7 +240,7 @@ public class IntegrationTests
         var info = type.GetProperty("PropertyWithSetExceptionToMark");
         var obsoleteAttribute = ReadAttribute(info);
         Assert.Equal("Custom message. Use `NewThing` instead. Will be treated as an error from version 2.0.0. The member currently throws a NotImplementedException. Will be removed in version 4.0.0.", obsoleteAttribute.Message);
-        ValidateHidden(info);
+        ValidateHiddenState(info, expectedBrowsableState);
         ValidateIsNotError(info);
     }
 
@@ -204,7 +251,7 @@ public class IntegrationTests
         var info = type.GetProperty("PropertyWithGetExceptionToMark");
         var obsoleteAttribute = ReadAttribute(info);
         Assert.Equal("Custom message. Use `NewThing` instead. Will be treated as an error from version 2.0.0. The member currently throws a NotImplementedException. Will be removed in version 4.0.0.", obsoleteAttribute.Message);
-        ValidateHidden(info);
+        ValidateHiddenState(info, expectedBrowsableState);
         ValidateIsNotError(info);
     }
 
@@ -214,7 +261,7 @@ public class IntegrationTests
         var type = assembly.GetType("ClassToMark");
         var info = type.GetProperty("PropertyToMark");
         ValidateMessage(info);
-        ValidateHidden(info);
+        ValidateHiddenState(info, expectedBrowsableState);
         ValidateIsNotError(info);
     }
 
@@ -224,7 +271,7 @@ public class IntegrationTests
         var type = assembly.GetType("ClassToMark");
         var info = type.GetField("FieldToMark");
         ValidateMessage(info);
-        ValidateHidden(info);
+        ValidateHiddenState(info, expectedBrowsableState);
         ValidateIsNotError(info);
     }
 
@@ -234,7 +281,7 @@ public class IntegrationTests
         var type = assembly.GetType("InterfaceToMark");
         var info = type.GetMember("EventToMark").First();
         ValidateMessage(info);
-        ValidateHidden(info);
+        ValidateHiddenState(info, expectedBrowsableState);
         ValidateIsNotError(info);
     }
 
@@ -244,7 +291,7 @@ public class IntegrationTests
         var type = assembly.GetType("ClassToMark");
         var info = type.GetEvent("EventToMark");
         ValidateMessage(info);
-        ValidateHidden(info);
+        ValidateHiddenState(info, expectedBrowsableState);
         ValidateIsNotError(info);
     }
 
@@ -254,7 +301,7 @@ public class IntegrationTests
         var type = assembly.GetType("StructToMark");
         var info = type.GetMember("EventToMark").First();
         ValidateMessage(info);
-        ValidateHidden(info);
+        ValidateHiddenState(info, expectedBrowsableState);
         ValidateIsNotError(info);
     }
 
@@ -264,7 +311,7 @@ public class IntegrationTests
         var type = assembly.GetType("InterfaceToMark");
         var info = type.GetProperty("PropertyToMark");
         ValidateMessage(info);
-        ValidateHidden(info);
+        ValidateHiddenState(info, expectedBrowsableState);
         ValidateIsNotError(info);
     }
 
@@ -274,7 +321,7 @@ public class IntegrationTests
         var type = assembly.GetType("StructToMark");
         var info = type.GetProperty("PropertyToMark");
         ValidateMessage(info);
-        ValidateHidden(info);
+        ValidateHiddenState(info, expectedBrowsableState);
         ValidateIsNotError(info);
     }
 
@@ -284,7 +331,7 @@ public class IntegrationTests
         var type = assembly.GetType("StructToMark");
         var info = type.GetField("FieldToMark");
         ValidateMessage(info);
-        ValidateHidden(info);
+        ValidateHiddenState(info, expectedBrowsableState);
         ValidateIsNotError(info);
     }
 
@@ -300,11 +347,26 @@ public class IntegrationTests
         return (ObsoleteAttribute)customAttributes.First();
     }
 
-    static void ValidateHidden(ICustomAttributeProvider attributeProvider)
+    static void ValidateHiddenState(ICustomAttributeProvider attributeProvider, ModuleWeaver.HideObsoleteMembersState state)
     {
         var customAttributes = attributeProvider.GetCustomAttributes(typeof(EditorBrowsableAttribute), false);
-        var attribute = (EditorBrowsableAttribute)customAttributes.First();
-        Assert.Equal(EditorBrowsableState.Advanced, attribute.State);
+        var attribute = (EditorBrowsableAttribute)customAttributes.FirstOrDefault();
+        switch (state)
+        {
+            case ModuleWeaver.HideObsoleteMembersState.Advanced:
+                Assert.NotNull(attribute);
+                Assert.Equal(EditorBrowsableState.Advanced, attribute.State);
+                break;
+            case ModuleWeaver.HideObsoleteMembersState.Never:
+                Assert.NotNull(attribute);
+                Assert.Equal(EditorBrowsableState.Never, attribute.State);
+                break;
+            case ModuleWeaver.HideObsoleteMembersState.Off:
+                Assert.Null(attribute);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(state), state, null);
+        }
     }
 
     static void ValidateIsError(ICustomAttributeProvider attributeProvider)

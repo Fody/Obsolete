@@ -10,7 +10,7 @@ public partial class ModuleWeaver
     public string ThrowsNotImplementedText = "The member currently throws a NotImplementedException. ";
     public string ReplacementFormat = "Use `{0}` instead. ";
 
-    public bool HideObsoleteMembers = true;
+    public HideObsoleteMembersState HideObsoleteMembers = HideObsoleteMembersState.Advanced;
 
     public void ReadConfig()
     {
@@ -52,8 +52,10 @@ public partial class ModuleWeaver
         {
             return;
         }
-        if (bool.TryParse(xAttribute.Value, out HideObsoleteMembers))
+
+        if (Enum.TryParse<HideObsoleteMembersState>(xAttribute.Value, true, out var state))
         {
+            HideObsoleteMembers = state;
             return;
         }
         throw new Exception($"Could not parse 'HideObsoleteMembers' from '{xAttribute.Value}'.");

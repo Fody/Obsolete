@@ -52,10 +52,7 @@ public partial class ModuleWeaver
         ValidateVersion(memberDefinition, attributeData);
 
         AddObsoleteAttribute(attributeData, customAttributes);
-        if (HideObsoleteMembers)
-        {
-            AddEditorBrowsableAttribute(customAttributes);
-        }
+        AddEditorBrowsableAttribute(customAttributes, HideObsoleteMembers);
     }
 
     static bool ThrowsNotImplemented(PropertyDefinition propertyDefinition)
