@@ -1,5 +1,3 @@
-using System;
-
 [ObsoleteEx(
     TreatAsErrorFromVersion = "2.0",
     RemoveInVersion = "4.0",

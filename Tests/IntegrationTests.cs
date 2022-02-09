@@ -1,9 +1,6 @@
-﻿using System;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Reflection;
 using Fody;
-using Xunit;
 using ICustomAttributeProvider = System.Reflection.ICustomAttributeProvider;
 
 public class IntegrationTestsDefaultHidding : IntegrationTestsBase
@@ -20,14 +17,17 @@ public class IntegrationTestsNeverHidding : IntegrationTestsBase
     }
 }
 
-public class IntegrationTestsHiddingDisabled : IntegrationTestsBase
+public class IntegrationTestsHiddingDisabled :
+    IntegrationTestsBase
 {
-    public IntegrationTestsHiddingDisabled(IntegrationTestFixture fixture) : base(fixture, ModuleWeaver.HideObsoleteMembersState.Off)
+    public IntegrationTestsHiddingDisabled(IntegrationTestFixture fixture) :
+        base(fixture, ModuleWeaver.HideObsoleteMembersState.Off)
     {
     }
 }
 
-public class IntegrationTestFixture : IDisposable
+public class IntegrationTestFixture :
+    IDisposable
 {
     public void Initialize(ModuleWeaver.HideObsoleteMembersState state)
     {
@@ -35,7 +35,7 @@ public class IntegrationTestFixture : IDisposable
         {
             return;
         }
-        
+
         var weavingTask = new ModuleWeaver
         {
             HideObsoleteMembers = state
@@ -43,7 +43,7 @@ public class IntegrationTestFixture : IDisposable
         TestResult = weavingTask.ExecuteTestRun("AssemblyToProcess.dll");
         Assembly = TestResult.Assembly;
     }
-    
+
     public TestResult TestResult { get; set; }
     public Assembly Assembly { get; set; }
 
@@ -53,18 +53,19 @@ public class IntegrationTestFixture : IDisposable
 }
 
 [Collection("IntegrationTestsBase")]
-public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestFixture>
+public abstract class IntegrationTestsBase :
+    IClassFixture<IntegrationTestFixture>
 {
     Assembly assembly;
     TestResult testResult;
-    ModuleWeaver.HideObsoleteMembersState expectedBrowsableState;
+    ModuleWeaver.HideObsoleteMembersState expectedState;
 
     protected IntegrationTestsBase(IntegrationTestFixture fixture, ModuleWeaver.HideObsoleteMembersState state)
     {
         fixture.Initialize(state);
         assembly = fixture.Assembly;
         testResult = fixture.TestResult;
-        expectedBrowsableState = state;
+        expectedState = state;
     }
 
     [Fact]
@@ -72,7 +73,7 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestFixtur
     {
         var type = assembly.GetType("ClassToMark");
         ValidateMessage(type);
-        ValidateHiddenState(type, expectedBrowsableState);
+        ValidateHiddenState(type, expectedState);
         ValidateIsNotError(type);
     }
 
@@ -80,8 +81,8 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestFixtur
     public void ClassWithHigherAssumedRemoveInVersion()
     {
         var type = assembly.GetType("ClassToMarkWithHigherAssumedRemoveInVersion");
-        var customAttributes = ((ICustomAttributeProvider)type).GetCustomAttributes(typeof(ObsoleteAttribute), false);
-        var obsoleteAttribute = (ObsoleteAttribute)customAttributes.First();
+        var attributes = ((ICustomAttributeProvider)type).GetCustomAttributes(typeof(ObsoleteAttribute), false);
+        var obsoleteAttribute = (ObsoleteAttribute)attributes.First();
         Assert.Equal("Will be treated as an error from version 3.0.0. Will be removed in version 4.0.0.", obsoleteAttribute.Message);
         ValidateIsNotError(type);
     }
@@ -90,8 +91,8 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestFixtur
     public void ClassToMarkWithSameRemoveAndTreatAsError()
     {
         var type = assembly.GetType("ClassToMarkWithSameRemoveAndTreatAsError");
-        var customAttributes = ((ICustomAttributeProvider)type).GetCustomAttributes(typeof(ObsoleteAttribute), false);
-        var obsoleteAttribute = (ObsoleteAttribute)customAttributes.First();
+        var attributes = ((ICustomAttributeProvider)type).GetCustomAttributes(typeof(ObsoleteAttribute), false);
+        var obsoleteAttribute = (ObsoleteAttribute)attributes.First();
         Assert.Equal("Will be treated as an error from version 1.2.0. Will be removed in version 1.2.0.", obsoleteAttribute.Message);
         ValidateIsNotError(type);
     }
@@ -100,9 +101,9 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestFixtur
     public void ClassToMarkWithHigherAssumedTreatAsErrorFromVersion()
     {
         var type = assembly.GetType("ClassToMarkWithHigherAssumedTreatAsErrorFromVersion");
-        var customAttributes = ((ICustomAttributeProvider)type).GetCustomAttributes(typeof(ObsoleteAttribute), false);
-        var obsoleteAttribute = (ObsoleteAttribute)customAttributes.First();
-        Assert.Equal("Will be treated as an error from version 2.0.0. Will be removed in version 3.0.0.", obsoleteAttribute.Message);
+        var attributes = ((ICustomAttributeProvider)type).GetCustomAttributes(typeof(ObsoleteAttribute), false);
+        var attribute = (ObsoleteAttribute)attributes.First();
+        Assert.Equal("Will be treated as an error from version 2.0.0. Will be removed in version 3.0.0.", attribute.Message);
         ValidateIsNotError(type);
     }
 
@@ -110,9 +111,9 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestFixtur
     public void ClassWithAssumedRemoveInVersion()
     {
         var type = assembly.GetType("ClassToMarkWithAssumedRemoveInVersion");
-        var customAttributes = ((ICustomAttributeProvider)type).GetCustomAttributes(typeof(ObsoleteAttribute), false);
-        var obsoleteAttribute = (ObsoleteAttribute)customAttributes.First();
-        Assert.Equal("Will be treated as an error from version 2.0.0. Will be removed in version 3.0.0.", obsoleteAttribute.Message);
+        var attributes = ((ICustomAttributeProvider)type).GetCustomAttributes(typeof(ObsoleteAttribute), false);
+        var attribute = (ObsoleteAttribute)attributes.First();
+        Assert.Equal("Will be treated as an error from version 2.0.0. Will be removed in version 3.0.0.", attribute.Message);
         ValidateIsNotError(type);
     }
 
@@ -120,9 +121,9 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestFixtur
     public void ClassToMarkWithAssumedTreatAsErrorFromVersion()
     {
         var type = assembly.GetType("ClassToMarkWithAssumedTreatAsErrorFromVersion");
-        var customAttributes = ((ICustomAttributeProvider)type).GetCustomAttributes(typeof(ObsoleteAttribute), false);
-        var obsoleteAttribute = (ObsoleteAttribute)customAttributes.First();
-        Assert.Equal("Will be removed in version 2.0.0.", obsoleteAttribute.Message);
+        var attributes = ((ICustomAttributeProvider)type).GetCustomAttributes(typeof(ObsoleteAttribute), false);
+        var attribute = (ObsoleteAttribute)attributes.First();
+        Assert.Equal("Will be removed in version 2.0.0.", attribute.Message);
         ValidateIsError(type);
     }
 
@@ -150,7 +151,7 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestFixtur
     {
         var type = assembly.GetType("InterfaceToMark");
         ValidateMessage(type);
-        ValidateHiddenState(type, expectedBrowsableState);
+        ValidateHiddenState(type, expectedState);
         ValidateIsNotError(type);
     }
 
@@ -188,7 +189,7 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestFixtur
         var type = assembly.GetType("EnumToMark");
         var info = type.GetField("Foo");
         ValidateMessage(info);
-        ValidateHiddenState(info, expectedBrowsableState);
+        ValidateHiddenState(info, expectedState);
         ValidateIsNotError(info);
     }
 
@@ -198,7 +199,7 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestFixtur
         var type = assembly.GetType("ClassToMark");
         var info = type.GetMethod("MethodToMark");
         ValidateMessage(info);
-        ValidateHiddenState(info, expectedBrowsableState);
+        ValidateHiddenState(info, expectedState);
         ValidateIsNotError(info);
     }
 
@@ -207,9 +208,9 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestFixtur
     {
         var type = assembly.GetType("ClassToMark");
         var info = type.GetMethod("MethodWithExceptionToMark");
-        var obsoleteAttribute = ReadAttribute(info);
-        Assert.Equal("Custom message. Use `NewThing` instead. Will be treated as an error from version 2.0.0. The member currently throws a NotImplementedException. Will be removed in version 4.0.0.", obsoleteAttribute.Message);
-        ValidateHiddenState(info, expectedBrowsableState);
+        var attribute = ReadAttribute(info);
+        Assert.Equal("Custom message. Use `NewThing` instead. Will be treated as an error from version 2.0.0. The member currently throws a NotImplementedException. Will be removed in version 4.0.0.", attribute.Message);
+        ValidateHiddenState(info, expectedState);
         ValidateIsNotError(info);
     }
 
@@ -219,7 +220,7 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestFixtur
         var type = assembly.GetType("InterfaceToMark");
         var info = type.GetMethod("MethodToMark");
         ValidateMessage(info);
-        ValidateHiddenState(info, expectedBrowsableState);
+        ValidateHiddenState(info, expectedState);
         ValidateIsNotError(info);
     }
 
@@ -229,7 +230,7 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestFixtur
         var type = assembly.GetType("StructToMark");
         var info = type.GetMethod("MethodToMark");
         ValidateMessage(info);
-        ValidateHiddenState(info, expectedBrowsableState);
+        ValidateHiddenState(info, expectedState);
         ValidateIsNotError(info);
     }
 
@@ -238,9 +239,9 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestFixtur
     {
         var type = assembly.GetType("ClassToMark");
         var info = type.GetProperty("PropertyWithSetExceptionToMark");
-        var obsoleteAttribute = ReadAttribute(info);
-        Assert.Equal("Custom message. Use `NewThing` instead. Will be treated as an error from version 2.0.0. The member currently throws a NotImplementedException. Will be removed in version 4.0.0.", obsoleteAttribute.Message);
-        ValidateHiddenState(info, expectedBrowsableState);
+        var attribute = ReadAttribute(info);
+        Assert.Equal("Custom message. Use `NewThing` instead. Will be treated as an error from version 2.0.0. The member currently throws a NotImplementedException. Will be removed in version 4.0.0.", attribute.Message);
+        ValidateHiddenState(info, expectedState);
         ValidateIsNotError(info);
     }
 
@@ -249,9 +250,9 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestFixtur
     {
         var type = assembly.GetType("ClassToMark");
         var info = type.GetProperty("PropertyWithGetExceptionToMark");
-        var obsoleteAttribute = ReadAttribute(info);
-        Assert.Equal("Custom message. Use `NewThing` instead. Will be treated as an error from version 2.0.0. The member currently throws a NotImplementedException. Will be removed in version 4.0.0.", obsoleteAttribute.Message);
-        ValidateHiddenState(info, expectedBrowsableState);
+        var attribute = ReadAttribute(info);
+        Assert.Equal("Custom message. Use `NewThing` instead. Will be treated as an error from version 2.0.0. The member currently throws a NotImplementedException. Will be removed in version 4.0.0.", attribute.Message);
+        ValidateHiddenState(info, expectedState);
         ValidateIsNotError(info);
     }
 
@@ -261,7 +262,7 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestFixtur
         var type = assembly.GetType("ClassToMark");
         var info = type.GetProperty("PropertyToMark");
         ValidateMessage(info);
-        ValidateHiddenState(info, expectedBrowsableState);
+        ValidateHiddenState(info, expectedState);
         ValidateIsNotError(info);
     }
 
@@ -271,7 +272,7 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestFixtur
         var type = assembly.GetType("ClassToMark");
         var info = type.GetField("FieldToMark");
         ValidateMessage(info);
-        ValidateHiddenState(info, expectedBrowsableState);
+        ValidateHiddenState(info, expectedState);
         ValidateIsNotError(info);
     }
 
@@ -281,7 +282,7 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestFixtur
         var type = assembly.GetType("InterfaceToMark");
         var info = type.GetMember("EventToMark").First();
         ValidateMessage(info);
-        ValidateHiddenState(info, expectedBrowsableState);
+        ValidateHiddenState(info, expectedState);
         ValidateIsNotError(info);
     }
 
@@ -291,7 +292,7 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestFixtur
         var type = assembly.GetType("ClassToMark");
         var info = type.GetEvent("EventToMark");
         ValidateMessage(info);
-        ValidateHiddenState(info, expectedBrowsableState);
+        ValidateHiddenState(info, expectedState);
         ValidateIsNotError(info);
     }
 
@@ -301,7 +302,7 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestFixtur
         var type = assembly.GetType("StructToMark");
         var info = type.GetMember("EventToMark").First();
         ValidateMessage(info);
-        ValidateHiddenState(info, expectedBrowsableState);
+        ValidateHiddenState(info, expectedState);
         ValidateIsNotError(info);
     }
 
@@ -311,7 +312,7 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestFixtur
         var type = assembly.GetType("InterfaceToMark");
         var info = type.GetProperty("PropertyToMark");
         ValidateMessage(info);
-        ValidateHiddenState(info, expectedBrowsableState);
+        ValidateHiddenState(info, expectedState);
         ValidateIsNotError(info);
     }
 
@@ -321,7 +322,7 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestFixtur
         var type = assembly.GetType("StructToMark");
         var info = type.GetProperty("PropertyToMark");
         ValidateMessage(info);
-        ValidateHiddenState(info, expectedBrowsableState);
+        ValidateHiddenState(info, expectedState);
         ValidateIsNotError(info);
     }
 
@@ -331,26 +332,26 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestFixtur
         var type = assembly.GetType("StructToMark");
         var info = type.GetField("FieldToMark");
         ValidateMessage(info);
-        ValidateHiddenState(info, expectedBrowsableState);
+        ValidateHiddenState(info, expectedState);
         ValidateIsNotError(info);
     }
 
     static void ValidateMessage(ICustomAttributeProvider attributeProvider)
     {
-        var obsoleteAttribute = ReadAttribute(attributeProvider);
-        Assert.Equal("Custom message. Use `NewThing` instead. Will be treated as an error from version 2.0.0. Will be removed in version 4.0.0.", obsoleteAttribute.Message);
+        var attribute = ReadAttribute(attributeProvider);
+        Assert.Equal("Custom message. Use `NewThing` instead. Will be treated as an error from version 2.0.0. Will be removed in version 4.0.0.", attribute.Message);
     }
 
     static ObsoleteAttribute ReadAttribute(ICustomAttributeProvider attributeProvider)
     {
-        var customAttributes = attributeProvider.GetCustomAttributes(typeof(ObsoleteAttribute), false);
-        return (ObsoleteAttribute)customAttributes.First();
+        var attributes = attributeProvider.GetCustomAttributes(typeof(ObsoleteAttribute), false);
+        return (ObsoleteAttribute)attributes.First();
     }
 
     static void ValidateHiddenState(ICustomAttributeProvider attributeProvider, ModuleWeaver.HideObsoleteMembersState state)
     {
-        var customAttributes = attributeProvider.GetCustomAttributes(typeof(EditorBrowsableAttribute), false);
-        var attribute = (EditorBrowsableAttribute)customAttributes.FirstOrDefault();
+        var attributes = attributeProvider.GetCustomAttributes(typeof(EditorBrowsableAttribute), false);
+        var attribute = (EditorBrowsableAttribute)attributes.FirstOrDefault();
         switch (state)
         {
             case ModuleWeaver.HideObsoleteMembersState.Advanced:
@@ -371,13 +372,13 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestFixtur
 
     static void ValidateIsError(ICustomAttributeProvider attributeProvider)
     {
-        var obsoleteAttribute = ReadAttribute(attributeProvider);
-        Assert.True(obsoleteAttribute.IsError);
+        var attribute = ReadAttribute(attributeProvider);
+        Assert.True(attribute.IsError);
     }
 
     static void ValidateIsNotError(ICustomAttributeProvider attributeProvider)
     {
-        var obsoleteAttribute = ReadAttribute(attributeProvider);
-        Assert.False(obsoleteAttribute.IsError);
+        var attribute = ReadAttribute(attributeProvider);
+        Assert.False(attribute.IsError);
     }
 }

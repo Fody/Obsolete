@@ -13,6 +13,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
   <ItemGroup>
+    <Using Remove="System.Net.Http" />
     <PackageReference Include="FodyPackaging" Version="6.6.0" PrivateAssets="All" />
     <PackageReference Include="Fody" Version="6.6.0" PrivateAssets="none" />
     <Compile Include="..\AttributeAssembly\*.cs" />

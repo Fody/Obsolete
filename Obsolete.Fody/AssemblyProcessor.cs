@@ -2,22 +2,22 @@ public partial class ModuleWeaver
 {
     public void ProcessAssembly()
     {
-        foreach (var typeDefinition in ModuleDefinition.GetTypes())
+        foreach (var type in ModuleDefinition.GetTypes())
         {
-            ProcessAttributes(typeDefinition);
-            foreach (var property in typeDefinition.Properties)
+            ProcessAttributes(type);
+            foreach (var property in type.Properties)
             {
                 ProcessAttributes(property);
             }
-            foreach (var method in typeDefinition.Methods)
+            foreach (var method in type.Methods)
             {
                 ProcessAttributes(method);
             }
-            foreach (var field in typeDefinition.Fields)
+            foreach (var field in type.Fields)
             {
                 ProcessAttributes(field);
             }
-            foreach (var @event in typeDefinition.Events)
+            foreach (var @event in type.Events)
             {
                 ProcessAttributes(@event);
             }

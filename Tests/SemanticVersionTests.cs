@@ -1,6 +1,4 @@
-﻿using Xunit;
-
-public class SemanticVersionTests
+﻿public class SemanticVersionTests
 {
     [Fact]
     public void TryParse()

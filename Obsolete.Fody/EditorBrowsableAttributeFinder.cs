@@ -1,4 +1,3 @@
-using System.Linq;
 using Mono.Cecil;
 
 public partial class ModuleWeaver
@@ -14,13 +13,14 @@ public partial class ModuleWeaver
         {
             return;
         }
+
         var attributeType = FindTypeDefinition("System.ComponentModel.EditorBrowsableAttribute");
         EditorBrowsableConstructor = ModuleDefinition.ImportReference(attributeType.Methods.First(IsDesiredConstructor));
         EditorBrowsableStateType = FindTypeDefinition("System.ComponentModel.EditorBrowsableState");
         var advancedFieldDefinition = EditorBrowsableStateType.Fields.First(x => x.Name == "Advanced");
-        AdvancedStateConstant = (int) advancedFieldDefinition.Constant;
+        AdvancedStateConstant = (int)advancedFieldDefinition.Constant;
         var neverFieldDefinition = EditorBrowsableStateType.Fields.First(x => x.Name == "Never");
-        NeverStateConstant = (int) neverFieldDefinition.Constant;
+        NeverStateConstant = (int)neverFieldDefinition.Constant;
     }
 
     static bool IsDesiredConstructor(MethodDefinition x)
@@ -29,20 +29,24 @@ public partial class ModuleWeaver
         {
             return false;
         }
+
         if (x.Parameters.Count != 1)
         {
             return false;
         }
+
         return x.Parameters[0].ParameterType.Name == "EditorBrowsableState";
     }
 
     public enum HideObsoleteMembersState
     {
         Advanced,
+
         // some dirty trickery to be backward compatible
         True = Advanced,
         Never,
         Off,
+
         // some dirty trickery to be backward compatible
         False = Off,
     }

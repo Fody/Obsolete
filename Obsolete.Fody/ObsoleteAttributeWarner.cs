@@ -1,11 +1,10 @@
-using System.Linq;
 using Mono.Cecil;
 
 public partial class ModuleWeaver
 {
-    public void CheckForNormalAttribute(IMemberDefinition memberDefinition)
+    public void CheckForNormalAttribute(IMemberDefinition member)
     {
-        var customAttributes = memberDefinition
+        var customAttributes = member
             .CustomAttributes;
         var doNotWarnAboutObsoleteUsageAttribute = customAttributes
             .FirstOrDefault(x => x.AttributeType.Name == "DoNotWarnAboutObsoleteUsageAttribute");
@@ -21,7 +20,7 @@ public partial class ModuleWeaver
         {
             return;
         }
-        var warning = $"The member `{memberDefinition.FullName}` has an ObsoleteAttribute. Consider replacing it with an ObsoleteExAttribute.";
+        var warning = $"The member `{member.FullName}` has an ObsoleteAttribute. Consider replacing it with an ObsoleteExAttribute.";
         WriteWarning(warning);
     }
 }

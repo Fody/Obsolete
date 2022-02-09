@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using Fody;
 
 public partial class ModuleWeaver
@@ -27,6 +25,7 @@ public partial class ModuleWeaver
         {
             TreatAsErrorFormat = treatAsErrorFormat.Value;
         }
+
         var throwsNotImplementedText = Config.Attributes("ThrowsNotImplementedText").FirstOrDefault();
         if (throwsNotImplementedText != null)
         {
@@ -38,6 +37,7 @@ public partial class ModuleWeaver
         {
             RemoveInVersionFormat = removeInVersionFormat.Value;
         }
+
         var replacementFormat = Config.Attributes("ReplacementFormat").FirstOrDefault();
         if (replacementFormat != null)
         {
@@ -58,6 +58,7 @@ public partial class ModuleWeaver
             HideObsoleteMembers = state;
             return;
         }
+
         throw new Exception($"Could not parse 'HideObsoleteMembers' from '{xAttribute.Value}'.");
     }
 
@@ -68,6 +69,7 @@ public partial class ModuleWeaver
         {
             return;
         }
+
         throw new WeavingException("VersionIncrement is no longer supported. Use StepType instead.");
     }
 
@@ -78,10 +80,12 @@ public partial class ModuleWeaver
         {
             return;
         }
+
         if (Enum.TryParse(xAttribute.Value, out StepType))
         {
             return;
         }
+
         throw new Exception($"Could not parse 'StepType' from '{xAttribute.Value}'.");
     }
 }

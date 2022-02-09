@@ -1,19 +1,18 @@
 ﻿using System.Xml.Linq;
 using Fody;
-using Xunit;
 
 public class ConfigReaderTests
 {
     [Fact]
     public void ThrowsNotImplementedText()
     {
-        var xElement = XElement.Parse(@"<Obsolete ThrowsNotImplementedText='Custom Text'/>");
-        var moduleWeaver = new ModuleWeaver
+        var element = XElement.Parse("<Obsolete ThrowsNotImplementedText='Custom Text'/>");
+        var weaver = new ModuleWeaver
         {
-            Config = xElement
+            Config = element
         };
-        moduleWeaver.ReadConfig();
-        Assert.Equal("Custom Text", moduleWeaver.ThrowsNotImplementedText);
+        weaver.ReadConfig();
+        Assert.Equal("Custom Text", weaver.ThrowsNotImplementedText);
     }
 
     [Theory]
@@ -29,48 +28,48 @@ public class ConfigReaderTests
     [InlineData("Off", ModuleWeaver.HideObsoleteMembersState.Off)]
     public void HideObsoleteMembers(string state, ModuleWeaver.HideObsoleteMembersState expected)
     {
-        var xElement = XElement.Parse($"<Obsolete HideObsoleteMembers='{state}'/>");
-        var moduleWeaver = new ModuleWeaver
+        var element = XElement.Parse($"<Obsolete HideObsoleteMembers='{state}'/>");
+        var weaver = new ModuleWeaver
         {
-            Config = xElement
+            Config = element
         };
-        moduleWeaver.ReadConfig();
-        Assert.Equal(expected, moduleWeaver.HideObsoleteMembers);
+        weaver.ReadConfig();
+        Assert.Equal(expected, weaver.HideObsoleteMembers);
     }
-    
+
     [Fact]
     public void EmptyHideObsoleteMembers()
     {
-        var xElement = XElement.Parse("<Obsolete/>");
-        var moduleWeaver = new ModuleWeaver
+        var element = XElement.Parse("<Obsolete/>");
+        var weaver = new ModuleWeaver
         {
-            Config = xElement
+            Config = element
         };
-        moduleWeaver.ReadConfig();
-        Assert.Equal(ModuleWeaver.HideObsoleteMembersState.Advanced, moduleWeaver.HideObsoleteMembers);
+        weaver.ReadConfig();
+        Assert.Equal(ModuleWeaver.HideObsoleteMembersState.Advanced, weaver.HideObsoleteMembers);
     }
 
     [Fact]
     public void CanParseStepType()
     {
-        var xElement = XElement.Parse(@"<Obsolete StepType='Minor'/>");
-        var moduleWeaver = new ModuleWeaver
+        var element = XElement.Parse("<Obsolete StepType='Minor'/>");
+        var weaver = new ModuleWeaver
         {
-            Config = xElement
+            Config = element
         };
-        moduleWeaver.ReadConfig();
-        Assert.Equal(StepType.Minor, moduleWeaver.StepType);
+        weaver.ReadConfig();
+        Assert.Equal(StepType.Minor, weaver.StepType);
     }
 
     [Fact]
     public void VersionIncrementThrows()
     {
-        var xElement = XElement.Parse(@"<Obsolete VersionIncrement='1.0.1'/>");
-        var moduleWeaver = new ModuleWeaver
+        var element = XElement.Parse("<Obsolete VersionIncrement='1.0.1'/>");
+        var weaver = new ModuleWeaver
         {
-            Config = xElement
+            Config = element
         };
-        var exception = Assert.Throws<WeavingException>(() => moduleWeaver.ReadConfig());
+        var exception = Assert.Throws<WeavingException>(() => weaver.ReadConfig());
         Assert.Equal("VersionIncrement is no longer supported. Use StepType instead.", exception.Message);
     }
 }

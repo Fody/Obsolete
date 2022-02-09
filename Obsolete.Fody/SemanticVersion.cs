@@ -1,4 +1,3 @@
-using System;
 #pragma warning disable 660,661
 
 public class SemanticVersion

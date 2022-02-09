@@ -1,4 +1,3 @@
-using System;
 #pragma warning disable 67
 
 [ObsoleteEx(

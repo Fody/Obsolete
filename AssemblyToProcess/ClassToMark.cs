@@ -1,4 +1,3 @@
-using System;
 // ReSharper disable NotAccessedField.Local
 // ReSharper disable EventNeverSubscribedTo.Global
 #pragma warning disable 67

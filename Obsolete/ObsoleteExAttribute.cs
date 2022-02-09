@@ -1,6 +1,4 @@
-﻿using System;
-
-/// <summary>
+﻿/// <summary>
 /// Marks the program elements that are no longer in use.
 /// </summary>
 [AttributeUsage(

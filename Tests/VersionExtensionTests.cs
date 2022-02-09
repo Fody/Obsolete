@@ -1,5 +1,4 @@
 ﻿using Fody;
-using Xunit;
 
 public class VersionExtensionTests
 {

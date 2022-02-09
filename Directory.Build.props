@@ -3,7 +3,8 @@
   <PropertyGroup>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Version>5.2.1</Version>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>10</LangVersion>
     <NoWarn>NU5118</NoWarn>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 </Project>

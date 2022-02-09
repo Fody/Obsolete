@@ -1,38 +1,37 @@
-using System.Linq;
 using Fody;
 using Mono.Cecil;
 using Mono.Collections.Generic;
 
 public partial class ModuleWeaver
 {
-    void ProcessAttributes(IMemberDefinition memberDefinition)
+    void ProcessAttributes(IMemberDefinition member)
     {
-        CheckForNormalAttribute(memberDefinition);
+        CheckForNormalAttribute(member);
 
-        InnerProcess(memberDefinition);
+        InnerProcess(member);
     }
 
-    void InnerProcess(IMemberDefinition memberDefinition)
+    void InnerProcess(IMemberDefinition member)
     {
-        var customAttributes = memberDefinition.CustomAttributes;
+        var customAttributes = member.CustomAttributes;
         var obsoleteExAttribute = customAttributes.FirstOrDefault(x => x.AttributeType.Name == "ObsoleteExAttribute");
         if (obsoleteExAttribute == null)
         {
             return;
         }
         var throwsNotImplemented = false;
-        if (memberDefinition is MethodDefinition methodDefinition)
+        if (member is MethodDefinition method)
         {
-            throwsNotImplemented = ThrowsNotImplemented(methodDefinition);
-            if (methodDefinition.IsGetter || methodDefinition.IsSetter)
+            throwsNotImplemented = ThrowsNotImplemented(method);
+            if (method.IsGetter || method.IsSetter)
             {
-                var error = $"ObsoleteExAttribute is not valid on property gets or sets. Member: `{memberDefinition.FullName}`.";
+                var error = $"ObsoleteExAttribute is not valid on property gets or sets. Member: `{member.FullName}`.";
                 WriteError(error);
             }
         }
-        else if (memberDefinition is PropertyDefinition propertyDefinition)
+        else if (member is PropertyDefinition property)
         {
-            throwsNotImplemented = ThrowsNotImplemented(propertyDefinition);
+            throwsNotImplemented = ThrowsNotImplemented(property);
         }
 
         customAttributes.Remove(obsoleteExAttribute);
@@ -46,27 +45,27 @@ public partial class ModuleWeaver
         }
         catch (WeavingException exception)
         {
-            throw new WeavingException($"Could not process {memberDefinition.FullName}. {exception.Message}");
+            throw new WeavingException($"Could not process {member.FullName}. {exception.Message}");
         }
 
-        ValidateVersion(memberDefinition, attributeData);
+        ValidateVersion(member, attributeData);
 
         AddObsoleteAttribute(attributeData, customAttributes);
         AddEditorBrowsableAttribute(customAttributes, HideObsoleteMembers);
     }
 
-    static bool ThrowsNotImplemented(PropertyDefinition propertyDefinition)
+    static bool ThrowsNotImplemented(PropertyDefinition property)
     {
-        if (propertyDefinition.SetMethod != null)
+        if (property.SetMethod != null)
         {
-            if (ThrowsNotImplemented(propertyDefinition.SetMethod))
+            if (ThrowsNotImplemented(property.SetMethod))
             {
                 return true;
             }
         }
-        if (propertyDefinition.GetMethod != null)
+        if (property.GetMethod != null)
         {
-            if (ThrowsNotImplemented(propertyDefinition.GetMethod))
+            if (ThrowsNotImplemented(property.GetMethod))
             {
                 return true;
             }
@@ -74,9 +73,9 @@ public partial class ModuleWeaver
         return false;
     }
 
-    static bool ThrowsNotImplemented(MethodDefinition methodDefinition)
+    static bool ThrowsNotImplemented(MethodDefinition method)
     {
-        return methodDefinition.HasBody && methodDefinition.Body.Instructions
+        return method.HasBody && method.Body.Instructions
             .Select(instruction => instruction.Operand)
             .OfType<MethodReference>()
             .Select(methodReference => methodReference.FullName)
@@ -117,17 +116,17 @@ public partial class ModuleWeaver
         customAttributes.Add(customAttribute);
     }
 
-    void ValidateVersion(IMemberDefinition memberDefinition, AttributeData attributeData)
+    void ValidateVersion(IMemberDefinition member, AttributeData attributeData)
     {
         if (attributeData.RemoveInVersion < attributeData.TreatAsErrorFromVersion)
         {
-            var message = $"Cannot process '{memberDefinition.FullName}'. The version specified in 'RemoveInVersion' {attributeData.RemoveInVersion} is less than the version specified in 'TreatAsErrorFromVersion' {attributeData.TreatAsErrorFromVersion}. The member should be removed or 'RemoveInVersion' increased.";
+            var message = $"Cannot process '{member.FullName}'. The version specified in 'RemoveInVersion' {attributeData.RemoveInVersion} is less than the version specified in 'TreatAsErrorFromVersion' {attributeData.TreatAsErrorFromVersion}. The member should be removed or 'RemoveInVersion' increased.";
             throw new WeavingException(message);
         }
 
         if (assemblyVersion >= attributeData.RemoveInVersion)
         {
-            var message = $"Cannot process '{memberDefinition.FullName}'. The assembly version {assemblyVersion} is equal to or greater than version specified in 'RemoveInVersion' {attributeData.RemoveInVersion}. The member should be removed or 'RemoveInVersion' increased.";
+            var message = $"Cannot process '{member.FullName}'. The assembly version {assemblyVersion} is equal to or greater than version specified in 'RemoveInVersion' {attributeData.RemoveInVersion}. The member should be removed or 'RemoveInVersion' increased.";
             throw new WeavingException(message);
         }
     }

@@ -1,6 +1,4 @@
-﻿using System;
-
-/// <summary>
+﻿/// <summary>
 /// Marks to Fody to skip program elements inspection for Obsolete replacement.
 /// </summary>
 [AttributeUsage(
