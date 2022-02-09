@@ -3,24 +3,24 @@ using System.Reflection;
 using Fody;
 using ICustomAttributeProvider = System.Reflection.ICustomAttributeProvider;
 
-public class IntegrationTestsDefaultHidding : IntegrationTestsBase
+public class IntegrationTestsDefaultHiding : IntegrationTestsBase
 {
-    public IntegrationTestsDefaultHidding(IntegrationTestFixture fixture) : base(fixture, ModuleWeaver.HideObsoleteMembersState.Advanced)
+    public IntegrationTestsDefaultHiding(IntegrationTestFixture fixture) : base(fixture, ModuleWeaver.HideObsoleteMembersState.Advanced)
     {
     }
 }
 
-public class IntegrationTestsNeverHidding : IntegrationTestsBase
+public class IntegrationTestsNeverHiding : IntegrationTestsBase
 {
-    public IntegrationTestsNeverHidding(IntegrationTestFixture fixture) : base(fixture, ModuleWeaver.HideObsoleteMembersState.Never)
+    public IntegrationTestsNeverHiding(IntegrationTestFixture fixture) : base(fixture, ModuleWeaver.HideObsoleteMembersState.Never)
     {
     }
 }
 
-public class IntegrationTestsHiddingDisabled :
+public class IntegrationTestsHidingDisabled :
     IntegrationTestsBase
 {
-    public IntegrationTestsHiddingDisabled(IntegrationTestFixture fixture) :
+    public IntegrationTestsHidingDisabled(IntegrationTestFixture fixture) :
         base(fixture, ModuleWeaver.HideObsoleteMembersState.Off)
     {
     }
