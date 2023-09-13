@@ -7,7 +7,7 @@ public partial class ModuleWeaver
         var customAttributes = member
             .CustomAttributes;
         var doNotWarnAboutObsoleteUsageAttribute = customAttributes
-            .FirstOrDefault(x => x.AttributeType.Name == "DoNotWarnAboutObsoleteUsageAttribute");
+            .FirstOrDefault(_ => _.AttributeType.Name == "DoNotWarnAboutObsoleteUsageAttribute");
         if (doNotWarnAboutObsoleteUsageAttribute != null)
         {
             customAttributes.Remove(doNotWarnAboutObsoleteUsageAttribute);
@@ -15,7 +15,7 @@ public partial class ModuleWeaver
         }
 
         var obsoleteExAttribute = customAttributes
-            .FirstOrDefault(x => x.AttributeType.Name == "ObsoleteAttribute");
+            .FirstOrDefault(_ => _.AttributeType.Name == "ObsoleteAttribute");
         if (obsoleteExAttribute == null)
         {
             return;

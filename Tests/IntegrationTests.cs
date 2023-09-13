@@ -130,20 +130,20 @@ public abstract class IntegrationTestsBase :
     [Fact]
     public void Warnings()
     {
-        Assert.Contains("The member `ClassWithObsoleteAttribute` has an ObsoleteAttribute. Consider replacing it with an ObsoleteExAttribute.", testResult.Warnings.Select(x => x.Text));
+        Assert.Contains("The member `ClassWithObsoleteAttribute` has an ObsoleteAttribute. Consider replacing it with an ObsoleteExAttribute.", testResult.Warnings.Select(_ => _.Text));
     }
 
     [Fact]
     public void NoWarnings()
     {
-        Assert.DoesNotContain("The member `ClassWithObsoleteAttributeToSkip` has an ObsoleteAttribute. Consider replacing it with an ObsoleteExAttribute.", testResult.Warnings.Select(x => x.Text));
+        Assert.DoesNotContain("The member `ClassWithObsoleteAttributeToSkip` has an ObsoleteAttribute. Consider replacing it with an ObsoleteExAttribute.", testResult.Warnings.Select(_ => _.Text));
     }
 
     [Fact]
     public void Errors()
     {
-        Assert.Contains("ObsoleteExAttribute is not valid on property gets or sets. Member: `System.Void ClassWithObsoleteOnGetSet::set_PropertyToMark(System.String)`.", testResult.Errors.Select(x => x.Text));
-        Assert.Contains("ObsoleteExAttribute is not valid on property gets or sets. Member: `System.String ClassWithObsoleteOnGetSet::get_PropertyToMark()`.", testResult.Errors.Select(x => x.Text));
+        Assert.Contains("ObsoleteExAttribute is not valid on property gets or sets. Member: `System.Void ClassWithObsoleteOnGetSet::set_PropertyToMark(System.String)`.", testResult.Errors.Select(_ => _.Text));
+        Assert.Contains("ObsoleteExAttribute is not valid on property gets or sets. Member: `System.String ClassWithObsoleteOnGetSet::get_PropertyToMark()`.", testResult.Errors.Select(_ => _.Text));
     }
 
     [Fact]

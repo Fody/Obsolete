@@ -5,11 +5,11 @@ public static class VersionReader
     public static SemanticVersion Read(AssemblyDefinition assembly)
     {
         var informationalAttribute = assembly.CustomAttributes
-            .SingleOrDefault(x => x.AttributeType.FullName == "System.Reflection.AssemblyInformationalVersionAttribute");
+            .SingleOrDefault(_ => _.AttributeType.FullName == "System.Reflection.AssemblyInformationalVersionAttribute");
         if (informationalAttribute != null)
         {
             var value = (string)informationalAttribute.ConstructorArguments.Single().Value;
-            var indexOf = value.IndexOf(x => x != '.' && !char.IsNumber(x));
+            var indexOf = value.IndexOf(_ => _ != '.' && !char.IsNumber(x));
             if (indexOf == -1)
             {
                 if (SemanticVersion.TryParse(value, out var informationalVersion))

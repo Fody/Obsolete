@@ -5,7 +5,7 @@ public partial class ModuleWeaver
 {
     public void AddEditorBrowsableAttribute(Collection<CustomAttribute> attributes, HideObsoleteMembersState state)
     {
-        if (attributes.Any(x => x.AttributeType.Name == "EditorBrowsableAttribute") || state == HideObsoleteMembersState.Off)
+        if (attributes.Any(_ => _.AttributeType.Name == "EditorBrowsableAttribute") || state == HideObsoleteMembersState.Off)
         {
             return;
         }

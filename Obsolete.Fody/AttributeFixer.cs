@@ -14,7 +14,7 @@ public partial class ModuleWeaver
     void InnerProcess(IMemberDefinition member)
     {
         var customAttributes = member.CustomAttributes;
-        var obsoleteExAttribute = customAttributes.FirstOrDefault(x => x.AttributeType.Name == "ObsoleteExAttribute");
+        var obsoleteExAttribute = customAttributes.FirstOrDefault(_ => _.AttributeType.Name == "ObsoleteExAttribute");
         if (obsoleteExAttribute == null)
         {
             return;
