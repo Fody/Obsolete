@@ -9,7 +9,8 @@ public static class VersionReader
         if (informationalAttribute != null)
         {
             var value = (string)informationalAttribute.ConstructorArguments.Single().Value;
-            var indexOf = value.IndexOf(_ => _ != '.' && !char.IsNumber(x));
+            var indexOf = value.IndexOf(_ => _ != '.' &&
+                                             !char.IsNumber(_));
             if (indexOf == -1)
             {
                 if (SemanticVersion.TryParse(value, out var informationalVersion))
