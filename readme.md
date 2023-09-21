@@ -5,6 +5,8 @@
 
 Helps keep usages of [ObsoleteAttribute](http://msdn.microsoft.com/en-us/library/fwz0y5c2) consistent.
 
+**See [Milestones](../../milestones?state=closed) for release notes.**
+
 
 ### This is an add-in for [Fody](https://github.com/Fody/Home/)
 
