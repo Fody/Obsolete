@@ -1,5 +1,3 @@
 [Obsolete]
 [DoNotWarnAboutObsoleteUsage]
-public class ClassWithObsoleteAttributeToSkip
-{
-}
+public class ClassWithObsoleteAttributeToSkip;

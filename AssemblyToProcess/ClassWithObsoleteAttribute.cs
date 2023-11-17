@@ -1,4 +1,2 @@
 [Obsolete]
-public class ClassWithObsoleteAttribute
-{
-}
+public class ClassWithObsoleteAttribute;

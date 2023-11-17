@@ -13,6 +13,4 @@
     AttributeTargets.Struct |
     AttributeTargets.Class,
     Inherited = false)]
-public sealed class DoNotWarnAboutObsoleteUsageAttribute : Attribute
-{
-}
+public sealed class DoNotWarnAboutObsoleteUsageAttribute : Attribute;
