@@ -36,11 +36,11 @@ public class IntegrationTestFixture :
             return;
         }
 
-        var weavingTask = new ModuleWeaver
+        var weaver = new ModuleWeaver
         {
             HideObsoleteMembers = state
         };
-        TestResult = weavingTask.ExecuteTestRun("AssemblyToProcess.dll");
+        TestResult = weaver.ExecuteTestRun("AssemblyToProcess.dll");
         Assembly = TestResult.Assembly;
     }
 
