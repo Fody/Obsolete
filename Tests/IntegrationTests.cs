@@ -335,6 +335,12 @@ public abstract class IntegrationTestsBase :
         ValidateHiddenState(info, expectedState);
         ValidateIsNotError(info);
     }
+    
+    [Fact]
+    public void ClassWithRequiredMembers()
+    {
+        Assert.DoesNotContain("The member `System.Void ClassWithRequiredMembers::.ctor()` has an ObsoleteAttribute. Consider replacing it with an ObsoleteExAttribute.", testResult.Warnings.Select(_ => _.Text));
+    }
 
     static void ValidateMessage(ICustomAttributeProvider attributeProvider)
     {
