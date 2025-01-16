@@ -1,6 +1,5 @@
 # <img src="/package_icon.png" height="30px"> Obsolete.Fody
 
-[![Chat on Gitter](https://img.shields.io/gitter/room/fody/fody.svg)](https://gitter.im/Fody/Fody)
 [![NuGet Status](https://img.shields.io/nuget/v/Obsolete.Fody.svg)](https://www.nuget.org/packages/Obsolete.Fody/)
 
 Helps keep usages of [ObsoleteAttribute](http://msdn.microsoft.com/en-us/library/fwz0y5c2) consistent.
