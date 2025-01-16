@@ -5,6 +5,7 @@
     <DisableFody>true</DisableFody>
     <Version>1.0.1-x</Version>
     <AssemblyVersion>1.0</AssemblyVersion>
+    <LangVersion>Latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Using Remove="System.Net.Http" />
