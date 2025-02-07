@@ -112,7 +112,7 @@ public class SemanticVersion
     {
         if (v1 == null)
         {
-            throw new ArgumentNullException("v1");
+            throw new ArgumentNullException(nameof(v1));
         }
         return v1.CompareTo(v2) <= 0;
     }
@@ -121,7 +121,7 @@ public class SemanticVersion
     {
         if (v1 == null)
         {
-            throw new ArgumentNullException("v1");
+            throw new ArgumentNullException(nameof(v1));
         }
         return v1.CompareTo(v2) < 0;
     }
