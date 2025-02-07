@@ -5,14 +5,13 @@
     <DisableFody>true</DisableFody>
     <Version>1.0.1-x</Version>
     <AssemblyVersion>1.0</AssemblyVersion>
-    <LangVersion>Latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Using Remove="System.Net.Http" />
     <ProjectReference Include="..\Obsolete\Obsolete.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Polyfill" Version="7.12.0">
+    <PackageReference Include="Polyfill" Version="7.16.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
