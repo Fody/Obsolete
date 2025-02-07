@@ -306,6 +306,16 @@ public abstract class IntegrationTestsBase :
         ValidateIsNotError(info);
     }
 
+#if NET9_0_OR_GREATER
+
+    [Fact]
+    public void ClassWithRequiredMembers()
+    {
+        Assert.DoesNotContain("The member `System.Void ClassWithRequiredMembers::.ctor()` has an ObsoleteAttribute. Consider replacing it with an ObsoleteExAttribute.", testResult.Warnings.Select(_ => _.Text));
+    }
+
+#endif
+
     [Fact]
     public void InterfaceProperty()
     {
