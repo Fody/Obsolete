@@ -20,7 +20,13 @@ public partial class ModuleWeaver
         {
             return;
         }
-        var warning = $"The member `{member.FullName}` has an ObsoleteAttribute. Consider replacing it with an ObsoleteExAttribute.";
-        WriteWarning(warning);
+
+        if (customAttributes.Where(_ => _.AttributeType.Name == "CompilerFeatureRequiredAttribute")
+            .Any(_ => _.ConstructorArguments.Any(_ => _.Value is "RequiredMembers")))
+        {
+            return;
+        }
+
+        WriteWarning($"The member `{member.FullName}` has an ObsoleteAttribute. Consider replacing it with an ObsoleteExAttribute.");
     }
 }
