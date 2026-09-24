@@ -1,355 +1,337 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 using Fody;
+using Assembly = System.Reflection.Assembly;
+using TestResult = Fody.TestResult;
 using ICustomAttributeProvider = System.Reflection.ICustomAttributeProvider;
 
-public class IntegrationTestsDefaultHiding : IntegrationTestsBase
+// the weaver runs against shared files on disk, and the results are cached per state
+[NotInParallel]
+[InheritsTests]
+public class IntegrationTestsDefaultHiding() :
+    IntegrationTestsBase(ModuleWeaver.HideObsoleteMembersState.Advanced);
+
+[NotInParallel]
+[InheritsTests]
+public class IntegrationTestsNeverHiding() :
+    IntegrationTestsBase(ModuleWeaver.HideObsoleteMembersState.Never);
+
+[NotInParallel]
+[InheritsTests]
+public class IntegrationTestsHidingDisabled() :
+    IntegrationTestsBase(ModuleWeaver.HideObsoleteMembersState.Off);
+
+public abstract class IntegrationTestsBase
 {
-    public IntegrationTestsDefaultHiding(IntegrationTestFixture fixture) : base(fixture, ModuleWeaver.HideObsoleteMembersState.Advanced)
-    {
-    }
-}
+    static Dictionary<ModuleWeaver.HideObsoleteMembersState, TestResult> results = [];
 
-public class IntegrationTestsNeverHiding : IntegrationTestsBase
-{
-    public IntegrationTestsNeverHiding(IntegrationTestFixture fixture) : base(fixture, ModuleWeaver.HideObsoleteMembersState.Never)
-    {
-    }
-}
-
-public class IntegrationTestsHidingDisabled :
-    IntegrationTestsBase
-{
-    public IntegrationTestsHidingDisabled(IntegrationTestFixture fixture) :
-        base(fixture, ModuleWeaver.HideObsoleteMembersState.Off)
-    {
-    }
-}
-
-public class IntegrationTestFixture :
-    IDisposable
-{
-    public void Initialize(ModuleWeaver.HideObsoleteMembersState state)
-    {
-        if (TestResult != null)
-        {
-            return;
-        }
-
-        var weaver = new ModuleWeaver
-        {
-            HideObsoleteMembers = state
-        };
-        TestResult = weaver.ExecuteTestRun("AssemblyToProcess.dll");
-        Assembly = TestResult.Assembly;
-    }
-
-    public TestResult TestResult { get; set; }
-    public Assembly Assembly { get; set; }
-
-    public void Dispose()
-    {
-    }
-}
-
-[Collection("IntegrationTestsBase")]
-public abstract class IntegrationTestsBase :
-    IClassFixture<IntegrationTestFixture>
-{
     Assembly assembly;
     TestResult testResult;
     ModuleWeaver.HideObsoleteMembersState expectedState;
 
-    protected IntegrationTestsBase(IntegrationTestFixture fixture, ModuleWeaver.HideObsoleteMembersState state)
+    protected IntegrationTestsBase(ModuleWeaver.HideObsoleteMembersState state)
     {
-        fixture.Initialize(state);
-        assembly = fixture.Assembly;
-        testResult = fixture.TestResult;
+        lock (results)
+        {
+            if (!results.TryGetValue(state, out var result))
+            {
+                var weaver = new ModuleWeaver
+                {
+                    HideObsoleteMembers = state
+                };
+                result = weaver.ExecuteTestRun("AssemblyToProcess.dll");
+                results[state] = result;
+            }
+
+            testResult = result;
+        }
+
+        assembly = testResult.Assembly;
         expectedState = state;
     }
 
-    [Fact]
-    public void Class()
+    [Test]
+    public async Task Class()
     {
         var type = assembly.GetType("ClassToMark");
-        ValidateMessage(type);
-        ValidateHiddenState(type, expectedState);
-        ValidateIsNotError(type);
+        await ValidateMessage(type);
+        await ValidateHiddenState(type, expectedState);
+        await ValidateIsNotError(type);
     }
 
-    [Fact]
-    public void ClassWithHigherAssumedRemoveInVersion()
+    [Test]
+    public async Task ClassWithHigherAssumedRemoveInVersion()
     {
         var type = assembly.GetType("ClassToMarkWithHigherAssumedRemoveInVersion");
         var attributes = ((ICustomAttributeProvider)type).GetCustomAttributes(typeof(ObsoleteAttribute), false);
         var obsoleteAttribute = (ObsoleteAttribute)attributes.First();
-        Assert.Equal("Will be treated as an error from version 3.0.0. Will be removed in version 4.0.0.", obsoleteAttribute.Message);
-        ValidateIsNotError(type);
+        await Assert.That(obsoleteAttribute.Message).IsEqualTo("Will be treated as an error from version 3.0.0. Will be removed in version 4.0.0.");
+        await ValidateIsNotError(type);
     }
 
-    [Fact]
-    public void ClassToMarkWithSameRemoveAndTreatAsError()
+    [Test]
+    public async Task ClassToMarkWithSameRemoveAndTreatAsError()
     {
         var type = assembly.GetType("ClassToMarkWithSameRemoveAndTreatAsError");
         var attributes = ((ICustomAttributeProvider)type).GetCustomAttributes(typeof(ObsoleteAttribute), false);
         var obsoleteAttribute = (ObsoleteAttribute)attributes.First();
-        Assert.Equal("Will be treated as an error from version 1.2.0. Will be removed in version 1.2.0.", obsoleteAttribute.Message);
-        ValidateIsNotError(type);
+        await Assert.That(obsoleteAttribute.Message).IsEqualTo("Will be treated as an error from version 1.2.0. Will be removed in version 1.2.0.");
+        await ValidateIsNotError(type);
     }
 
-    [Fact]
-    public void ClassToMarkWithHigherAssumedTreatAsErrorFromVersion()
+    [Test]
+    public async Task ClassToMarkWithHigherAssumedTreatAsErrorFromVersion()
     {
         var type = assembly.GetType("ClassToMarkWithHigherAssumedTreatAsErrorFromVersion");
         var attributes = ((ICustomAttributeProvider)type).GetCustomAttributes(typeof(ObsoleteAttribute), false);
         var attribute = (ObsoleteAttribute)attributes.First();
-        Assert.Equal("Will be treated as an error from version 2.0.0. Will be removed in version 3.0.0.", attribute.Message);
-        ValidateIsNotError(type);
+        await Assert.That(attribute.Message).IsEqualTo("Will be treated as an error from version 2.0.0. Will be removed in version 3.0.0.");
+        await ValidateIsNotError(type);
     }
 
-    [Fact]
-    public void ClassWithAssumedRemoveInVersion()
+    [Test]
+    public async Task ClassWithAssumedRemoveInVersion()
     {
         var type = assembly.GetType("ClassToMarkWithAssumedRemoveInVersion");
         var attributes = ((ICustomAttributeProvider)type).GetCustomAttributes(typeof(ObsoleteAttribute), false);
         var attribute = (ObsoleteAttribute)attributes.First();
-        Assert.Equal("Will be treated as an error from version 2.0.0. Will be removed in version 3.0.0.", attribute.Message);
-        ValidateIsNotError(type);
+        await Assert.That(attribute.Message).IsEqualTo("Will be treated as an error from version 2.0.0. Will be removed in version 3.0.0.");
+        await ValidateIsNotError(type);
     }
 
-    [Fact]
-    public void ClassToMarkWithAssumedTreatAsErrorFromVersion()
+    [Test]
+    public async Task ClassToMarkWithAssumedTreatAsErrorFromVersion()
     {
         var type = assembly.GetType("ClassToMarkWithAssumedTreatAsErrorFromVersion");
         var attributes = ((ICustomAttributeProvider)type).GetCustomAttributes(typeof(ObsoleteAttribute), false);
         var attribute = (ObsoleteAttribute)attributes.First();
-        Assert.Equal("Will be removed in version 2.0.0.", attribute.Message);
-        ValidateIsError(type);
+        await Assert.That(attribute.Message).IsEqualTo("Will be removed in version 2.0.0.");
+        await ValidateIsError(type);
     }
 
-    [Fact]
-    public void Warnings()
+    [Test]
+    public async Task Warnings()
     {
-        Assert.Contains("The member `ClassWithObsoleteAttribute` has an ObsoleteAttribute. Consider replacing it with an ObsoleteExAttribute.", testResult.Warnings.Select(_ => _.Text));
+        await Assert.That(testResult.Warnings.Select(_ => _.Text)).Contains("The member `ClassWithObsoleteAttribute` has an ObsoleteAttribute. Consider replacing it with an ObsoleteExAttribute.");
     }
 
-    [Fact]
-    public void NoWarnings()
+    [Test]
+    public async Task NoWarnings()
     {
-        Assert.DoesNotContain("The member `ClassWithObsoleteAttributeToSkip` has an ObsoleteAttribute. Consider replacing it with an ObsoleteExAttribute.", testResult.Warnings.Select(_ => _.Text));
+        await Assert.That(testResult.Warnings.Select(_ => _.Text)).DoesNotContain("The member `ClassWithObsoleteAttributeToSkip` has an ObsoleteAttribute. Consider replacing it with an ObsoleteExAttribute.");
     }
 
-    [Fact]
-    public void Errors()
+    [Test]
+    public async Task Errors()
     {
-        Assert.Contains("ObsoleteExAttribute is not valid on property gets or sets. Member: `System.Void ClassWithObsoleteOnGetSet::set_PropertyToMark(System.String)`.", testResult.Errors.Select(_ => _.Text));
-        Assert.Contains("ObsoleteExAttribute is not valid on property gets or sets. Member: `System.String ClassWithObsoleteOnGetSet::get_PropertyToMark()`.", testResult.Errors.Select(_ => _.Text));
+        await Assert.That(testResult.Errors.Select(_ => _.Text)).Contains("ObsoleteExAttribute is not valid on property gets or sets. Member: `System.Void ClassWithObsoleteOnGetSet::set_PropertyToMark(System.String)`.");
+        await Assert.That(testResult.Errors.Select(_ => _.Text)).Contains("ObsoleteExAttribute is not valid on property gets or sets. Member: `System.String ClassWithObsoleteOnGetSet::get_PropertyToMark()`.");
     }
 
-    [Fact]
-    public void Interface()
+    [Test]
+    public async Task Interface()
     {
         var type = assembly.GetType("InterfaceToMark");
-        ValidateMessage(type);
-        ValidateHiddenState(type, expectedState);
-        ValidateIsNotError(type);
+        await ValidateMessage(type);
+        await ValidateHiddenState(type, expectedState);
+        await ValidateIsNotError(type);
     }
 
-    [Fact]
-    public void ClassWithIsError()
+    [Test]
+    public async Task ClassWithIsError()
     {
         var type = assembly.GetType("ClassWithIsError");
-        ValidateIsError(type);
+        await ValidateIsError(type);
     }
 
-    [Fact]
-    public void ClassWithIsErrorFromInformationalVersion()
+    [Test]
+    public async Task ClassWithIsErrorFromInformationalVersion()
     {
         var type = assembly.GetType("ClassWithIsErrorFromInformationalVersion");
-        ValidateIsError(type);
+        await ValidateIsError(type);
     }
 
-    [Fact]
-    public void Enum()
+    [Test]
+    public async Task Enum()
     {
         var type = assembly.GetType("EnumToMark");
-        ValidateIsNotError(type);
+        await ValidateIsNotError(type);
     }
 
-    [Fact]
-    public void Struct()
+    [Test]
+    public async Task Struct()
     {
         var type = assembly.GetType("StructToMark");
-        ValidateIsNotError(type);
+        await ValidateIsNotError(type);
     }
 
-    [Fact]
-    public void EnumField()
+    [Test]
+    public async Task EnumField()
     {
         var type = assembly.GetType("EnumToMark");
         var info = type.GetField("Foo");
-        ValidateMessage(info);
-        ValidateHiddenState(info, expectedState);
-        ValidateIsNotError(info);
+        await ValidateMessage(info);
+        await ValidateHiddenState(info, expectedState);
+        await ValidateIsNotError(info);
     }
 
-    [Fact]
-    public void ClassMethod()
+    [Test]
+    public async Task ClassMethod()
     {
         var type = assembly.GetType("ClassToMark");
         var info = type.GetMethod("MethodToMark");
-        ValidateMessage(info);
-        ValidateHiddenState(info, expectedState);
-        ValidateIsNotError(info);
+        await ValidateMessage(info);
+        await ValidateHiddenState(info, expectedState);
+        await ValidateIsNotError(info);
     }
 
-    [Fact]
-    public void ClassMethodThatThrows()
+    [Test]
+    public async Task ClassMethodThatThrows()
     {
         var type = assembly.GetType("ClassToMark");
         var info = type.GetMethod("MethodWithExceptionToMark");
         var attribute = ReadAttribute(info);
-        Assert.Equal("Custom message. Use `NewThing` instead. Will be treated as an error from version 2.0.0. The member currently throws a NotImplementedException. Will be removed in version 4.0.0.", attribute.Message);
-        ValidateHiddenState(info, expectedState);
-        ValidateIsNotError(info);
+        await Assert.That(attribute.Message).IsEqualTo("Custom message. Use `NewThing` instead. Will be treated as an error from version 2.0.0. The member currently throws a NotImplementedException. Will be removed in version 4.0.0.");
+        await ValidateHiddenState(info, expectedState);
+        await ValidateIsNotError(info);
     }
 
-    [Fact]
-    public void InterfaceMethod()
+    [Test]
+    public async Task InterfaceMethod()
     {
         var type = assembly.GetType("InterfaceToMark");
         var info = type.GetMethod("MethodToMark");
-        ValidateMessage(info);
-        ValidateHiddenState(info, expectedState);
-        ValidateIsNotError(info);
+        await ValidateMessage(info);
+        await ValidateHiddenState(info, expectedState);
+        await ValidateIsNotError(info);
     }
 
-    [Fact]
-    public void StructMethod()
+    [Test]
+    public async Task StructMethod()
     {
         var type = assembly.GetType("StructToMark");
         var info = type.GetMethod("MethodToMark");
-        ValidateMessage(info);
-        ValidateHiddenState(info, expectedState);
-        ValidateIsNotError(info);
+        await ValidateMessage(info);
+        await ValidateHiddenState(info, expectedState);
+        await ValidateIsNotError(info);
     }
 
-    [Fact]
-    public void ClassPropertySetThatThrows()
+    [Test]
+    public async Task ClassPropertySetThatThrows()
     {
         var type = assembly.GetType("ClassToMark");
         var info = type.GetProperty("PropertyWithSetExceptionToMark");
         var attribute = ReadAttribute(info);
-        Assert.Equal("Custom message. Use `NewThing` instead. Will be treated as an error from version 2.0.0. The member currently throws a NotImplementedException. Will be removed in version 4.0.0.", attribute.Message);
-        ValidateHiddenState(info, expectedState);
-        ValidateIsNotError(info);
+        await Assert.That(attribute.Message).IsEqualTo("Custom message. Use `NewThing` instead. Will be treated as an error from version 2.0.0. The member currently throws a NotImplementedException. Will be removed in version 4.0.0.");
+        await ValidateHiddenState(info, expectedState);
+        await ValidateIsNotError(info);
     }
 
-    [Fact]
-    public void ClassPropertyGetThatThrows()
+    [Test]
+    public async Task ClassPropertyGetThatThrows()
     {
         var type = assembly.GetType("ClassToMark");
         var info = type.GetProperty("PropertyWithGetExceptionToMark");
         var attribute = ReadAttribute(info);
-        Assert.Equal("Custom message. Use `NewThing` instead. Will be treated as an error from version 2.0.0. The member currently throws a NotImplementedException. Will be removed in version 4.0.0.", attribute.Message);
-        ValidateHiddenState(info, expectedState);
-        ValidateIsNotError(info);
+        await Assert.That(attribute.Message).IsEqualTo("Custom message. Use `NewThing` instead. Will be treated as an error from version 2.0.0. The member currently throws a NotImplementedException. Will be removed in version 4.0.0.");
+        await ValidateHiddenState(info, expectedState);
+        await ValidateIsNotError(info);
     }
 
-    [Fact]
-    public void ClassProperty()
+    [Test]
+    public async Task ClassProperty()
     {
         var type = assembly.GetType("ClassToMark");
         var info = type.GetProperty("PropertyToMark");
-        ValidateMessage(info);
-        ValidateHiddenState(info, expectedState);
-        ValidateIsNotError(info);
+        await ValidateMessage(info);
+        await ValidateHiddenState(info, expectedState);
+        await ValidateIsNotError(info);
     }
 
-    [Fact]
-    public void ClassField()
+    [Test]
+    public async Task ClassField()
     {
         var type = assembly.GetType("ClassToMark");
         var info = type.GetField("FieldToMark");
-        ValidateMessage(info);
-        ValidateHiddenState(info, expectedState);
-        ValidateIsNotError(info);
+        await ValidateMessage(info);
+        await ValidateHiddenState(info, expectedState);
+        await ValidateIsNotError(info);
     }
 
-    [Fact]
-    public void InterfaceEvent()
+    [Test]
+    public async Task InterfaceEvent()
     {
         var type = assembly.GetType("InterfaceToMark");
         var info = type.GetMember("EventToMark").First();
-        ValidateMessage(info);
-        ValidateHiddenState(info, expectedState);
-        ValidateIsNotError(info);
+        await ValidateMessage(info);
+        await ValidateHiddenState(info, expectedState);
+        await ValidateIsNotError(info);
     }
 
-    [Fact]
-    public void ClassEvent()
+    [Test]
+    public async Task ClassEvent()
     {
         var type = assembly.GetType("ClassToMark");
         var info = type.GetEvent("EventToMark");
-        ValidateMessage(info);
-        ValidateHiddenState(info, expectedState);
-        ValidateIsNotError(info);
+        await ValidateMessage(info);
+        await ValidateHiddenState(info, expectedState);
+        await ValidateIsNotError(info);
     }
 
-    [Fact]
-    public void StructEvent()
+    [Test]
+    public async Task StructEvent()
     {
         var type = assembly.GetType("StructToMark");
         var info = type.GetMember("EventToMark").First();
-        ValidateMessage(info);
-        ValidateHiddenState(info, expectedState);
-        ValidateIsNotError(info);
+        await ValidateMessage(info);
+        await ValidateHiddenState(info, expectedState);
+        await ValidateIsNotError(info);
     }
 
 #if NET9_0_OR_GREATER
 
-    [Fact]
-    public void ClassWithRequiredMembers()
+    [Test]
+    public async Task ClassWithRequiredMembers()
     {
-        Assert.DoesNotContain("The member `System.Void ClassWithRequiredMembers::.ctor()` has an ObsoleteAttribute. Consider replacing it with an ObsoleteExAttribute.", testResult.Warnings.Select(_ => _.Text));
+        await Assert.That(testResult.Warnings.Select(_ => _.Text)).DoesNotContain("The member `System.Void ClassWithRequiredMembers::.ctor()` has an ObsoleteAttribute. Consider replacing it with an ObsoleteExAttribute.");
     }
 
 #endif
 
-    [Fact]
-    public void InterfaceProperty()
+    [Test]
+    public async Task InterfaceProperty()
     {
         var type = assembly.GetType("InterfaceToMark");
         var info = type.GetProperty("PropertyToMark");
-        ValidateMessage(info);
-        ValidateHiddenState(info, expectedState);
-        ValidateIsNotError(info);
+        await ValidateMessage(info);
+        await ValidateHiddenState(info, expectedState);
+        await ValidateIsNotError(info);
     }
 
-    [Fact]
-    public void StructProperty()
+    [Test]
+    public async Task StructProperty()
     {
         var type = assembly.GetType("StructToMark");
         var info = type.GetProperty("PropertyToMark");
-        ValidateMessage(info);
-        ValidateHiddenState(info, expectedState);
-        ValidateIsNotError(info);
+        await ValidateMessage(info);
+        await ValidateHiddenState(info, expectedState);
+        await ValidateIsNotError(info);
     }
 
-    [Fact]
-    public void StructField()
+    [Test]
+    public async Task StructField()
     {
         var type = assembly.GetType("StructToMark");
         var info = type.GetField("FieldToMark");
-        ValidateMessage(info);
-        ValidateHiddenState(info, expectedState);
-        ValidateIsNotError(info);
+        await ValidateMessage(info);
+        await ValidateHiddenState(info, expectedState);
+        await ValidateIsNotError(info);
     }
 
-    static void ValidateMessage(ICustomAttributeProvider attributeProvider)
+    static async Task ValidateMessage(ICustomAttributeProvider attributeProvider)
     {
         var attribute = ReadAttribute(attributeProvider);
-        Assert.Equal("Custom message. Use `NewThing` instead. Will be treated as an error from version 2.0.0. Will be removed in version 4.0.0.", attribute.Message);
+        await Assert.That(attribute.Message).IsEqualTo("Custom message. Use `NewThing` instead. Will be treated as an error from version 2.0.0. Will be removed in version 4.0.0.");
     }
 
     static ObsoleteAttribute ReadAttribute(ICustomAttributeProvider attributeProvider)
@@ -358,37 +340,37 @@ public abstract class IntegrationTestsBase :
         return (ObsoleteAttribute)attributes.First();
     }
 
-    static void ValidateHiddenState(ICustomAttributeProvider attributeProvider, ModuleWeaver.HideObsoleteMembersState state)
+    static async Task ValidateHiddenState(ICustomAttributeProvider attributeProvider, ModuleWeaver.HideObsoleteMembersState state)
     {
         var attributes = attributeProvider.GetCustomAttributes(typeof(EditorBrowsableAttribute), false);
         var attribute = (EditorBrowsableAttribute)attributes.FirstOrDefault();
         switch (state)
         {
             case ModuleWeaver.HideObsoleteMembersState.Advanced:
-                Assert.NotNull(attribute);
-                Assert.Equal(EditorBrowsableState.Advanced, attribute.State);
+                await Assert.That(attribute).IsNotNull();
+                await Assert.That(attribute.State).IsEqualTo(EditorBrowsableState.Advanced);
                 break;
             case ModuleWeaver.HideObsoleteMembersState.Never:
-                Assert.NotNull(attribute);
-                Assert.Equal(EditorBrowsableState.Never, attribute.State);
+                await Assert.That(attribute).IsNotNull();
+                await Assert.That(attribute.State).IsEqualTo(EditorBrowsableState.Never);
                 break;
             case ModuleWeaver.HideObsoleteMembersState.Off:
-                Assert.Null(attribute);
+                await Assert.That(attribute).IsNull();
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(state), state, null);
         }
     }
 
-    static void ValidateIsError(ICustomAttributeProvider attributeProvider)
+    static async Task ValidateIsError(ICustomAttributeProvider attributeProvider)
     {
         var attribute = ReadAttribute(attributeProvider);
-        Assert.True(attribute.IsError);
+        await Assert.That(attribute.IsError).IsTrue();
     }
 
-    static void ValidateIsNotError(ICustomAttributeProvider attributeProvider)
+    static async Task ValidateIsNotError(ICustomAttributeProvider attributeProvider)
     {
         var attribute = ReadAttribute(attributeProvider);
-        Assert.False(attribute.IsError);
+        await Assert.That(attribute.IsError).IsFalse();
     }
 }

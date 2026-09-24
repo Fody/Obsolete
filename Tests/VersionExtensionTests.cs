@@ -2,128 +2,128 @@
 
 public class VersionExtensionTests
 {
-    [Fact]
-    public void IncrementMajor()
+    [Test]
+    public async Task IncrementMajor()
     {
         SemanticVersion version1 = "2";
         var version = version1.Increment(StepType.Major);
-        Assert.Equal("3.0.0", version);
+        await Assert.That(version.ToString()).IsEqualTo("3.0.0");
     }
 
-    [Fact]
-    public void IncrementMajorWithMinor()
+    [Test]
+    public async Task IncrementMajorWithMinor()
     {
         SemanticVersion version1 = "2.1";
         var version = version1.Increment(StepType.Major);
-        Assert.Equal("3.0.0", version);
+        await Assert.That(version.ToString()).IsEqualTo("3.0.0");
     }
 
-    [Fact]
-    public void IncrementMajorWithMinorAndPatch()
+    [Test]
+    public async Task IncrementMajorWithMinorAndPatch()
     {
         SemanticVersion version1 = "2.1.1";
         var version = version1.Increment(StepType.Major);
-        Assert.Equal("3.0.0", version);
+        await Assert.That(version.ToString()).IsEqualTo("3.0.0");
     }
 
-    [Fact]
-    public void IncrementMinor()
+    [Test]
+    public async Task IncrementMinor()
     {
         SemanticVersion version1 = "2";
         var version = version1.Increment(StepType.Minor);
-        Assert.Equal("2.1.0", version);
+        await Assert.That(version.ToString()).IsEqualTo("2.1.0");
     }
 
-    [Fact]
-    public void IncrementMinorWithPatch()
+    [Test]
+    public async Task IncrementMinorWithPatch()
     {
         SemanticVersion version1 = "2.0.1";
         var version = version1.Increment(StepType.Minor);
-        Assert.Equal("2.1.0", version);
+        await Assert.That(version.ToString()).IsEqualTo("2.1.0");
     }
 
-    [Fact]
-    public void IncrementPatch()
+    [Test]
+    public async Task IncrementPatch()
     {
         SemanticVersion version1 = "2";
         var version = version1.Increment(StepType.Patch);
-        Assert.Equal("2.0.1", version);
+        await Assert.That(version.ToString()).IsEqualTo("2.0.1");
     }
 
-    [Fact]
-    public void IncrementPatchWithMinor()
+    [Test]
+    public async Task IncrementPatchWithMinor()
     {
         SemanticVersion version1 = "2.1";
         var version = version1.Increment(StepType.Patch);
-        Assert.Equal("2.1.1", version);
+        await Assert.That(version.ToString()).IsEqualTo("2.1.1");
     }
 
-    [Fact]
-    public void DecrementMajor()
+    [Test]
+    public async Task DecrementMajor()
     {
         SemanticVersion version1 = "2";
         var version = version1.Decrement(StepType.Major);
-        Assert.Equal("1.0.0", version);
+        await Assert.That(version.ToString()).IsEqualTo("1.0.0");
     }
 
-    [Fact]
-    public void DecrementMajorWithMinor()
+    [Test]
+    public async Task DecrementMajorWithMinor()
     {
         SemanticVersion version1 = "2.1";
         var version = version1.Decrement(StepType.Major);
-        Assert.Equal("1.0.0", version);
+        await Assert.That(version.ToString()).IsEqualTo("1.0.0");
     }
 
-    [Fact]
-    public void DecrementMajorWithMinorAndPatch()
+    [Test]
+    public async Task DecrementMajorWithMinorAndPatch()
     {
         SemanticVersion version1 = "2.1.1";
         var version = version1.Decrement(StepType.Major);
-        Assert.Equal("1.0.0", version);
+        await Assert.That(version.ToString()).IsEqualTo("1.0.0");
     }
 
-    [Fact]
-    public void DecrementMajorError()
+    [Test]
+    public async Task DecrementMajorError()
     {
         SemanticVersion version1 = "0";
-        Assert.Throws<WeavingException>(() => version1.Decrement(StepType.Major));
+        await Assert.That(() => version1.Decrement(StepType.Major)).Throws<WeavingException>();
     }
 
-    [Fact]
-    public void DecrementMinor()
+    [Test]
+    public async Task DecrementMinor()
     {
         SemanticVersion version1 = "2.1";
         var version = version1.Decrement(StepType.Minor);
-        Assert.Equal("2.0.0", version);
+        await Assert.That(version.ToString()).IsEqualTo("2.0.0");
     }
 
-    [Fact]
-    public void DecrementMinorWithPatch()
+    [Test]
+    public async Task DecrementMinorWithPatch()
     {
         SemanticVersion version1 = "2.1.1";
         var version = version1.Decrement(StepType.Minor);
-        Assert.Equal("2.0.0", version);
+        await Assert.That(version.ToString()).IsEqualTo("2.0.0");
     }
 
-    [Fact]
-    public void DecrementMinorError()
+    [Test]
+    public async Task DecrementMinorError()
     {
         SemanticVersion version1 = "2.0";
-        Assert.Throws<WeavingException>(() => version1.Decrement(StepType.Minor));
+        await Assert.That(() => version1.Decrement(StepType.Minor)).Throws<WeavingException>();
     }
 
-    [Fact]
-    public void DecrementPatch()
+    [Test]
+    public async Task DecrementPatch()
     {
         SemanticVersion version1 = "2.1.1";
         var version = version1.Decrement(StepType.Patch);
-        Assert.Equal("2.1.0", version);
+        await Assert.That(version.ToString()).IsEqualTo("2.1.0");
     }
 
-    [Fact]
-    public void DecrementPatchError()
+    [Test]
+    public async Task DecrementPatchError()
     {
         SemanticVersion version1 = "2.1.0";
-        Assert.Throws<WeavingException>(() => version1.Decrement(StepType.Patch));
+        await Assert.That(() => version1.Decrement(StepType.Patch)).Throws<WeavingException>();
     }
 }

@@ -2,8 +2,8 @@ using System.Diagnostics;
 
 public class AttributeDataFormatterTests
 {
-    [Fact]
-    public void All()
+    [Test]
+    public async Task All()
     {
         var attributeData = new AttributeData
         {
@@ -18,10 +18,10 @@ public class AttributeDataFormatterTests
             assemblyVersion = assemblyVersion
         };
         var message = dataFormatter.ConvertToMessage(attributeData);
-        Assert.Equal("Custom Message. Use `NewMember` instead. Will be treated as an error from version 2.0.0. Will be removed in version 4.0.0.", message);
+        await Assert.That(message).IsEqualTo("Custom Message. Use `NewMember` instead. Will be treated as an error from version 2.0.0. Will be removed in version 4.0.0.");
     }
 
-    [Fact]
+    [Test]
     public void ForSample()
     {
         var attributeData = new AttributeData
